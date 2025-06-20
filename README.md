@@ -5,7 +5,7 @@
 > 코드 품질을 위해 **ESLint + Prettier + Commitlint + Husky**를 사용하며, 자동 import·아이콘 플러그인도 Vite에 적용했다.
 
 ## 1. 프로젝트 트리
-
+      
 ```
 Progmong-FE
 ├─ .github/                  # GitHub Actions·Issue 템플릿 등 CI/CD 설정
