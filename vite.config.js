@@ -48,4 +48,8 @@ export default defineConfig({
       reporter: ['text', 'html'],
     },
   },
+
+  server: {
+    port: 5200, // 필요시 포트 조정
+  },
 })
