@@ -1,0 +1,12 @@
+/* 네온 테두리 공통 클래스 */
+.neon-border {
+  --neon-color: #f148fb;
+  border: 2px solid #fff;
+  box-shadow:
+    0 0 5px var(--neon-color),
+    0 0 10px var(--neon-color),
+    0 0 15px var(--neon-color),
+    0 0 20px var(--neon-color),
+    inset 0 0 10px var(--neon-color),
+    inset 0 0 20px var(--neon-color);
+}

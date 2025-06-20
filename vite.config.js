@@ -5,8 +5,8 @@ import { fileURLToPath, URL } from 'node:url'
 import AutoImport from 'unplugin-auto-import/vite'
 // 👉 Icon 사용
 import Icons from 'unplugin-icons/vite'
-// 👉 TailwindCSS (선택 시)
-import tailwindcss from 'tailwindcss'
+// // 👉 TailwindCSS (선택 시)
+// import tailwindcss from 'tailwindcss'
 
 // 👉 테스트용 (Vitest)
 export default defineConfig({
@@ -35,11 +35,11 @@ export default defineConfig({
     },
   },
 
-  css: {
-    postcss: {
-      plugins: [tailwindcss()],
-    },
-  },
+  // css: {
+  //   postcss: {
+  //     plugins: [tailwindcss()],
+  //   },
+  // },
 
   test: {
     environment: 'jsdom',
