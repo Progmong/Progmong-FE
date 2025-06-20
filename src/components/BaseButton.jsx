@@ -3,45 +3,51 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
-  display: inline-block;
-  padding: 0.75rem 0.75rem; /* px-3 py-3 */
+  border: 3px solid #fcfcfc;
+  border-radius: 7px;
+  margin: 30px 0 10px 0;
+  background-color: #661111;
+  padding-bottom: 6px;
+  overflow: hidden;
 `
 
 const StyledButton = styled.button`
-  display: flex;
   width: 100%;
-  justify-content: center;
-  border-radius: 0.5rem; /* rounded-md */
-  padding: 0.75rem 0.75rem; /* px-3 py-3 */
-  font-weight: 700;
-  color: #000;
-  font-size: 20px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* shadow-xs */
+  padding: 20px;
+  border-radius: 0 0 7px 7px;
   cursor: pointer;
-  border: 2px solid #fff;
+  font-size: 24px;
+  font-weight: bold;
+  border-style: none;
+  background-color: #fd3b40;
+  color: white;
   box-shadow:
-    0 0 5px var(--neon-color),
-    0 0 10px var(--neon-color),
-    0 0 15px var(--neon-color),
-    0 0 20px var(--neon-color),
-    inset 0 0 10px var(--neon-color),
-    inset 0 0 20px var(--neon-color);
-  background: transparent;
-  &:disabled {
-    color: #d1d5db; /* text-gray-500 */
-    cursor: not-allowed;
+    0 6px #880800,
+    0 0 10px #fd3b40;
+  transition: all 0.15s ease-in-out;
+
+  &:hover {
+    transform: translateY(2px);
+    border-radius: 7px;
+    box-shadow:
+      0 4px #880800,
+      0 0 12px #ff6a6a;
+  }
+
+  &:active {
+    transform: translateY(3px) scale(0.98);
+    border-radius: 7px;
+    box-shadow:
+      inset 0 2px 4px rgba(0, 0, 0, 0.2),
+      0 2px #661111;
+    filter: brightness(1.05);
   }
 `
 
 const BaseButton = ({ children, currentColor, handleHover, handleLeave, ...rest }) => {
   return (
     <Container>
-      <StyledButton
-        style={{ '--neon-color': currentColor }}
-        onMouseOver={handleHover}
-        onMouseLeave={handleLeave}
-        {...rest}
-      >
+      <StyledButton onMouseOver={handleHover} onMouseLeave={handleLeave} {...rest}>
         {children}
       </StyledButton>
     </Container>
