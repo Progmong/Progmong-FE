@@ -1,11 +1,21 @@
 // routes.jsx
 import { createBrowserRouter, redirect } from 'react-router-dom'
-import ExamplePage from '../pages/ExamplePage'
+import Login from '../pages/Auth/Login'
+import Register from '../pages/Auth/Register'
+import FindPwd from '../pages/Auth/FindPwd'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <ExamplePage />,
+    element: <Login />,
+  },
+  {
+    path: '/register',
+    element: <Register />,
+  },
+  {
+    path: '/findpwd',
+    element: <FindPwd />,
   },
 ])
 
