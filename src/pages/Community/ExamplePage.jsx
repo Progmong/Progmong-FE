@@ -8,7 +8,7 @@ import styled from 'styled-components'
 // styled-component
 const Box = styled.div`
   height: 100vh;
-  width: 100%;
+  width: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
