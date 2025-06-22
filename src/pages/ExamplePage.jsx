@@ -3,7 +3,6 @@ import { useNeonColor } from '../hooks/useNeonColor'
 
 // styled-components가 적용된 버튼 구조 생성 == Vue의 template
 import BaseButton from '../components/BaseButton'
-import BaseButton2 from '../components/BaseButton2'
 import BaseContainer from '../components/BaseContainer'
 import BaseInput from '../components/BaseInput'
 import styled from 'styled-components'
@@ -57,57 +56,48 @@ const ExamplePage = () => {
   return (
     // styled-component로 만든 Div
     <Box>
-      <BaseButton
-        currentColor={currentColor} // fdsf
-        handleHover={handleHover}
-        handleLeave={handleLeave}
-        onClick={() => setCount((count) => count + 1)}
-      >
-        네온 버튼
-      </BaseButton>
       <FontBox>빙그레체 입니다</FontBox>
-      <div>클릭 횟수 : {count}</div>
 
       <Title>공통 넘포넌트화</Title>
       <Title>버튼</Title>
       <ListBox>
-        <BaseButton2
+        <BaseButton
           variant="primary"
           size="sm"
           onClick={handleEvent} // 버튼에 대한 이벤트 처리 가능
         >
           기본색상/sm
-        </BaseButton2>
-        <BaseButton2 variant="primary" size="mg">
+        </BaseButton>
+        <BaseButton variant="primary" size="mg">
           기본색상/md
-        </BaseButton2>
-        <BaseButton2 variant="primary" size="lg">
+        </BaseButton>
+        <BaseButton variant="primary" size="lg">
           기본색상/lg
-        </BaseButton2>
+        </BaseButton>
       </ListBox>
       <ListBox>
-        <BaseButton2 variant="secondary" size="sm">
+        <BaseButton variant="secondary" size="sm">
           2nd색상/sm
-        </BaseButton2>
-        <BaseButton2 variant="secondary" size="mg">
+        </BaseButton>
+        <BaseButton variant="secondary" size="mg">
           2nd색상/md
-        </BaseButton2>
-        <BaseButton2 variant="secondary" size="lg">
+        </BaseButton>
+        <BaseButton variant="secondary" size="lg">
           2nd색상/lg
-        </BaseButton2>
+        </BaseButton>
       </ListBox>
       <ListBox>
-        <BaseButton2 variant="pass" size="sm">
+        <BaseButton variant="pass" size="sm">
           3rd색상/sm
-        </BaseButton2>
-        <BaseButton2 variant="pass" size="mg">
+        </BaseButton>
+        <BaseButton variant="pass" size="mg">
           3rd색상/md
-        </BaseButton2>
-        <BaseButton2 variant="pass" size="lg">
+        </BaseButton>
+        <BaseButton variant="pass" size="lg">
           3rd색상/lg
-        </BaseButton2>
+        </BaseButton>
       </ListBox>
-      <BaseButton2 disabled>비활성화</BaseButton2>
+      <BaseButton disabled>비활성화</BaseButton>
 
       <Title>Div(컨테이너)</Title>
       <div
