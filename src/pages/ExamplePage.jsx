@@ -3,6 +3,7 @@ import { useNeonColor } from '../hooks/useNeonColor'
 
 // styled-components가 적용된 버튼 구조 생성 == Vue의 template
 import BaseButton from '../components/BaseButton'
+import BaseButton2 from '../components/BaseButton2'
 import styled from 'styled-components'
 
 // styled-component
@@ -13,10 +14,21 @@ const Box = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  row-gap: 10px;
 `
 
 const FontBox = styled.div`
   font-family: 'Binggrae';
+`
+
+const Title = styled.div`
+  font-family: 'Binggrae';
+  font-weight: 700;
+  font-size: large;
+
+  margin-bottom: 3px;
+  border-bottom: 2px;
+  border-color: black;
 `
 
 const ExamplePage = () => {
@@ -43,6 +55,14 @@ const ExamplePage = () => {
       </BaseButton>
       <FontBox>빙그레체 입니다</FontBox>
       <div>클릭 횟수 : {count}</div>
+
+      <Title>공통 넘포넌트화</Title>
+      <Title>버튼</Title>
+      <BaseButton2>기본</BaseButton2>
+
+      <Title>Div(컨테이너)</Title>
+
+      <Title>Input(인풋)</Title>
     </Box>
   )
 }
