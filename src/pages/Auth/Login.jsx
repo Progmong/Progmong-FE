@@ -2,6 +2,8 @@ import styled, { createGlobalStyle } from 'styled-components'
 import bgImage from '../../assets/bg-img.gif'
 import { Link } from 'react-router-dom'
 import BaseButton from '../../components/BaseButton'
+import useAuthApi from '../../constants/auth'
+import { useState } from 'react'
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
@@ -69,6 +71,23 @@ const Input = styled.input`
 `
 
 const Login = () => {
+  const { login } = useAuthApi()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      alert('이메일 또는 비밀번호를 입력하세요.')
+      return
+    }
+    try {
+      await login(email, password)
+      alert('로그인 성공')
+    } catch (error) {
+      console.error(error)
+      alert('로그인 실패')
+    }
+  }
   return (
     <>
       <GlobalStyle />
@@ -77,10 +96,20 @@ const Login = () => {
           <Title>PROGMONG</Title>
           <LoginContainer>
             <Label>EMAIL</Label>
-            <Input type="email" placeholder="progmong@example.com" />
+            <Input
+              type="email"
+              placeholder="progmong@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
             <Label>PASSWORD</Label>
-            <Input type="password" placeholder="비밀번호를 입력하세요" />
-            <BaseButton>LOGIN</BaseButton>
+            <Input
+              type="password"
+              placeholder="비밀번호를 입력하세요"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <BaseButton onClick={handleLogin}>LOGIN</BaseButton>
             <div
               style={{
                 display: 'flex',
@@ -96,7 +125,7 @@ const Login = () => {
                 비밀번호 찾기
               </Link>
               <Link
-                to="/register"
+                to="/verify-email"
                 style={{ textDecoration: 'none', color: '#2c2c2c', fontWeight: 'bold' }}
               >
                 회원가입
