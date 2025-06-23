@@ -100,6 +100,17 @@ const FindPwd = () => {
             <Label>이메일</Label>
             <Input type="email" placeholder="progmong@example.com"></Input>
             <BaseButton>이메일 인증</BaseButton>
+            <Link
+              to={'/'}
+              style={{
+                textDecoration: 'none',
+                color: '#2c2c2c',
+                fontWeight: 'bold',
+                textAlign: 'right',
+              }}
+            >
+              로그인
+            </Link>
           </LoginContainer>
         </MainContainer>
       </Bg>

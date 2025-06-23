@@ -104,6 +104,17 @@ const Register = () => {
             <Label>새 비밀번호 확인</Label>
             <Input type="password" placeholder="새 비밀번호 확인"></Input>
             <BaseButton>회원가입</BaseButton>
+            <Link
+              to={'/'}
+              style={{
+                textDecoration: 'none',
+                color: '#2c2c2c',
+                fontWeight: 'bold',
+                textAlign: 'right',
+              }}
+            >
+              로그인
+            </Link>
           </LoginContainer>
         </MainContainer>
       </Bg>

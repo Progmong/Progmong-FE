@@ -12,7 +12,7 @@ const GlobalStyle = createGlobalStyle`
   }
   @font-face {
   font-family: 'NEXON Bazzi Code';
-  src: url('../assets/Bazzi.woff') format('woff');
+  src: url('../../assets/Bazzi.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
