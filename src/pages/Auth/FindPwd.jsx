@@ -2,24 +2,25 @@ import styled, { createGlobalStyle } from 'styled-components'
 import bgImage from '../../assets/background-img1.png'
 import { Link } from 'react-router-dom'
 import BaseButton from '../../components/BaseButton'
+import useAuthApi from '../../constants/auth'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
-  font-family: 'NEXON Bazzi Code', 'Comic Sans MS';
-
-      
-
+    font-family: 'NEXON Bazzi Code', 'Comic Sans MS';
   }
   @font-face {
-  font-family: 'NEXON Bazzi Code';
-  src: url('../assets/Bazzi.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
+    font-family: 'NEXON Bazzi Code';
+    src: url('../assets/Bazzi.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
 `
+
 const Bg = styled.div`
-  height: 100vh; /* 화면 전체 높이 */
-  width: 100%; /* 가로 100% */
+  height: 100vh;
+  width: 100%;
   background-image: url(${bgImage});
   background-repeat: no-repeat;
   background-position: center;
@@ -31,7 +32,7 @@ const Bg = styled.div`
 
 const MainContainer = styled.div`
   width: 50%;
-  background-color: #fffeffb3; /* 배경만 투명 */
+  background-color: #fffeffb3;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
@@ -45,6 +46,7 @@ const Title = styled.h1`
   text-align: center;
   font-size: 50px;
 `
+
 const LoginContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -56,6 +58,7 @@ const Label = styled.label`
   font-size: 24px;
   margin-bottom: 8px;
 `
+
 const Input = styled.input`
   border-radius: 20px;
   padding: 15px;
@@ -68,28 +71,51 @@ const Input = styled.input`
     0 5px #bfa385b3;
   background-color: white;
 `
-const ButtonWrapper = styled.div`
-  border: 3px solid #fcfcfc;
-  border-radius: 7px;
-  margin: 30px 0 10px 0;
-  background-color: #880800;
-  padding-bottom: 6px;
-  overflow: hidden;
-`
-
-const Button = styled.button`
-  width: 100%;
-  padding: 20px;
-  border-radius: 0 0 7px 7px;
-  cursor: pointer;
-  font-size: 24px;
-  font-weight: bold;
-  border-style: none;
-  background-color: #fd3b40;
-  color: white;
-`
 
 const FindPwd = () => {
+  const { sendResetEmail, verifyResetEmail } = useAuthApi()
+  const [step, setStep] = useState('email') // 'email' | 'code' | 'done'
+  const [email, setEmail] = useState('')
+  const [code, setCode] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPwd, setConfirmPwd] = useState('')
+  const navigate = useNavigate()
+
+  const handleSendEmail = async () => {
+    if (!email) {
+      alert('이메일을 입력해주세요.')
+      return
+    }
+    try {
+      await sendResetEmail(email)
+      alert('인증 코드가 이메일로 전송되었습니다.')
+      setStep('code')
+    } catch (error) {
+      console.error(error)
+      alert('이메일 전송 실패')
+    }
+  }
+
+  const handleVerifyCodeAndChangePwd = async () => {
+    if (!code || !password || !confirmPwd) {
+      alert('모든 항목을 입력해주세요.')
+      return
+    }
+    if (password !== confirmPwd) {
+      alert('비밀번호가 일치하지 않습니다.')
+      return
+    }
+
+    try {
+      await verifyResetEmail(code, password)
+      alert('비밀번호가 변경되었습니다.')
+      navigate('/')
+    } catch (error) {
+      console.error(error)
+      alert('비밀번호 변경 실패')
+    }
+  }
+
   return (
     <>
       <GlobalStyle />
@@ -97,11 +123,48 @@ const FindPwd = () => {
         <MainContainer>
           <Title>비밀번호 찾기</Title>
           <LoginContainer>
-            <Label>이메일</Label>
-            <Input type="email" placeholder="progmong@example.com"></Input>
-            <BaseButton>이메일 인증</BaseButton>
+            {step === 'email' && (
+              <>
+                <Label>이메일</Label>
+                <Input
+                  type="email"
+                  placeholder="progmong@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <BaseButton onClick={handleSendEmail}>이메일 인증</BaseButton>
+              </>
+            )}
+
+            {step === 'code' && (
+              <>
+                <Label>인증 코드</Label>
+                <Input
+                  type="text"
+                  placeholder="이메일로 받은 인증 코드를 입력하세요"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                />
+                <Label>새 비밀번호</Label>
+                <Input
+                  type="password"
+                  placeholder="새 비밀번호를 입력하세요"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <Label>비밀번호 확인</Label>
+                <Input
+                  type="password"
+                  placeholder="비밀번호를 다시 입력하세요"
+                  value={confirmPwd}
+                  onChange={(e) => setConfirmPwd(e.target.value)}
+                />
+                <BaseButton onClick={handleVerifyCodeAndChangePwd}>비밀번호 변경</BaseButton>
+              </>
+            )}
+
             <Link
-              to={'/'}
+              to="/"
               style={{
                 textDecoration: 'none',
                 color: '#2c2c2c',
