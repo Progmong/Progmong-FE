@@ -1,9 +1,9 @@
 // routes.jsx
 import { createBrowserRouter, redirect } from 'react-router-dom'
 import Login from '../pages/Auth/Login'
-import Register from '../pages/Auth/Register'
 import FindPwd from '../pages/Auth/FindPwd'
 import InitProgmong from '../pages/Auth/InitProgmong'
+import EmailVerifyForm from '../pages/Auth/EmailVerifyForm'
 
 const router = createBrowserRouter([
   {
@@ -11,8 +11,8 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: '/register',
-    element: <Register />,
+    path: '/verify-email',
+    element: <EmailVerifyForm />,
   },
   {
     path: '/findpwd',
