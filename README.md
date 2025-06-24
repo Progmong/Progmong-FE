@@ -2,10 +2,10 @@
 
 > **Progmong FE**는 React 19 + Vite 6 기반의 프론트엔드 레포지토리다.  
 > 스타일은 **styled-components** 중심으로 작성하고, 전역 CSS 변수·리셋은 별도 `Styles` 폴더에 분리하였다.  
-> 코드 품질을 위해 **ESLint + Prettier + Commitlint + Husky**를 사용하며, 자동 import·아이콘 플러그인도 Vite에 적용했다. 
+> 코드 품질을 위해 **ESLint + Prettier + Commitlint + Husky**를 사용하며, 자동 import·아이콘 플러그인도 Vite에 적용했다.
 
 ## 1. 프로젝트 트리
-      
+
 ```
 Progmong-FE
 ├─ .github/                  # GitHub Actions·Issue 템플릿 등 CI/CD 설정

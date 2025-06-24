@@ -13,6 +13,7 @@ const COLOR_SET = {
   secondary: { front: '#FD3B40', back: '#880800', text: '#FCFCFC' },
   success: { front: '#FFB52C', back: '#AC6E04', text: '#2B1900' },
   pass: { front: '#4CDAFE', back: '#08B9FF', text: '#FCFCFC' },
+  tag: { front: '#4CDAFE', back: '#08B9FF', text: '#FCFCFC' },
 }
 
 // 사이즈 팔레트(Size)
