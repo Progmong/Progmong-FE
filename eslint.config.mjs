@@ -18,7 +18,7 @@ export default [
     ignores: ['dist', 'node_modules'],
   },
   {
-    files: ['**/*.{js,jsx}'],
+    files: ['**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -45,9 +45,13 @@ export default [
       ...pluginReact.configs.recommended.rules,
       ...pluginReactHooks.configs.recommended.rules,
       ...pluginJsxA11y.configs.recommended.rules,
+      // 추가된 사항 : prettier과 규칙 공유
+      ...pluginPrettier.configs.recommended.rules,
 
       // JSX 사용 시 React 자동 인식
       'react/react-in-jsx-scope': 'off',
+
+      'linebreak-style': ['warn', 'unix'], // or 'auto'
 
       'no-unused-vars': ['warn', { varsIgnorePattern: '^[A-Z_]' }],
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
