@@ -1,5 +1,6 @@
 import styled, { createGlobalStyle } from 'styled-components'
 import bgImage from '../../assets/bg-img.gif'
+import bgVideo from '../../assets/bg-video.mp4'
 import { Link } from 'react-router-dom'
 import BaseButton from '../../components/BaseButton'
 import useAuthApi from '../../constants/auth'
@@ -20,18 +21,36 @@ const GlobalStyle = createGlobalStyle`
 }
 `
 
+// const Bg = styled.div`
+//   height: 100vh; /* 화면 전체 높이 */
+//   width: 100%; /* 가로 100% */
+//   background-image: url(${bgVideo});
+//   background-repeat: no-repeat;
+//   background-position: center;
+//   background-size: cover;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `
 const Bg = styled.div`
-  height: 100vh; /* 화면 전체 높이 */
-  width: 100%; /* 가로 100% */
-  background-image: url(${bgImage});
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
 `
 
+const BackgroundVideo = styled.video`
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* 뒤로 보내기 */
+`
 const MainContainer = styled.div`
   width: 50%;
   background-color: #fffeffb3; /* 배경만 투명 */
@@ -92,6 +111,9 @@ const Login = () => {
     <>
       <GlobalStyle />
       <Bg>
+        <BackgroundVideo autoPlay muted loop>
+          <source src={bgVideo} type="video/mp4" />
+        </BackgroundVideo>
         <MainContainer>
           <Title>PROGMONG</Title>
           <LoginContainer>
