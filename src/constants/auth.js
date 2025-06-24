@@ -1,9 +1,10 @@
 import axios from './axiosInstance'
 
 export const useAuthApi = () => {
-  const register = async (email, nickname, password) => {
+  const register = async (email, bojId, nickname, password) => {
     return await axios.post('/users/register', {
       email,
+      bojId,
       nickname,
       password,
     })
@@ -36,6 +37,17 @@ export const useAuthApi = () => {
     return await axios.get('/users/user-info')
   }
 
+  const getBojId = async (bojId) => {
+    return await axios.get(`/solvedac/${bojId}`)
+  }
+
+  const generateBojCode = async (bojId) => {
+    return axios.get(`/solvedac/generate/${bojId}`)
+  }
+  const verifyBojCode = async (bojId) => {
+    return axios.get(`/solvedac/verify/${bojId}`)
+  }
+
   return {
     register,
     login,
@@ -44,6 +56,9 @@ export const useAuthApi = () => {
     sendResetEmail,
     verifyResetEmail,
     getUserInfo,
+    getBojId,
+    generateBojCode,
+    verifyBojCode,
   }
 }
 
