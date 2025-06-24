@@ -147,7 +147,7 @@ const Login = () => {
                 비밀번호 찾기
               </Link>
               <Link
-                to="/verify-email"
+                to="/register"
                 style={{ textDecoration: 'none', color: '#2c2c2c', fontWeight: 'bold' }}
               >
                 회원가입
