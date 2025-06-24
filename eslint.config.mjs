@@ -8,7 +8,7 @@ import pluginImport from 'eslint-plugin-import'
 import pluginPrettier from 'eslint-plugin-prettier'
 
 // 👉 자동 import된 전역 변수 반영
-import autoImportGlobals from './.eslintrc-auto-import.json' assert { type: 'json' }
+import autoImportGlobals from './.eslintrc-auto-import.js'
 
 // 👉 React를 반드시 포함
 autoImportGlobals.globals.React = true
