@@ -1,5 +1,6 @@
 // routes.jsx
 import { createBrowserRouter, redirect } from 'react-router-dom'
+
 import Login from '../pages/Auth/Login'
 import FindPwd from '../pages/Auth/FindPwd'
 import Register from '../pages/Auth/Register'

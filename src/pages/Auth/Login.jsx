@@ -1,10 +1,11 @@
 import styled, { createGlobalStyle } from 'styled-components'
+import { Link } from 'react-router-dom'
+import { useState } from 'react'
+
 import bgImage from '../../assets/bg-img.gif'
 import bgVideo from '../../assets/bg-video.mp4'
-import { Link } from 'react-router-dom'
 import BaseButton from '../../components/BaseButton'
 import useAuthApi from '../../constants/auth'
-import { useState } from 'react'
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
