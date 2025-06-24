@@ -2,7 +2,6 @@
 import { createBrowserRouter, redirect } from 'react-router-dom'
 import Login from '../pages/Auth/Login'
 import FindPwd from '../pages/Auth/FindPwd'
-import InitProgmong from '../pages/Auth/InitProgmong'
 import EmailVerifyForm from '../pages/Auth/EmailVerifyForm'
 
 const router = createBrowserRouter([
@@ -17,10 +16,6 @@ const router = createBrowserRouter([
   {
     path: '/findpwd',
     element: <FindPwd />,
-  },
-  {
-    path: '/initprogmong',
-    element: <InitProgmong />,
   },
 ])
 
