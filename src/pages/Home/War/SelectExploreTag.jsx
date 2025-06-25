@@ -93,11 +93,7 @@ const ExploreTagSelect = () => {
   const [selectedTags, setSelectedTags] = useState(new Set())
 
   useEffect(() => {
-    // const token = localStorage.getItem('accessToken')
-
-    //하드코딩으로 테스트
-    const token =
-      'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzUwNzU4NDQ4fQ.aWcvqyvcwtDMMu7B2Uh4wg56vYMkaob-o4XJ8lAK8N6UqF8vLNUaFScx-54WVdF84jg1hjJ8HZWfhQOM9pMNNQ'
+    const token = localStorage.getItem('accessToken')
 
     if (!token) {
       console.warn('🚫 accessToken이 없습니다. 로그인 먼저 하세요.')
