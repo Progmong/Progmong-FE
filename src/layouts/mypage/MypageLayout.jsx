@@ -32,13 +32,6 @@ const BottomGrid = styled.section`
   gap: 24px;
 `
 
-const Box = styled.div`
-  background-color: white;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
-`
-
 const MyPageLayout = () => {
   return (
     <Container>
