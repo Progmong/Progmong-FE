@@ -1,3 +1,5 @@
+import fs from 'node:fs'
+import { defineConfig, globalIgnores } from 'eslint/config'
 import js from '@eslint/js'
 import globals from 'globals'
 import pluginReact from 'eslint-plugin-react'
@@ -8,12 +10,12 @@ import pluginImport from 'eslint-plugin-import'
 import pluginPrettier from 'eslint-plugin-prettier'
 
 // 👉 자동 import된 전역 변수 반영
-import autoImportGlobals from './.eslintrc-auto-import.js'
+const autoImportGlobals = JSON.parse(fs.readFileSync('./.eslintrc-auto-import.json', 'utf-8'))
 
 // 👉 React를 반드시 포함
 autoImportGlobals.globals.React = true
 
-export default [
+export default defineConfig([
   {
     ignores: ['dist', 'node_modules'],
   },
@@ -40,6 +42,7 @@ export default [
       import: pluginImport,
       prettier: pluginPrettier,
     },
+    // 실제 린트 규칙 정의
     rules: {
       ...js.configs.recommended.rules,
       ...pluginReact.configs.recommended.rules,
@@ -53,6 +56,12 @@ export default [
 
       'linebreak-style': ['warn', 'unix'], // or 'auto'
 
+      // 리액트 프롭스 검사 끄기
+      'react/prop-types': 'off',
+
+      // useEffect 등 의존성에 대한 검사 끄기
+      'react-hooks/exhaustive-deps': 'off',
+
       'no-unused-vars': ['warn', { varsIgnorePattern: '^[A-Z_]' }],
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
 
@@ -65,6 +74,7 @@ export default [
       ],
 
       'prettier/prettier': 'warn',
+      // JavaScript 기본 권장 설정 추가 (no-unused-vars 등) ESLint 기본구성
     },
     settings: {
       react: {
@@ -72,4 +82,9 @@ export default [
       },
     },
   },
-]
+  // 검사 제외할 경로 설정 (빌드 결과물 등)
+  globalIgnores(['**/dist/**', '**/coverage/**', '**/.output/**']),
+
+  // JavaScript 기본 권장 설정 추가 (no-unused-vars 등) ESLint 기본구성
+  js.configs.recommended,
+])

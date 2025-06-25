@@ -146,10 +146,14 @@ const Login = () => {
       return
     }
     try {
-      const res = await login(email, password)
-      const { accessToken } = res.data.data
-      localStorage.setItem('accessToken', accessToken)
-      alert('로그인 성공')
+      const response = await login(email, password)
+      const accessToken = response.data.data.accessToken
+      if (accessToken) {
+        localStorage.setItem('accessToken', accessToken) // 토큰 저장
+        alert('로그인 성공')
+      } else {
+        alert('액세스 토큰이 응답에 없습니다.')
+      }
     } catch (error) {
       console.error(error)
       alert('로그인 실패')

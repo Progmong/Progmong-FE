@@ -13,6 +13,7 @@ const COLOR_SET = {
   secondary: { front: '#FD3B40', back: '#880800', text: '#FCFCFC' },
   success: { front: '#FFB52C', back: '#AC6E04', text: '#2B1900' },
   pass: { front: '#4CDAFE', back: '#08B9FF', text: '#FCFCFC' },
+  tag: { front: '#4CDAFE', back: '#08B9FF', text: '#FCFCFC' },
 }
 
 // 사이즈 팔레트(Size)
@@ -25,22 +26,22 @@ const SIZE_SET = {
 /* --------------------------------------------------
    2) 볼록 효과 Mixin
    -------------------------------------------------- */
-const convexMixin = ({ c, s }) => css`
+const convexMixin = ({ $c, $s }) => css`
   /* 사이즈별 여백·글꼴·그림자 설정 */
-  padding: ${s.padY}px ${s.padX}px;
-  font-size: ${s.font};
-  box-shadow: 0 ${s.shadow}px 0 ${c.back};
+  padding: ${$s.padY}px ${$s.padX}px;
+  font-size: ${$s.font};
+  box-shadow: 0 ${$s.shadow}px 0 ${$c.back};
 
-  margin-bottom: ${s.shadow}px; /* 그람자를 보장하기 위한 최소한의 margin */
+  margin-bottom: ${$s.shadow}px; /* 그람자를 보장하기 위한 최소한의 margin */
 
   /* Hover: 깊이 ½, Active: 그림자 제거 */
   &:hover {
-    transform: translateY(${s.shadow / 2}px);
-    box-shadow: 0 ${s.shadow / 2}px 0 ${c.back};
+    transform: translateY(${$s.shadow / 2}px);
+    box-shadow: 0 ${$s.shadow / 2}px 0 ${$c.back};
   }
   &:active {
-    transform: translateY(${s.shadow}px);
-    box-shadow: 0 0 0 ${c.back};
+    transform: translateY(${$s.shadow}px);
+    box-shadow: 0 0 0 ${$c.back};
   }
 `
 
@@ -48,8 +49,8 @@ const convexMixin = ({ c, s }) => css`
    3) 스타일드 버튼
    -------------------------------------------------- */
 const ConvexBtn = styled.button.attrs(({ variant = 'primary', size = 'md' }) => ({
-  c: COLOR_SET[variant] || COLOR_SET.primary,
-  s: SIZE_SET[size] || SIZE_SET.md,
+  $c: COLOR_SET[variant] || COLOR_SET.primary,
+  $s: SIZE_SET[size] || SIZE_SET.md,
 }))`
   /* 기본 레이아웃 */
   display: inline-block;
@@ -72,11 +73,11 @@ const ConvexBtn = styled.button.attrs(({ variant = 'primary', size = 'md' }) => 
     box-shadow 0.12s ease;
 
   /* 팔레트 색상 적용 */
-  color: ${({ c }) => c.text};
-  background: ${({ c }) => c.front};
+  color: ${({ $c }) => $c.text};
+  background: ${({ $c }) => $c.front};
 
   /* 볼록 효과 삽입 */
-  ${({ c, s }) => convexMixin({ c, s })};
+  ${({ $c, $s }) => convexMixin({ $c, $s })}
 
   /* 비활성 상태 */
   &:disabled {
