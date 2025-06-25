@@ -8,7 +8,7 @@ const AxiosInstance = axios.create({
 AxiosInstance.interceptors.request.use((config) => {
   // const token = localStorage.getItem('accessToken')
   const dummyToken =
-    'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzUxMTEwMTMzfQ.cTLLHTmG_ohhpy47tUjQx-nbgeBgDS-jiFxqMea4iJiD6pyt9VIqwPKcdWueHnEbCzsUTQXFgAtj89DGQcn97Q'
+    'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzUxMjEyMzA4fQ.3g_QJP9A0P1P6xw7Mc-Oo3ijNLLKKsFVz-F_oq4Ayk7qn2eicKwDa7NkUS7kd9YpYuNL340F49JdrS3HsGmjcA'
 
   if (dummyToken) {
     config.headers.Authorization = `Bearer ${dummyToken}`

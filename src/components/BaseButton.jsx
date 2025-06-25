@@ -76,7 +76,7 @@ const ConvexBtn = styled.button.attrs(({ variant = 'primary', size = 'md' }) => 
   background: ${({ c }) => c.front};
 
   /* 볼록 효과 삽입 */
-  ${({ c, s }) => convexMixin({ c, s })};
+  ${({ c, s }) => convexMixin({ c, s })}
 
   /* 비활성 상태 */
   &:disabled {

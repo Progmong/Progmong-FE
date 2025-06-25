@@ -30,6 +30,7 @@ const InputBase = styled.input.attrs(({ size = 'md' }) => ({
 
   /* number 타입 스핀 버튼 제거 */
   &[type='number'] {
+    appearance: none;
     -moz-appearance: textfield;
   }
   &[type='number']::-webkit-outer-spin-button,

@@ -1,11 +1,11 @@
 // routes.jsx
-import { createBrowserRouter, redirect } from 'react-router-dom'
-import ExamplePage from '../pages/ExamplePage'
+import { createBrowserRouter } from 'react-router-dom'
+import CommunityMain from '../pages/Community/CommunityMain'
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <ExamplePage />,
+    path: '/community',
+    Component: CommunityMain,
   },
 ])
 

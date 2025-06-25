@@ -1,10 +1,13 @@
 import styled from 'styled-components'
+import { useEffect, useState } from 'react'
 
 import BaseContainer from '../../components/BaseContainer'
 import useCommnunityApi from '../../Services/Community'
+import FreePostEle from './FreePostEle'
+
+import BaseButton from '@/components/BaseButton'
 
 const MainBox = styled.div`
-  height: 100vh;
   width: 100%;
   background-color: #fff9ed;
 `
@@ -47,21 +50,41 @@ const BoardContainer = styled.div`
 
 const CompContainer = styled.div``
 
-const ListContainer = styled.div``
+const ListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`
+
+const BottomContainer = styled.div`
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+`
+
+const WriteButtonContainer = styled.div`
+  display: inline-block;
+  text-align: end;
+`
 
 const CommunityMain = () => {
   const communityApi = useCommnunityApi()
 
-  const fetchData = async () => {
-    try {
-      const res = await communityApi()
-      console.log(res.data.data)
-    } catch (err) {
-      console.error(err)
-    }
-  }
+  const [posts, setPosts] = useState([])
 
-  fetchData()
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await communityApi()
+        console.log(res.data.data)
+        setPosts(res.data.data)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    fetchData()
+  }, [])
 
   return (
     <MainBox>
@@ -74,8 +97,17 @@ const CommunityMain = () => {
       <HomeBox>
         <BoardContainer>
           <ListContainer>
-            <BaseContainer></BaseContainer>
+            {posts.map((post) => (
+              <FreePostEle key={post.id} post={post} />
+            ))}
           </ListContainer>
+          <BottomContainer>
+            <div></div>
+            <div></div>
+            <WriteButtonContainer>
+              <BaseButton>글쓰기</BaseButton>
+            </WriteButtonContainer>
+          </BottomContainer>
         </BoardContainer>
       </HomeBox>
     </MainBox>
