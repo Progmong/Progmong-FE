@@ -55,8 +55,12 @@ export default defineConfig([
       'react/react-in-jsx-scope': 'off',
 
       'linebreak-style': ['warn', 'unix'], // or 'auto'
+
       // 리액트 프롭스 검사 끄기
       'react/prop-types': 'off',
+
+      // useEffect 등 의존성에 대한 검사 끄기
+      'react-hooks/exhaustive-deps': 'off',
 
       'no-unused-vars': ['warn', { varsIgnorePattern: '^[A-Z_]' }],
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
