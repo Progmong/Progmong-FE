@@ -1,8 +1,5 @@
 import styled from 'styled-components'
 
-import BaseButton from '../../components/BaseButton.jsx'
-import { useModal } from '../../context/ModalContext.jsx'
-
 const Box = styled.div`
   background-color: white;
   border-radius: 16px;
@@ -17,13 +14,10 @@ const Title = styled.h3`
 `
 
 const InterestTags = () => {
-  const { openModal } = useModal()
-
   return (
     <Box>
       <Title>관심 태그</Title>
       <div>선택한 관심 분야 태그가 여기에 표시됩니다.</div>
-      <BaseButton onClick={() => openModal('tag-edit')}>태그 수정</BaseButton>
     </Box>
   )
 }
