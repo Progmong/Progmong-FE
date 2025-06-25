@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import BaseContainer from './BaseContainer.jsx'
+
 const Overlay = styled.div`
   position: fixed;
   top: 0;
@@ -15,18 +17,43 @@ const Overlay = styled.div`
 `
 
 const ModalContainer = styled.div`
-  background: white;
+  display: flex;
+  background-image: url('/src/assets/modalBackground.png');
   padding: 2rem;
   border-radius: 12px;
-  min-width: 300px;
-  max-width: 90%;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  width: 600px;
+  height: 400px;
+  font-family: Binggrae;
+`
+const ModalTitle = styled.div`
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+
+  font-size: 1.7rem;
+  text-align: center;
+  font-weight: bold;
+  flex-grow: 0;
 `
 
-const BaseModal = ({ children, onClose }) => {
+const ModalContent = styled.div`
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  height: max-content;
+  flex-direction: column;
+`
+
+const BaseModal = ({ title, children, onClose }) => {
   return (
     <Overlay onClick={onClose}>
-      <ModalContainer onClick={(e) => e.stopPropagation()}>{children}</ModalContainer>
+      <ModalContainer onClick={(e) => e.stopPropagation()}>
+        <BaseContainer style={{ flexGrow: 1 }}>
+          {title && <ModalTitle>{title}</ModalTitle>}
+          <ModalContent>{children}</ModalContent>
+        </BaseContainer>
+      </ModalContainer>
     </Overlay>
   )
 }
