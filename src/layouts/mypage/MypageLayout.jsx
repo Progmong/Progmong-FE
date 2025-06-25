@@ -2,6 +2,8 @@ import styled from 'styled-components'
 
 import InfoPanel from '../../pages/MyPage/InfoPanel.jsx'
 import CharacterStage from '../../pages/MyPage/CharacterStage.jsx'
+import ExploreRecords from '../../pages/MyPage/ExploreRecord.jsx'
+import InterestTags from '../../pages/MyPage/InterestTags.jsx'
 
 const Container = styled.div`
   width: 100%;
@@ -45,8 +47,8 @@ const MyPageLayout = () => {
         <MainContent>
           <CharacterStage />
           <BottomGrid>
-            <Box>최근 탐험 기록</Box>
-            <Box>관심 태그 영역</Box>
+            <ExploreRecords />
+            <InterestTags />
           </BottomGrid>
         </MainContent>
       </Wrapper>
