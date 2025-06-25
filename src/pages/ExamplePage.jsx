@@ -1,11 +1,12 @@
 // 컴포넌트의 상태관리를 hooks 폴더에 분리
+import styled from 'styled-components'
+
 import { useNeonColor } from '../hooks/useNeonColor'
 
 // styled-components가 적용된 버튼 구조 생성 == Vue의 template
 import BaseButton from '../components/BaseButton'
 import BaseContainer from '../components/BaseContainer'
 import BaseInput from '../components/BaseInput'
-import styled from 'styled-components'
 
 // styled-component
 const Box = styled.div`
