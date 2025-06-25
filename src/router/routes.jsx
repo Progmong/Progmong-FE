@@ -1,9 +1,11 @@
 // routes.jsx
-import { createBrowserRouter, redirect } from 'react-router-dom'
+import { createBrowserRouter } from 'react-router-dom'
 
 import Login from '../pages/Auth/Login'
 import FindPwd from '../pages/Auth/FindPwd'
 import Register from '../pages/Auth/Register'
+import MyPageLayout from '../layouts/mypage/MypageLayout.jsx'
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -16,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: '/findpwd',
     element: <FindPwd />,
+  },
+  {
+    path: '/mypage',
+    element: <MyPageLayout />,
   },
 ])
 
