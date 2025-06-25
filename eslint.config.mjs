@@ -54,12 +54,9 @@ export default defineConfig([
       // JSX 사용 시 React 자동 인식
       'react/react-in-jsx-scope': 'off',
 
-<<<<<<< Updated upstream
       'linebreak-style': ['warn', 'unix'], // or 'auto'
-=======
       // 리액트 프롭스 검사 끄기
       'react/prop-types': 'off',
->>>>>>> Stashed changes
 
       'no-unused-vars': ['warn', { varsIgnorePattern: '^[A-Z_]' }],
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
