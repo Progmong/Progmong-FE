@@ -7,6 +7,9 @@ import Register from '../pages/Auth/Register'
 import SelectEgg from '../pages/OnBoarding/SelectEgg'
 import SelectExploreTag from '../pages/Home/War/SelectExploreTag'
 import MyPageLayout from '../layouts/mypage/MypageLayout.jsx'
+import ExplorePage from '../pages/Explore/ExplorePage'
+import MainPage from '../pages/Main/MainPage'
+import ExploreResultPage from '../pages/Explore/ExploreResultPage'
 
 const router = createBrowserRouter([
   {
@@ -32,6 +35,18 @@ const router = createBrowserRouter([
   {
     path: '/mypage',
     element: <MyPageLayout />,
+  },
+  {
+    path: '/explore',
+    element: <ExplorePage />,
+  },
+  {
+    path: '/main',
+    element: <MainPage />,
+  },
+  {
+    path: '/explore/result',
+    element: <ExploreResultPage />,
   },
 ])
 
