@@ -13,7 +13,7 @@ const ProgmongEggs = [
   new URL('../../assets/egg3.svg', import.meta.url).href,
 ]
 
-const introBackground = new URL('../../assets/intro.png', import.meta.url).href
+const introBackground = new URL('../../assets/background-img1.png', import.meta.url).href
 
 const Background = styled.div`
   position: relative;
@@ -116,9 +116,6 @@ const EggSelect = () => {
   const [nickname, setNickname] = useState('') // ⬅️ 상태 선언
   const handleEvent = async () => {
     const token = localStorage.getItem('accessToken')
-    //하드코딩으로 테스트
-    //const token =
-    //  'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzUwNzU4NDQ4fQ.aWcvqyvcwtDMMu7B2Uh4wg56vYMkaob-o4XJ8lAK8N6UqF8vLNUaFScx-54WVdF84jg1hjJ8HZWfhQOM9pMNNQ'
 
     try {
       const response = await axios.post(
