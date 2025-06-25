@@ -4,15 +4,18 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import bgImage from '../../assets/background-img1.png'
+import bgVideo from '../../assets/bg-video.mp4'
+
 import BaseButton from '../../components/BaseButton'
+import BaseInput from '../../components/BaseInput'
+import BaseContainer from '../../components/BaseContainer'
 import useAuthApi from '../../constants/auth'
+import { useMediaQuery } from 'react-responsive'
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
-  font-family: 'NEXON Bazzi Code', 'Comic Sans MS';
-
-      
-
+  /* font-family: 'NEXON Bazzi Code', 'Comic Sans MS'; */
+  font-family: 'Binggrae';
   }
   @font-face {
   font-family: 'NEXON Bazzi Code';
@@ -22,56 +25,64 @@ const GlobalStyle = createGlobalStyle`
 }
 `
 const Bg = styled.div`
-  height: 100vh; /* 화면 전체 높이 */
-  width: 100%; /* 가로 100% */
-  background-image: url(${bgImage});
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
 `
 
-const MainContainer = styled.div`
-  width: 50%;
-  background-color: #fffeffb3; /* 배경만 투명 */
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  box-shadow:
-    0 3px #d1d8ffb3,
-    0 5px #6b0300b3;
+const BackgroundVideo = styled.video`
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* 뒤로 보내기 */
 `
+
+// const MainContainer = styled.div`
+//   width: 50%;
+//   background-color: #fffeffb3; /* 배경만 투명 */
+//   border-radius: 20px;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   box-shadow:
+//     0 3px #d1d8ffb3,
+//     0 5px #6b0300b3;
+// `
 
 const Title = styled.h1`
   text-align: center;
-  font-size: 50px;
+  font-size: 30px;
 `
 const LoginContainer = styled.div`
+  width: 80%;
   display: flex;
   flex-direction: column;
-  padding: 50px 100px;
+  gap: 10px;
 `
 
 const Label = styled.label`
   font-weight: bold;
-  font-size: 24px;
-  margin-bottom: 8px;
+  font-size: 18px;
 `
-const Input = styled.input`
-  border-radius: 20px;
-  padding: 15px;
-  margin-bottom: 30px;
-  font-size: 20px;
-  border-style: none;
-  outline: none;
-  box-shadow:
-    0 3px #d1d8ffb3,
-    0 5px #bfa385b3;
-  background-color: white;
-`
+// const Input = styled.input`
+//   border-radius: 20px;
+//   padding: 15px;
+//   margin-bottom: 30px;
+//   font-size: 20px;
+//   border-style: none;
+//   outline: none;
+//   box-shadow:
+//     0 3px #d1d8ffb3,
+//     0 5px #bfa385b3;
+//   background-color: white;
+// `
 
 const Register = () => {
   const [email, setEmail] = useState('')
@@ -84,6 +95,10 @@ const Register = () => {
   const [step, setStep] = useState('boj')
   const [bojId, setBojId] = useState('')
   const navigate = useNavigate()
+
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  })
 
   const handleGenerateBojCode = async () => {
     if (!bojId) {
@@ -108,13 +123,11 @@ const Register = () => {
     try {
       const res = await verifyBojCode(bojId)
       if (res.data.verified) {
-        alert('백준 인증 성공!')
+        alert('인증 성공')
         setStep('email')
-      } else {
-        alert('인증 실패. bio에 올바른 코드를 입력했는지 확인하세요.')
       }
-    } catch (err) {
-      alert('서버 오류')
+    } catch (error) {
+      alert(error.response.data)
     }
   }
 
@@ -170,25 +183,43 @@ const Register = () => {
     <>
       <GlobalStyle />
       <Bg>
-        <MainContainer>
+        <BackgroundVideo autoPlay muted loop>
+          <source src={bgVideo} type="video/mp4" />
+        </BackgroundVideo>
+        <BaseContainer
+          style={{
+            backgroundColor: '#ffffffb9',
+            width: '40%',
+            minWidth: isMobile ? '280px' : '360px',
+            display: 'flex',
+            justifyContent: 'center',
+            padding: isMobile ? '1.5rem' : '2rem',
+          }}
+        >
           <LoginContainer>
             {step === 'boj' ? (
               <>
-                <Title>백준 인증</Title>
+                <Title>Solved.ac 인증</Title>
                 <Label>solved.ac 아이디</Label>
-                <Input
+                <BaseInput
                   type="text"
                   placeholder="solved.ac 아이디"
                   value={bojId}
                   onChange={(e) => setBojId(e.target.value)}
                 />
-                <BaseButton onClick={handleGenerateBojCode}>인증코드 생성</BaseButton>
+                <BaseButton
+                  variant="secondary"
+                  onClick={handleGenerateBojCode}
+                  style={{ marginTop: '15px' }}
+                >
+                  인증코드 생성
+                </BaseButton>
               </>
             ) : step === 'boj_verify' ? (
               <>
-                <Title>백준 인증 코드 검증</Title>
+                <Title>인증 코드 검증</Title>
                 <p style={{ textAlign: 'center' }}>
-                  아래 코드를 solved.ac <b>bio</b>에 붙여넣은 후, 검증 버튼을 눌러주세요.
+                  아래 코드를 solved.ac 자기소개에 붙여넣은 후, 인증 확인 버튼을 눌러주세요.
                 </p>
                 <code
                   style={{
@@ -203,80 +234,120 @@ const Register = () => {
                 >
                   {bojCode}
                 </code>
-                <BaseButton onClick={handleVerifyBojCode}>solved.ac 인증 확인</BaseButton>
+                <div style={{ display: 'flex' }}>
+                  <Link
+                    to={`https://solved.ac/profile/${bojId}`}
+                    target={'_blank'}
+                    style={{
+                      textDecoration: 'none',
+                      color: '#2c2c2c',
+                      fontWeight: 'bold',
+                      textAlign: 'left',
+                    }}
+                  >
+                    Solved.ac 프로필 바로가기
+                  </Link>
+                </div>
+                <BaseButton
+                  variant="secondary"
+                  onClick={handleVerifyBojCode}
+                  style={{ marginTop: '15px' }}
+                >
+                  인증 확인
+                </BaseButton>
               </>
             ) : step === 'email' ? (
               <>
                 <Title>이메일 인증</Title>
                 <Label>이메일</Label>
-                <Input
+                <BaseInput
                   type="email"
                   placeholder="progmong@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  style={{
+                    margin: '1rem 0',
+                  }}
                 />
-                <BaseButton onClick={handleSendEmail}>이메일 인증</BaseButton>
+                <BaseButton
+                  variant="secondary"
+                  onClick={handleSendEmail}
+                  style={{ marginTop: '15px' }}
+                >
+                  이메일 인증
+                </BaseButton>
               </>
             ) : step === 'code' ? (
               <>
                 <Title>코드 인증</Title>
-                <Label>인증 코드</Label>
-                <Input
+                <Label>인증코드</Label>
+                <BaseInput
                   type="text"
-                  placeholder="이메일로 받은 인증 코드를 입력하세요"
+                  placeholder="인증코드 입력"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                 />
-                <BaseButton onClick={handleVerifyCode}>코드 확인</BaseButton>
+                <BaseButton
+                  variant="secondary"
+                  onClick={handleVerifyCode}
+                  style={{ marginTop: '15px' }}
+                >
+                  코드 확인
+                </BaseButton>
               </>
             ) : (
               <>
                 <Title>회원가입</Title>
-                <Label>EMAIL</Label>
-                <Input
-                  type="email"
-                  placeholder="email"
-                  value={email}
-                  disabled
-                  style={{ backgroundColor: 'gray' }}
-                />
+                {/* <Label>EMAIL</Label>
+                <BaseInput type="email" placeholder="email" value={email} disabled />
+
+                <Label>Solved.ac 아이디</Label>
+                <BaseInput type="text" placeholder="solved.ac 아이디" value={bojId} disabled /> */}
                 <Label>닉네임</Label>
-                <Input
+                <BaseInput
                   type="text"
                   placeholder="닉네임"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
                 />
                 <Label>비밀번호</Label>
-                <Input
+                <BaseInput
                   type="password"
-                  placeholder="비밀번호를 입력하세요"
+                  placeholder="비밀번호"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <Label>비밀번호 확인</Label>
-                <Input
+                <BaseInput
                   type="password"
-                  placeholder="비밀번호를 다시 입력하세요"
+                  placeholder="비밀번호 확인"
                   value={confirmPwd}
                   onChange={(e) => setConfirmPwd(e.target.value)}
                 />
-                <BaseButton onClick={handleRegister}>가입</BaseButton>
+                <BaseButton
+                  variant="secondary"
+                  onClick={handleRegister}
+                  style={{ marginTop: '15px' }}
+                >
+                  가입
+                </BaseButton>
               </>
             )}
-            <Link
-              to={'/'}
-              style={{
-                textDecoration: 'none',
-                color: '#2c2c2c',
-                fontWeight: 'bold',
-                textAlign: 'right',
-              }}
-            >
-              로그인
-            </Link>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Link
+                to={'/'}
+                style={{
+                  textDecoration: 'none',
+                  color: '#2c2c2c',
+                  fontWeight: 'bold',
+                  // textAlign: 'right',
+                }}
+              >
+                로그인
+              </Link>
+            </div>
           </LoginContainer>
-        </MainContainer>
+        </BaseContainer>
       </Bg>
     </>
   )

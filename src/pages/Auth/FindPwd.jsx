@@ -4,12 +4,19 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import bgImage from '../../assets/background-img1.png'
+import bgVideo from '../../assets/bg-video.mp4'
+
 import BaseButton from '../../components/BaseButton'
+import BaseInput from '../../components/BaseInput'
+import BaseContainer from '../../components/BaseContainer'
 import useAuthApi from '../../constants/auth'
+import { useMediaQuery } from 'react-responsive'
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
-    font-family: 'NEXON Bazzi Code', 'Comic Sans MS';
+    /* font-family: 'NEXON Bazzi Code', 'Comic Sans MS'; */
+      font-family: 'Binggrae';
+    
   }
   @font-face {
     font-family: 'NEXON Bazzi Code';
@@ -20,57 +27,39 @@ const GlobalStyle = createGlobalStyle`
 `
 
 const Bg = styled.div`
+  position: relative;
   height: 100vh;
   width: 100%;
-  background-image: url(${bgImage});
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
 `
 
-const MainContainer = styled.div`
-  width: 50%;
-  background-color: #fffeffb3;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  box-shadow:
-    0 3px #d1d8ffb3,
-    0 5px #6b0300b3;
+const BackgroundVideo = styled.video`
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* 뒤로 보내기 */
 `
 
 const Title = styled.h1`
   text-align: center;
-  font-size: 50px;
+  font-size: 30px;
 `
-
 const LoginContainer = styled.div`
+  width: 80%;
   display: flex;
   flex-direction: column;
-  padding: 50px 100px;
+  gap: 10px;
 `
 
 const Label = styled.label`
   font-weight: bold;
-  font-size: 24px;
-  margin-bottom: 8px;
-`
-
-const Input = styled.input`
-  border-radius: 20px;
-  padding: 15px;
-  margin-bottom: 30px;
-  font-size: 20px;
-  border-style: none;
-  outline: none;
-  box-shadow:
-    0 3px #d1d8ffb3,
-    0 5px #bfa385b3;
-  background-color: white;
+  font-size: 18px;
 `
 
 const FindPwd = () => {
@@ -81,6 +70,10 @@ const FindPwd = () => {
   const [password, setPassword] = useState('')
   const [confirmPwd, setConfirmPwd] = useState('')
   const navigate = useNavigate()
+
+  const isMobile = useMediaQuery({
+    query: '(max-width:767px)',
+  })
 
   const handleSendEmail = async () => {
     if (!email) {
@@ -121,62 +114,88 @@ const FindPwd = () => {
     <>
       <GlobalStyle />
       <Bg>
-        <MainContainer>
-          <Title>비밀번호 찾기</Title>
+        <BackgroundVideo autoPlay muted loop>
+          <source src={bgVideo} type="video/mp4" />
+        </BackgroundVideo>
+        <BaseContainer
+          style={{
+            backgroundColor: '#ffffffb9',
+            width: '40%',
+            minWidth: isMobile ? '280px' : '360px',
+            display: 'flex',
+            justifyContent: 'center',
+            padding: isMobile ? '1.5rem' : '2rem',
+          }}
+        >
           <LoginContainer>
+            <Title>비밀번호 찾기</Title>
+
             {step === 'email' && (
               <>
                 <Label>이메일</Label>
-                <Input
+                <BaseInput
                   type="email"
                   placeholder="progmong@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                <BaseButton onClick={handleSendEmail}>이메일 인증</BaseButton>
+                <BaseButton
+                  variant="secondary"
+                  onClick={handleSendEmail}
+                  style={{ marginTop: '15px' }}
+                >
+                  이메일 인증
+                </BaseButton>
               </>
             )}
 
             {step === 'code' && (
               <>
                 <Label>인증 코드</Label>
-                <Input
+                <BaseInput
                   type="text"
                   placeholder="이메일로 받은 인증 코드를 입력하세요"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                 />
                 <Label>새 비밀번호</Label>
-                <Input
+                <BaseInput
                   type="password"
                   placeholder="새 비밀번호를 입력하세요"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <Label>비밀번호 확인</Label>
-                <Input
+                <BaseInput
                   type="password"
                   placeholder="비밀번호를 다시 입력하세요"
                   value={confirmPwd}
                   onChange={(e) => setConfirmPwd(e.target.value)}
                 />
-                <BaseButton onClick={handleVerifyCodeAndChangePwd}>비밀번호 변경</BaseButton>
+                <BaseButton
+                  variant="secondary"
+                  onClick={handleVerifyCodeAndChangePwd}
+                  style={{ marginTop: '15px' }}
+                >
+                  비밀번호 변경
+                </BaseButton>
               </>
             )}
-
-            <Link
-              to="/"
-              style={{
-                textDecoration: 'none',
-                color: '#2c2c2c',
-                fontWeight: 'bold',
-                textAlign: 'right',
-              }}
-            >
-              로그인
-            </Link>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Link
+                to="/"
+                style={{
+                  textDecoration: 'none',
+                  color: '#2c2c2c',
+                  fontWeight: 'bold',
+                  textAlign: 'right',
+                }}
+              >
+                로그인
+              </Link>
+            </div>
           </LoginContainer>
-        </MainContainer>
+        </BaseContainer>
       </Bg>
     </>
   )
