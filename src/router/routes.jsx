@@ -1,11 +1,13 @@
 // routes.jsx
-import { createBrowserRouter, redirect } from 'react-router-dom'
+import { createBrowserRouter } from 'react-router-dom'
 
 import Login from '../pages/Auth/Login'
 import FindPwd from '../pages/Auth/FindPwd'
 import Register from '../pages/Auth/Register'
 import SelectEgg from '../pages/OnBoarding/SelectEgg'
 import SelectExploreTag from '../pages/Home/War/SelectExploreTag'
+import MyPageLayout from '../layouts/mypage/MypageLayout.jsx'
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -26,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: '/SelectExploreTag',
     element: <SelectExploreTag />,
+  },
+  {
+    path: '/mypage',
+    element: <MyPageLayout />,
   },
 ])
 
