@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import InfoPanel from '../../pages/MyPage/InfoPanel.jsx'
+
 const FontBox = styled.div`
   font-family: 'Binggrae';
 `
@@ -56,7 +58,7 @@ const MyPageLayout = () => {
   return (
     <Container>
       <Wrapper>
-        <SideBar>좌측 정보 영역</SideBar>
+        <InfoPanel />
         <MainContent>
           <CharacterStage>캐릭터 무대 영역</CharacterStage>
           <BottomGrid>
