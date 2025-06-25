@@ -1,14 +1,12 @@
 import styled from 'styled-components'
 
 import InfoPanel from '../../pages/MyPage/InfoPanel.jsx'
+import CharacterStage from '../../pages/MyPage/CharacterStage.jsx'
 
-const FontBox = styled.div`
-  font-family: 'Binggrae';
-`
 const Container = styled.div`
   width: 100%;
   min-height: 100vh;
-  background-color: #f8f9fa;
+  background-color: #fff5db;
   padding: 24px;
 `
 
@@ -20,25 +18,10 @@ const Wrapper = styled.div`
   gap: 24px;
 `
 
-const SideBar = styled.aside`
-  background-color: white;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
-`
-
 const MainContent = styled.main`
   display: flex;
   flex-direction: column;
   gap: 24px;
-`
-
-const CharacterStage = styled.section`
-  background-color: white;
-  border-radius: 16px;
-  padding: 24px;
-  text-align: center;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
 `
 
 const BottomGrid = styled.section`
@@ -60,7 +43,7 @@ const MyPageLayout = () => {
       <Wrapper>
         <InfoPanel />
         <MainContent>
-          <CharacterStage>캐릭터 무대 영역</CharacterStage>
+          <CharacterStage />
           <BottomGrid>
             <Box>최근 탐험 기록</Box>
             <Box>관심 태그 영역</Box>
