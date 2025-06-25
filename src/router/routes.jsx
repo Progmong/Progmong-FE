@@ -6,6 +6,8 @@ import FindPwd from '../pages/Auth/FindPwd'
 import Register from '../pages/Auth/Register'
 import SelectEgg from '../pages/OnBoarding/SelectEgg'
 import SelectExploreTag from '../pages/Home/War/SelectExploreTag'
+import Home from '../pages/Home/Home'
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -20,12 +22,16 @@ const router = createBrowserRouter([
     element: <FindPwd />,
   },
   {
-    path: '/SelectEgg',
+    path: '/selectEgg',
     element: <SelectEgg />,
   },
   {
-    path: '/SelectExploreTag',
+    path: '/selectExploreTag',
     element: <SelectExploreTag />,
+  },
+  {
+    path: '/home',
+    element: <Home />,
   },
 ])
 
