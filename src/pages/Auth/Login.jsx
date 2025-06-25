@@ -2,6 +2,7 @@ import styled, { createGlobalStyle } from 'styled-components'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 
+import logo from '../../assets/progmong-logo.png'
 import bgImage from '../../assets/bg-img.gif'
 import bgVideo from '../../assets/bg-video.mp4'
 import BaseButton from '../../components/BaseButton'
@@ -55,6 +56,34 @@ const BackgroundVideo = styled.video`
   height: 100%;
   z-index: -1; /* 뒤로 보내기 */
 `
+
+const Logo = styled.div`
+  position: absolute;
+  top: -200px;
+  width: 500px;
+  height: 500px;
+  background-image: url(${logo});
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 2;
+
+  /* 강렬한 효과 */
+  animation: glow 2.5s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 10px #ff4b4b) drop-shadow(0 0 20px #ff7e7e);
+
+  @keyframes glow {
+    0% {
+      transform: scale(1);
+      filter: drop-shadow(0 0 5px #ff4b4b);
+    }
+    100% {
+      transform: scale(1.08);
+      filter: drop-shadow(0 0 20px #ff4b4b) drop-shadow(0 0 30px #ffaaaa);
+    }
+  }
+`
+
 // const MainContainer = styled.div`
 //   width: 50%;
 //   background-color: #fffeffb3; /* 배경만 투명 */
@@ -66,20 +95,28 @@ const BackgroundVideo = styled.video`
 //     0 3px #d1d8ffb3,
 //     0 5px #6b0300b3;
 // `
-const Title = styled.h1`
-  text-align: center;
-  font-size: 30px;
-`
 const LoginContainer = styled.div`
   width: 80%;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  z-index: 100;
 `
 
 const Label = styled.label`
   font-weight: bold;
   font-size: 18px;
+`
+
+const StyleLink = styled(Link)`
+  text-decoration: none;
+  color: #2c2c2c;
+  font-weight: bold;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `
 // const Input = styled.input`
 //   border-radius: 20px;
@@ -109,13 +146,16 @@ const Login = () => {
       return
     }
     try {
-      await login(email, password)
+      const res = await login(email, password)
+      const { accessToken } = res.data.data
+      localStorage.setItem('accessToken', accessToken)
       alert('로그인 성공')
     } catch (error) {
       console.error(error)
       alert('로그인 실패')
     }
   }
+
   return (
     <>
       <GlobalStyle />
@@ -131,11 +171,12 @@ const Login = () => {
             display: 'flex',
             justifyContent: 'center',
             padding: isMobile ? '1.5rem' : '2rem',
+            position: 'relative', // 중요: 자식 absolute 기준이 됨
+            paddingTop: '6rem', // 로고 겹침 여유 공간 확보
           }}
         >
-          <LoginContainer>
-            <Title>PROGMONG</Title>
-
+          <Logo />
+          <LoginContainer style={{ marginTop: '100px' }}>
             <Label>EMAIL</Label>
             <BaseInput
               type="email"
@@ -157,22 +198,10 @@ const Login = () => {
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                color: '#2c2c2c',
-                fontWeight: 'bold',
               }}
             >
-              <Link
-                to="/findpwd"
-                style={{ textDecoration: 'none', color: '#2c2c2c', fontWeight: 'bold' }}
-              >
-                비밀번호 찾기
-              </Link>
-              <Link
-                to="/register"
-                style={{ textDecoration: 'none', color: '#2c2c2c', fontWeight: 'bold' }}
-              >
-                회원가입
-              </Link>
+              <StyleLink to="/findpwd">비밀번호 찾기</StyleLink>
+              <StyleLink to="/register">회원가입</StyleLink>
             </div>
           </LoginContainer>
         </BaseContainer>

@@ -49,6 +49,7 @@ const BackgroundVideo = styled.video`
 const Title = styled.h1`
   text-align: center;
   font-size: 30px;
+  font-weight: bold;
 `
 const LoginContainer = styled.div`
   width: 80%;
@@ -60,6 +61,15 @@ const LoginContainer = styled.div`
 const Label = styled.label`
   font-weight: bold;
   font-size: 18px;
+`
+const StyleLink = styled(Link)`
+  text-decoration: none;
+  color: #2c2c2c;
+  font-weight: bold;
+  transition: transform 0.2s ease;
+  &:hover {
+    transform: scale(1.1);
+  }
 `
 
 const FindPwd = () => {
@@ -182,7 +192,7 @@ const FindPwd = () => {
               </>
             )}
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Link
+              <StyleLink
                 to="/"
                 style={{
                   textDecoration: 'none',
@@ -192,7 +202,7 @@ const FindPwd = () => {
                 }}
               >
                 로그인
-              </Link>
+              </StyleLink>
             </div>
           </LoginContainer>
         </BaseContainer>

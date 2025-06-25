@@ -59,6 +59,7 @@ const BackgroundVideo = styled.video`
 const Title = styled.h1`
   text-align: center;
   font-size: 30px;
+  font-weight: bold;
 `
 const LoginContainer = styled.div`
   width: 80%;
@@ -70,6 +71,16 @@ const LoginContainer = styled.div`
 const Label = styled.label`
   font-weight: bold;
   font-size: 18px;
+`
+
+const StyleLink = styled(Link)`
+  text-decoration: none;
+  color: #2c2c2c;
+  font-weight: bold;
+  transition: transform 0.2s ease;
+  &:hover {
+    transform: scale(1.1);
+  }
 `
 // const Input = styled.input`
 //   border-radius: 20px;
@@ -95,6 +106,7 @@ const Register = () => {
   const [step, setStep] = useState('boj')
   const [bojId, setBojId] = useState('')
   const navigate = useNavigate()
+  const [isEmailSending, setIsEmailSending] = useState(false) // 버튼 잠금 상태
 
   const isMobile = useMediaQuery({
     query: '(max-width:767px)',
@@ -138,12 +150,14 @@ const Register = () => {
     }
 
     try {
+      setIsEmailSending(true)
       await sendEmail(email)
       alert('인증 코드가 해당 이메일로 전송되었습니다.')
-
       setStep('code')
     } catch (error) {
       alert('서버 오류로 이메일을 전송하지 못했습니다.')
+    } finally {
+      setIsEmailSending(false)
     }
   }
 
@@ -175,7 +189,7 @@ const Register = () => {
       alert('회원가입 완료')
       navigate('/') // 로그인 페이지로 이동
     } catch (error) {
-      alert('회원가입 실패')
+      alert(error.response.data.message)
     }
   }
 
@@ -234,20 +248,7 @@ const Register = () => {
                 >
                   {bojCode}
                 </code>
-                <div style={{ display: 'flex' }}>
-                  <Link
-                    to={`https://solved.ac/profile/${bojId}`}
-                    target={'_blank'}
-                    style={{
-                      textDecoration: 'none',
-                      color: '#2c2c2c',
-                      fontWeight: 'bold',
-                      textAlign: 'left',
-                    }}
-                  >
-                    Solved.ac 프로필 바로가기
-                  </Link>
-                </div>
+
                 <BaseButton
                   variant="secondary"
                   onClick={handleVerifyBojCode}
@@ -273,6 +274,7 @@ const Register = () => {
                   variant="secondary"
                   onClick={handleSendEmail}
                   style={{ marginTop: '15px' }}
+                  disabled={isEmailSending}
                 >
                   이메일 인증
                 </BaseButton>
@@ -308,7 +310,14 @@ const Register = () => {
                   type="text"
                   placeholder="닉네임"
                   value={nickname}
-                  onChange={(e) => setNickname(e.target.value)}
+                  onChange={(e) => {
+                    const input = e.target.value
+                    if (input.length <= 12) {
+                      setNickname(input)
+                    } else {
+                      alert('닉네임 12자 초과')
+                    }
+                  }}
                 />
                 <Label>비밀번호</Label>
                 <BaseInput
@@ -333,18 +342,35 @@ const Register = () => {
                 </BaseButton>
               </>
             )}
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Link
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: step === 'boj_verify' ? 'space-between' : 'flex-end',
+              }}
+            >
+              {step === 'boj_verify' && (
+                <StyleLink
+                  to={`https://solved.ac/profile/${bojId}`}
+                  target="_blank"
+                  style={{
+                    textDecoration: 'none',
+                    color: '#2c2c2c',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  Solved.ac 프로필 바로가기
+                </StyleLink>
+              )}
+              <StyleLink
                 to={'/'}
                 style={{
                   textDecoration: 'none',
                   color: '#2c2c2c',
                   fontWeight: 'bold',
-                  // textAlign: 'right',
                 }}
               >
                 로그인
-              </Link>
+              </StyleLink>
             </div>
           </LoginContainer>
         </BaseContainer>
