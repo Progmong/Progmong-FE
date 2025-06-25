@@ -93,17 +93,26 @@ const ExploreTagSelect = () => {
   const [selectedTags, setSelectedTags] = useState(new Set())
 
   useEffect(() => {
-    axios
-      .get('http://localhost:8080/api/v1/tag', { params: { userId: 1 } }) // ⭐ 하드코딩된 테스트용 사용자 ID
-      .then((res) => {
-        console.log('✅ 서버 응답:', res.data)
+    // const token = localStorage.getItem('accessToken')
 
-        if (res.data && Array.isArray(res.data.data)) {
-          const tagIds = res.data.data.map((tag) => tag.id)
-          setSelectedTags(new Set(tagIds))
-        } else {
-          console.warn('⚠️ data 필드가 배열이 아님:', res.data)
-        }
+    //하드코딩으로 테스트
+    const token =
+      'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzUwNzU4NDQ4fQ.aWcvqyvcwtDMMu7B2Uh4wg56vYMkaob-o4XJ8lAK8N6UqF8vLNUaFScx-54WVdF84jg1hjJ8HZWfhQOM9pMNNQ'
+
+    if (!token) {
+      console.warn('🚫 accessToken이 없습니다. 로그인 먼저 하세요.')
+      return
+    }
+
+    axios
+      .get('http://localhost:8100/api/v1/tag', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        const tagIds = res.data.data.map((tag) => tag.id)
+        setSelectedTags(new Set(tagIds))
       })
       .catch((err) => {
         console.error('❌ 관심 태그 불러오기 실패:', err)
@@ -122,15 +131,27 @@ const ExploreTagSelect = () => {
     })
   }
 
-  const userId = 1 // ⭐ 하드코딩된 테스트용 사용자 ID
-
   const handleSubmit = () => {
     const selectedArray = Array.from(selectedTags) // 선택된 태그 id 배열
+
+    const token = localStorage.getItem('accessToken')
+
+    //하드코딩으로 테스트
+    //const token =
+    //  'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzUwNzU4NDQ4fQ.aWcvqyvcwtDMMu7B2Uh4wg56vYMkaob-o4XJ8lAK8N6UqF8vLNUaFScx-54WVdF84jg1hjJ8HZWfhQOM9pMNNQ'
+
     axios
-      .put('http://localhost:8080/api/v1/tag', {
-        userId: userId,
-        tagIds: selectedArray,
-      })
+      .put(
+        'http://localhost:8100/api/v1/tag',
+        {
+          tagIds: selectedArray, // ✅ userId 제거
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ 인증 헤더 넣기
+          },
+        },
+      )
       .then((res) => {
         alert('관심 태그가 성공적으로 갱신되었습니다!')
       })

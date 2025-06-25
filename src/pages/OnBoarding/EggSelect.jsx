@@ -114,14 +114,25 @@ const EggSelect = () => {
   }
 
   const [nickname, setNickname] = useState('') // ⬅️ 상태 선언
-
   const handleEvent = async () => {
+    const token = localStorage.getItem('accessToken')
+    //하드코딩으로 테스트
+    //const token =
+    //  'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzUwNzU4NDQ4fQ.aWcvqyvcwtDMMu7B2Uh4wg56vYMkaob-o4XJ8lAK8N6UqF8vLNUaFScx-54WVdF84jg1hjJ8HZWfhQOM9pMNNQ'
+
     try {
-      const response = await axios.post('http://localhost:8080/api/v1/pet/register', {
-        userId: 1, // ⭐ 하드코딩된 테스트용 사용자 ID
-        petId: currentEgg + 1, // 알 선택 번호 // ✅ 1부터 시작하는 ID로 보정
-        nickname: nickname,
-      })
+      const response = await axios.post(
+        'http://localhost:8100/api/v1/pet/register',
+        {
+          petId: currentEgg + 1, // ✅ 선택한 알 ID
+          nickname: nickname,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ 인증 정보 추가
+          },
+        },
+      )
 
       console.log('서버 응답:', response.data)
     } catch (error) {
