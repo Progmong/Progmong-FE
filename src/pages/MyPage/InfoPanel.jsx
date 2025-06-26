@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 import BaseButton from '@/components/BaseButton.jsx'
+import UserInfo from '@/pages/MyPage/infoPanel/UserInfo.jsx'
+import PetInfo from '@/pages/MyPage/infoPanel/PetInfo.jsx'
 
 const Panel = styled.div`
   min-width: 200px;
@@ -49,18 +51,47 @@ const ContentBox = styled.div`
 `
 
 const InfoPanel = () => {
+  const [mode, setMode] = useState('pet')
+
+  const mockPet = {
+    name: '에라그몽프로그몽',
+    stage: '알',
+    level: 20,
+    exp: 70,
+    expMax: 100,
+    growthProgress: 5,
+    growthMax: 10,
+    solved: 120,
+  }
+
+  const mockUser = {
+    nickname: '애라모르겠다',
+    email: 'progmong@gmail.com',
+    baekjoonId: 'progmong',
+  }
+
   return (
     <Panel>
       <Title>내 정보</Title>
       <ToggleGroup>
-        <BaseButton variant={'secondary'} size={'sm'} style={{ padding: '15px 5px' }}>
+        <BaseButton
+          variant={mode === 'pet' ? 'secondary' : 'pass'}
+          size="sm"
+          onClick={() => setMode('pet')}
+        >
           프로그몽
         </BaseButton>
-        <BaseButton variant={'pass'} size={'sm'}>
-          유저
+        <BaseButton
+          variant={mode === 'user' ? 'secondary' : 'pass'}
+          size="sm"
+          onClick={() => setMode('user')}
+        >
+          유저정보
         </BaseButton>
       </ToggleGroup>
-      <ContentBox>정보 표시 영역 (추후 모드별 전환)</ContentBox>
+      <ContentBox>
+        {mode === 'pet' ? <PetInfo pet={mockPet} /> : <UserInfo user={mockUser} />}
+      </ContentBox>
     </Panel>
   )
 }
