@@ -25,28 +25,12 @@ const router = createBrowserRouter([
     element: <FindPwd />,
   },
   {
-    path: '/SelectEgg',
+    path: '/selectEgg',
     element: <SelectEgg />,
   },
   {
-    path: '/SelectExploreTag',
+    path: '/selectExploreTag',
     element: <SelectExploreTag />,
-  },
-  {
-    path: '/mypage',
-    element: <MyPageLayout />,
-  },
-  {
-    path: '/explore',
-    element: <ExplorePage />,
-  },
-  {
-    path: '/main',
-    element: <MainPage />,
-  },
-  {
-    path: '/explore/result',
-    element: <ExploreResultPage />,
   },
 ])
 

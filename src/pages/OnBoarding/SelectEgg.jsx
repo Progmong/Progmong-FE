@@ -24,63 +24,72 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  // overflow: hidden;
+  overflow: hidden;
 `
 const CustomContainer = styled(BaseContainer)`
-  width: 1003.82px;
-  height: 780.32px;
+  width: 60vw; /* 기존 69.7vw -> 60vw로 줄임 */
+  max-width: 900px; /* 최대 너비도 줄임 */
+  height: 76.2vh;
+  max-height: 780px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-`
 
+  padding: 3vh 4vw;
+  box-sizing: border-box;
+
+  font-size: clamp(14px, 1.2vw, 18px);
+`
 const Title = styled.h2`
-  font-size: 48px;
+  font-size: 3em; /* 부모 font-size 기준으로 3배 */
   font-family: 'Binggrae';
   font-weight: 700;
   margin-bottom: 1.5rem;
   color: #fd3b40;
 
-  /* Stroke (텍스트 외곽선 흉내) */
-  -webkit-text-stroke: 1px #e8e8e8; /* 바깥쪽 외곽선 효과 */
+  -webkit-text-stroke: 1px #e8e8e8;
   text-stroke: 1px black;
-
-  /* Drop shadow */
   text-shadow: 0 2px 0 rgba(136, 8, 0, 1);
 `
 
 const EggSelector = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   margin: 1.5rem 0;
-`
-
-const Arrow = styled.img`
-  width: 122px;
-  height: 122px;
-  cursor: pointer;
-
-  &.left {
-    margin-right: 205px;
-  }
-  &.right {
-    margin-left: 205px;
-  }
+  gap: 2em;
+  height: 10em; /* 최대 높이 제한 */
+  max-height: 15vh; /* 화면 대비 최대 높이 제한 */
+  overflow: hidden; /* 넘치는 부분 숨김 */
 `
 
 const EggImage = styled.img`
-  width: 275px;
-  height: 351px;
+  width: 5em;
+  max-height: 100%; /* 부모 높이 내에서만 크기 조절 */
+  object-fit: contain;
+`
+const Arrow = styled.img`
+  width: 2.5em;
+  height: auto;
+  cursor: pointer;
+
+  &.left {
+    margin-right: 3em;
+  }
+  &.right {
+    margin-left: 3em;
+  }
 `
 
 const IndicatorDots = styled.div`
   margin-bottom: 1.5rem;
 
   .dot {
-    font-size: 1.2rem;
+    font-size: 1em;
     color: #ccc;
-    margin: 0 4px;
+    margin: 0 0.25em;
   }
 
   .active {
@@ -89,18 +98,18 @@ const IndicatorDots = styled.div`
 `
 
 const NicknameInput = styled(BaseInput)`
-  width: 500px;
-  height: 71px;
+  width: 12em;
+  height: 2.5em;
   padding: 0 10px;
   margin-bottom: 1.5rem;
-  font-size: 24px;
+  font-size: 1em;
   text-align: center;
 `
 
 const CustomButton = styled(BaseButton)`
-  width: 212px;
-  height: 62px;
-  font-size: 24px;
+  width: 10em;
+  height: 2.5em;
+  font-size: 1em;
 `
 
 const EggSelect = () => {
@@ -159,7 +168,14 @@ const EggSelect = () => {
         <NicknameInput
           placeholder="닉네임을 입력하세요"
           value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
+          onChange={(e) => {
+            const input = e.target.value
+            if (input.length <= 12) {
+              setNickname(input)
+            } else {
+              alert('닉네임은 최대 12자까지 입력할 수 있어요!')
+            }
+          }}
         />
 
         <CustomButton variant="secondary" size="mg" onClick={handleEvent}>
