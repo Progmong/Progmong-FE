@@ -5,19 +5,26 @@ import CharacterStage from '../../pages/MyPage/CharacterStage.jsx'
 import ExploreRecords from '../../pages/MyPage/ExploreRecord.jsx'
 import InterestTags from '../../pages/MyPage/InterestTags.jsx'
 
+const BackgroundContainer = styled.div`
+  background-color: #fff5db;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`
+
 const Container = styled.div`
   width: 100%;
-  min-height: 100vh;
-  background-color: #fff5db;
+  max-height: 100vh;
   padding: 24px;
+  display: flex;
 `
 
 const Wrapper = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  gap: 24px;
+  margin: 5px auto;
+  display: flex;
+  gap: 20px;
 `
 
 const MainContent = styled.main`
@@ -26,26 +33,30 @@ const MainContent = styled.main`
   gap: 24px;
 `
 
-const BottomGrid = styled.section`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+const BottomContents = styled.section`
+  display: flex;
+  width: 100%;
   gap: 24px;
+  align-items: center;
+  justify-content: space-between;
 `
 
 const MyPageLayout = () => {
   return (
-    <Container>
-      <Wrapper>
-        <InfoPanel />
-        <MainContent>
-          <CharacterStage />
-          <BottomGrid>
-            <ExploreRecords />
-            <InterestTags />
-          </BottomGrid>
-        </MainContent>
-      </Wrapper>
-    </Container>
+    <BackgroundContainer>
+      <Container>
+        <Wrapper>
+          <InfoPanel />
+          <MainContent>
+            <CharacterStage />
+            <BottomContents>
+              <ExploreRecords />
+              <InterestTags />
+            </BottomContents>
+          </MainContent>
+        </Wrapper>
+      </Container>
+    </BackgroundContainer>
   )
 }
 

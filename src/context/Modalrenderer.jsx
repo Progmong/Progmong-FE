@@ -1,13 +1,13 @@
 import React from 'react'
 
-import TagEditModal from '../modals/TagEditModal'
+import TextEditModal from '../modals/TextEditModal.jsx'
 
 const ModalRenderer = ({ name, props }) => {
   if (!name) return null
 
   switch (name) {
     case 'tag-edit':
-      return <TagEditModal {...props} />
+      return <TextEditModal {...props} />
     default:
       return null
   }
