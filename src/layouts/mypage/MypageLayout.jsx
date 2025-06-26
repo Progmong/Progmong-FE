@@ -7,19 +7,18 @@ import InterestTags from '../../pages/MyPage/InterestTags.jsx'
 
 const BackgroundContainer = styled.div`
   background-color: #fff5db;
-  min-height: 100vh;
+  //min-height: 100vh;
+  width: auto;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-`
-const MyPageFontWrapper = styled.div`
   font-family: Binggrae;
 `
 
 const Container = styled.div`
   width: 100%;
-  max-height: 100vh;
+  //max-height: 100vh;
   padding: 24px;
   display: flex;
 `
@@ -27,16 +26,17 @@ const Container = styled.div`
 const Wrapper = styled.div`
   margin: 5px auto;
   display: flex;
+  flex-direction: column;
   gap: 20px;
 `
 
-const MainContent = styled.main`
+const MainContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
 `
 
-const BottomContents = styled.section`
+const BottomContents = styled.div`
   display: flex;
   width: 100%;
   gap: 24px;
@@ -44,24 +44,29 @@ const BottomContents = styled.section`
   justify-content: space-between;
 `
 
+const UpperContents = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
 const MyPageLayout = () => {
   return (
-    <MyPageFontWrapper>
-      <BackgroundContainer>
-        <Container>
-          <Wrapper>
+    <BackgroundContainer>
+      <Container>
+        <Wrapper>
+          <UpperContents>
             <InfoPanel />
             <MainContent>
               <CharacterStage />
-              <BottomContents>
-                <ExploreRecords />
-                <InterestTags />
-              </BottomContents>
             </MainContent>
-          </Wrapper>
-        </Container>
-      </BackgroundContainer>
-    </MyPageFontWrapper>
+          </UpperContents>
+          <BottomContents>
+            <ExploreRecords />
+            <InterestTags />
+          </BottomContents>
+        </Wrapper>
+      </Container>
+    </BackgroundContainer>
   )
 }
 
