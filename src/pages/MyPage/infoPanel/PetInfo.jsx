@@ -8,31 +8,31 @@ const LabelRow = styled.div`
   padding: 4px 0;
 `
 
-const PetInfo = ({ petData }) => {
+const PetInfo = ({ pet }) => {
   return (
     <>
       <LabelRow>
-        <span>단계</span>
-        <span>{petData.stage}</span>
+        <div>단계</div>
+        <div>{pet.stage}</div>
       </LabelRow>
       <LabelRow>
-        <span>레벨</span>
-        <span>{petData.level}</span>
+        <div>레벨</div>
+        <div>{pet.level}</div>
       </LabelRow>
       <LabelRow>
-        <span>경험치</span>
-        <ExpBar current={petData.exp} max={100} />
+        <div>경험치</div>
+        <ExpBar current={pet.exp} max={pet.expMax} />
       </LabelRow>
       <LabelRow>
-        <span>푼 문제</span>
-        <span>{petData.solved}문제</span>
+        <div>푼 문제</div>
+        <div>{pet.solved}문제</div>
       </LabelRow>
       <LabelRow>
-        <span>다음 성장까지</span>
+        <div>다음 성장까지</div>
         <ExpBar
-          current={petData.growthProgress}
-          max={10}
-          label={`${petData.growthProgress}/10 레벨`}
+          current={pet.growthProgress}
+          max={pet.growthMax}
+          label={`${pet.growthProgress}/${pet.growthMax} 레벨`}
         />
       </LabelRow>
       <div style={{ textAlign: 'center', marginTop: '12px' }}>

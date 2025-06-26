@@ -1,10 +1,12 @@
+// InfoPanel.jsx
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import BaseButton from '@/components/BaseButton.jsx'
-import UserInfo from '@/pages/MyPage/infoPanel/UserInfo.jsx'
+import BaseButton from '@/components/BaseButton'
 import PetInfo from '@/pages/MyPage/infoPanel/PetInfo.jsx'
+import UserInfo from '@/pages/MyPage/infoPanel/UserInfo.jsx'
 
 const Panel = styled.div`
-  min-width: 200px;
+  min-width: 300px;
   max-width: 400px;
   background-color: white;
   border-radius: 16px;
@@ -27,20 +29,6 @@ const ToggleGroup = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 `
-
-// const BaseButton = styled.button`
-//   flex: 1;
-//   padding: 8px 12px;
-//   border-radius: 8px;
-//   border: 1px solid #ccc;
-//   background-color: #f3f4f6;
-//   font-weight: 500;
-//   cursor: pointer;
-//
-//   &:hover {
-//     background-color: #e5e7eb;
-//   }
-// `
 
 const ContentBox = styled.div`
   padding: 12px;

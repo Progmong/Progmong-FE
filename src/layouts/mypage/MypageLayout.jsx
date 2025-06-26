@@ -13,6 +13,9 @@ const BackgroundContainer = styled.div`
   justify-content: center;
   align-items: center;
 `
+const MyPageFontWrapper = styled.div`
+  font-family: Binggrae;
+`
 
 const Container = styled.div`
   width: 100%;
@@ -43,20 +46,22 @@ const BottomContents = styled.section`
 
 const MyPageLayout = () => {
   return (
-    <BackgroundContainer>
-      <Container>
-        <Wrapper>
-          <InfoPanel />
-          <MainContent>
-            <CharacterStage />
-            <BottomContents>
-              <ExploreRecords />
-              <InterestTags />
-            </BottomContents>
-          </MainContent>
-        </Wrapper>
-      </Container>
-    </BackgroundContainer>
+    <MyPageFontWrapper>
+      <BackgroundContainer>
+        <Container>
+          <Wrapper>
+            <InfoPanel />
+            <MainContent>
+              <CharacterStage />
+              <BottomContents>
+                <ExploreRecords />
+                <InterestTags />
+              </BottomContents>
+            </MainContent>
+          </Wrapper>
+        </Container>
+      </BackgroundContainer>
+    </MyPageFontWrapper>
   )
 }
 

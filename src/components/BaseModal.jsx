@@ -23,7 +23,8 @@ const ModalContainer = styled.div`
   padding: 2rem;
   border-radius: 12px;
   width: 600px;
-  max-height: 90vh; /* 고정 높이 제거 */
+  max-width: 70vw;
+  max-height: 75vh; /* 고정 높이 제거 */
   font-family: Binggrae;
   overflow-y: auto;
 `
