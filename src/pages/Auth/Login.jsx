@@ -82,10 +82,11 @@ const StyleLink = styled(Link)`
 `
 
 const Login = () => {
-  const { login } = useAuthApi()
+  const { login, checkPet } = useAuthApi()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const { openModal } = useModal()
+  const navigate = useNavigate()
 
   const isMobile = useMediaQuery({
     query: '(max-width:767px)',
@@ -102,7 +103,19 @@ const Login = () => {
       if (accessToken) {
         localStorage.setItem('accessToken', accessToken) // 토큰 저장
         console.log(response)
-        openModal('alert', { message: `${response.data.message}` })
+        const loginSuccess = response.data.message
+
+        const res = await checkPet()
+        console.log(res.data.userPetId)
+        if (res.data.message === '사용자 펫 정보가 없습니다.') {
+          openModal('alert', {
+            message: `${response.data.message} 신규 사용자는 알을 선택해주세요.`,
+          })
+          navigate('/SelectEgg')
+        } else {
+          openModal('alert', { message: `${response.data.message}` })
+          navigate('/main')
+        }
       } else {
         openModal('alert', { message: `${response.data.message}` })
       }

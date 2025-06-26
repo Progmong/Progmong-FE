@@ -47,7 +47,9 @@ export const useAuthApi = () => {
   const verifyBojCode = async (bojId) => {
     return axios.get(`/solvedac/verify/${bojId}`)
   }
-
+  const checkPet = async () => {
+    return axios.get(`/pet/all`)
+  }
   return {
     register,
     login,
@@ -59,6 +61,7 @@ export const useAuthApi = () => {
     getBojId,
     generateBojCode,
     verifyBojCode,
+    checkPet,
   }
 }
 
