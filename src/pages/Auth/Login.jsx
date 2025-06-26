@@ -10,33 +10,13 @@ import BaseInput from '../../components/BaseInput/'
 import BaseContainer from '../../components/BaseContainer'
 import useAuthApi from '../../constants/auth'
 import { useMediaQuery } from 'react-responsive'
+import { useModal } from '@/context/ModalContext'
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
-  /* font-family: 'NEXON Bazzi Code', 'Comic Sans MS'; */
   font-family: 'Binggrae';
-      
-
   }
-  @font-face {
-  font-family: 'NEXON Bazzi Code';
-  src: url('../../assets/Bazzi.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
 `
-
-// const Bg = styled.div`
-//   height: 100vh; /* 화면 전체 높이 */
-//   width: 100%; /* 가로 100% */
-//   background-image: url(${bgVideo});
-//   background-repeat: no-repeat;
-//   background-position: center;
-//   background-size: cover;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// `
 const Bg = styled.div`
   position: relative;
   height: 100vh;
@@ -46,7 +26,6 @@ const Bg = styled.div`
   justify-content: center;
   align-items: center;
 `
-
 const BackgroundVideo = styled.video`
   position: absolute;
   top: 0;
@@ -56,18 +35,16 @@ const BackgroundVideo = styled.video`
   height: 100%;
   z-index: -1; /* 뒤로 보내기 */
 `
-
 const Logo = styled.div`
   position: absolute;
-  top: -200px;
-  width: 500px;
-  height: 500px;
+  top: -220px;
+  width: 100%;
+  height: 100%;
   background-image: url(${logo});
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   z-index: 2;
-
   /* 강렬한 효과 */
   animation: glow 2.5s ease-in-out infinite alternate;
   filter: drop-shadow(0 0 10px #ff4b4b) drop-shadow(0 0 20px #ff7e7e);
@@ -83,18 +60,6 @@ const Logo = styled.div`
     }
   }
 `
-
-// const MainContainer = styled.div`
-//   width: 50%;
-//   background-color: #fffeffb3; /* 배경만 투명 */
-//   border-radius: 20px;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   box-shadow:
-//     0 3px #d1d8ffb3,
-//     0 5px #6b0300b3;
-// `
 const LoginContainer = styled.div`
   width: 80%;
   display: flex;
@@ -102,39 +67,25 @@ const LoginContainer = styled.div`
   gap: 10px;
   z-index: 100;
 `
-
 const Label = styled.label`
   font-weight: bold;
   font-size: 18px;
 `
-
 const StyleLink = styled(Link)`
   text-decoration: none;
   color: #2c2c2c;
   font-weight: bold;
   transition: transform 0.2s ease;
-
   &:hover {
     transform: scale(1.1);
   }
 `
-// const Input = styled.input`
-//   border-radius: 20px;
-//   padding: 15px;
-//   margin-bottom: 30px;
-//   font-size: 20px;
-//   border-style: none;
-//   outline: none;
-//   box-shadow:
-//     0 3px #d1d8ffb3,
-//     0 5px #bfa385b3;
-//   background-color: white;
-// `
 
 const Login = () => {
   const { login } = useAuthApi()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const { openModal } = useModal()
 
   const isMobile = useMediaQuery({
     query: '(max-width:767px)',
@@ -142,7 +93,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      alert('이메일 또는 비밀번호를 입력하세요.')
+      openModal('alert', { title: '로그인 오류', message: '아이디 또는 비밀번호를 입력하세요.' })
       return
     }
     try {
@@ -150,13 +101,14 @@ const Login = () => {
       const accessToken = response.data.data.accessToken
       if (accessToken) {
         localStorage.setItem('accessToken', accessToken) // 토큰 저장
-        alert('로그인 성공')
+        console.log(response)
+        openModal('alert', { message: `${response.data.message}` })
       } else {
-        alert('액세스 토큰이 응답에 없습니다.')
+        openModal('alert', { message: `${response.data.message}` })
       }
     } catch (error) {
       console.error(error)
-      alert('로그인 실패')
+      openModal('alert', { message: `${error.response.data.message}` })
     }
   }
 
@@ -167,10 +119,12 @@ const Login = () => {
         <BackgroundVideo autoPlay muted loop>
           <source src={bgVideo} type="video/mp4" />
         </BackgroundVideo>
+
         <BaseContainer
           style={{
             backgroundColor: '#ffffffb9',
             width: '40%',
+            maxWidth: '700px',
             minWidth: isMobile ? '280px' : '360px',
             display: 'flex',
             justifyContent: 'center',
@@ -180,7 +134,12 @@ const Login = () => {
           }}
         >
           <Logo />
-          <LoginContainer style={{ marginTop: '100px' }}>
+
+          <LoginContainer
+            style={{
+              marginTop: isMobile ? '100px' : '160px',
+            }}
+          >
             <Label>EMAIL</Label>
             <BaseInput
               type="email"
