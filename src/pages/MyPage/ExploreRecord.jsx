@@ -23,14 +23,6 @@ const MypageResultContainer = styled.div`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 `
 
-const MypageTotalExpText = styled.div`
-  text-align: center;
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 24px;
-  font-family: 'Binggrae';
-`
-
 const MyPageResultHeaderRow = styled.div`
   display: flex;
   align-items: center;
@@ -58,10 +50,10 @@ const ResultRow = styled.div`
 `
 
 const IconWrapper = styled.div`
-  //flex: 0.5;
-  //display: flex;
-  //justify-content: center;
-  //align-items: center;
+  flex: 0.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const IconCircle = styled.div`
@@ -92,37 +84,48 @@ const GrayBox = styled.div`
   text-overflow: ellipsis;
 `
 
-const ExitButton = styled.button`
-  display: block;
-  margin: 30px auto 0;
-  background-color: #a8ff3e;
-  padding: 14px 32px;
-  border: none;
-  border-radius: 12px;
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
-  cursor: pointer;
-  box-shadow: 0 4px 0 #80cc33;
-
-  &:hover {
-    background-color: #92e632;
-  }
-`
-
 const ExploreRecords = () => {
-  const problems = [1, 2, 3, 4, 5] || []
+  const { problems } =
+    {
+      problems: [
+        {
+          id: 1001,
+          tier: 'Gold V',
+          title: '부분 수열의 합',
+          status: '성공',
+        },
+        {
+          id: 2020,
+          tier: 'Silver I',
+          title: 'LCS',
+          status: '패스',
+        },
+        {
+          id: 3010,
+          tier: 'Bronze II',
+          title: 'DFS와 BFS',
+          status: '성공',
+        },
+        {
+          id: 4040,
+          tier: 'Silver III',
+          title: '토마토',
+          status: '패스',
+        },
+        {
+          id: 5050,
+          tier: 'Gold IV',
+          title: '다익스트라',
+          status: '성공',
+        },
+      ],
+      totalExp: 270,
+    } || []
 
   return (
     <Box>
       <Title>최근 탐험 기록</Title>
       <MypageResultContainer>
-        <MyPageResultHeaderRow>
-          <MyPageResultHeaderCol flex="0.5" />
-          <MyPageResultHeaderCol flex="0.8">티어</MyPageResultHeaderCol>
-          <MyPageResultHeaderCol flex="1">번호</MyPageResultHeaderCol>
-          <MyPageResultHeaderCol flex="2">이름</MyPageResultHeaderCol>
-        </MyPageResultHeaderRow>
         {problems.map((p) => (
           <ResultRow key={p.id}>
             <IconWrapper>
