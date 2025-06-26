@@ -290,7 +290,7 @@ const Register = () => {
                     if (input.length <= 12) {
                       setNickname(input)
                     } else {
-                      alert('닉네임 12자 초과')
+                      openModal('alert', { message: '닉네임 12자 초과' })
                     }
                   }}
                 />
