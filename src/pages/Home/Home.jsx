@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 
+import Home767 from '../../assets/home/background_767.png'
+import Home1440 from '../../assets/home/background_1440.png'
+import Home3000 from '../../assets/home/background_3000.png'
 import mainImage2 from '../../assets/mainWeb.png'
 import mainMobile from '../../assets/mainmobile.png'
 import community from '../../assets/shop.png'
@@ -14,7 +17,13 @@ import fightBubble from '../../assets/fightbubble.png'
 import sleepBubble from '../../assets/sleepbubble.png'
 import progmong2 from '../../assets/progmong2.png'
 
+// 브레이크포인트 헬퍼 (앞서 만든 media 객체를 쓴다)
+import { media } from '@/utils/breakpoints.js'
+
 const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -34,23 +43,47 @@ const ScaledWrapper = styled.div`
 
 const FixedStage = styled.div`
   position: relative;
-  width: 1440px;
-  height: 100vh;
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 0;
 `
 
 const BackgroundWrapper = styled.div`
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 1440px;
-  height: 1100px;
-  transform: translateX(-50%);
-  background-image: url(${mainImage2});
-  background-repeat: no-repeat;
-  background-size: 1440px 1100px;
-  background-position: center;
-  z-index: 0;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: url(${Home767}) center / cover no-repeat;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  place-items: center;
+  @media (min-width: 767px) {
+    width: 767px;
+    height: 1000px;
+    background-size: contain;
+    background-image: url(${Home767});
+  }
+
+  @media (min-width: 1024px) {
+    width: 1024px;
+    height: 1100px;
+    background-image: url(${Home1440});
+  }
+
+  @media (min-width: 1440px) {
+    width: 1440px;
+    height: 1100px;
+    background-image: url(${Home3000});
+  }
+
+  @media (min-width: 2560px) {
+    width: 3000px;
+    height: 1700px;
+    background-image: url(${Home3000});
+  }
 `
 
 const MobileBackground = styled.div`
@@ -64,14 +97,26 @@ const MobileBackground = styled.div`
 
 const BubbleBox = styled.div`
   position: absolute;
-  left: 510px;
-  top: 300px;
-  width: 420px;
-  height: 420px;
+
+  /* width: 380px;
+  height: 380px;
+
+  top: -250px;
+  left: -380px; */
+
+  width: 45%;
+  height: 25%;
+
+  top: 40%;
+  left: 25%;
+
   font-family: 'Binggrae';
+  font-weight: bold;
   z-index: 2;
-  background: url(${thoughtbubble}) no-repeat center center;
-  background-size: contain;
+
+  background: url(${thoughtbubble}) no-repeat center;
+  background-size: 100% 100%;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,9 +125,35 @@ const BubbleBox = styled.div`
   text-align: center;
   color: black;
   font-size: 30px;
-  font-weight: 500;
   line-height: 1.5;
   word-break: keep-all;
+
+  /* 태블릿 이상 */
+  ${media.tablet`
+    width: 100%;
+    height: 70%;
+
+    top: -60%;
+    left: -70%;
+  `}
+
+  /* 노트북 이상 */
+  ${media.notebook`
+    width: 150%;
+    height: 90%;
+
+    top: -70%;
+    left: -130%;
+  `}
+
+  /* 데스크톱 이상 */
+  ${media.desktop`
+   width: 150%;
+    height: 90%;
+
+    top: -70%;
+    left: -130%;
+  `}
 `
 
 const FixedIconWrapper = styled.div`
@@ -112,10 +183,41 @@ const IconTextOverlay = styled.span`
   pointer-events: none;
 `
 
-const FixedMainIcon = styled.img`
-  position: absolute;
-  width: ${(props) => props.width || '300px'};
-  z-index: 1;
+// ✅ 이미지 대신 div (JSX 버전)
+const FixedMainIcon = styled.div`
+  /* 공통 배경 설정 */
+  background-image: ${({ $src }) => `url(${$src})`};
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain; /* 종횡비 유지 */
+
+  /* 모바일 기본값 */
+  width: 80%;
+  aspect-ratio: 1 / 1; /* 높이 확보 */
+  justify-self: center;
+  align-self: center;
+
+  /* 태블릿 이상 */
+  ${media.tablet`
+    position: absolute;
+    width: ${({ $w }) => $w.tablet};
+    left: ${({ $pos }) => $pos.tablet.x};
+    top:  ${({ $pos }) => $pos.tablet.y};
+  `}
+
+  /* 노트북 이상 */
+  ${media.notebook`
+    width: ${({ $w }) => $w.notebook};
+    left: ${({ $pos }) => $pos.notebook.x};
+    top:  ${({ $pos }) => $pos.notebook.y};
+  `}
+
+  /* 데스크톱 이상 */
+  ${media.desktop`
+    width: ${({ $w }) => $w.desktop};
+    left: ${({ $pos }) => $pos.desktop.x};
+    top:  ${({ $pos }) => $pos.desktop.y};
+  `}
 `
 
 const MobileLayout = styled.div`
@@ -147,7 +249,8 @@ const Home = () => {
   const [scale, setScale] = useState(1)
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken')
+    const accessToken =
+      'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzUxMjc2ODcwfQ.Q32sbAXJExOyqIANdeHoVEEJl-TYlbZuWhggh3Zb4d7QESXTpSqGA_BfAG1WQtTBwfZGfAd3-TzkzIUxuh6gNg'
 
     const api = axios.create({
       baseURL: 'http://localhost:8100/api/v1',
@@ -186,50 +289,88 @@ const Home = () => {
 
   return (
     <Container>
-      {windowWidth > 767 ? (
-        <ScaledWrapper style={{ transform: `translate(-50%, -50%) scale(${scale})` }}>
-          <FixedStage>
-            <BackgroundWrapper />
-            <BubbleBox>{petData.message || '...'}</BubbleBox>
+      {/* {windowWidth > 767 ? ( */}
+      <>
+        <BackgroundWrapper>
+          {/* {config && (
+            <FixedIconWrapper
+              style={{
+                left: config.position.left,
+                top: config.position.top,
+                width: config.width || '200px',
+              }}
+            >
+              <IconOverlayContainer>
+                <FixedIcon src={config.img} />
+                <IconTextOverlay color={config.textColor}>{config.text}</IconTextOverlay>
+              </IconOverlayContainer>
+            </FixedIconWrapper>
+          )} */}
+          {/* /page1 – 시장 아이콘 */}
+          <Link to="/page1" style={{ display: 'contents' }}>
+            <FixedMainIcon
+              $src={community}
+              $w={{ mobile: '320px', tablet: '320px', notebook: '320px', desktop: '400px' }}
+              $pos={{
+                mobile: { x: 'calc(50% - 160px)', y: 'calc(50% - 200px)' }, // 모바일
+                tablet: { x: 'calc(50% - 320px)', y: 'calc(50% - 390px)' }, // 태블릿
+                notebook: { x: 'calc(50% - 320px)', y: 'calc(50% - 330px)' }, // 노트북
+                desktop: { x: 'calc(50% - 400px)', y: 'calc(50% - 390px)' }, // 데스크톱
+              }}
+            />
+          </Link>
+          {/* /page2 – 집 아이콘 */}
+          <Link to="/page2" style={{ display: 'contents' }}>
+            <FixedMainIcon
+              $src={house}
+              $w={{ mobile: '320px', tablet: '320px', notebook: '320px', desktop: '400px' }}
+              $pos={{
+                mobile: { x: 'calc(50% +  10px)', y: 'calc(50% - 200px)' },
+                tablet: { x: 'calc(50% + 10px)', y: 'calc(50% - 390px)' },
+                notebook: { x: 'calc(50% + 160px)', y: 'calc(50% - 330px)' }, // 노트북
+                desktop: { x: 'calc(50% + 250px)', y: 'calc(50% - 390px)' },
+              }}
+            />
+          </Link>
+          {/* /page3 – 동굴 아이콘 */}
+          <Link to="/page3" style={{ display: 'contents' }}>
+            <FixedMainIcon
+              $src={cave}
+              $w={{ mobile: '320px', tablet: '300px', notebook: '320px', desktop: '400px' }}
+              $pos={{
+                mobile: { x: 'calc(50% - 170px)', y: 'calc(50% + 40px)' }, // 모바일
+                tablet: { x: 'calc(50% - 320px)', y: 'calc(50% + 150px)' }, // 태블릿
+                notebook: { x: 'calc(50% - 400px)', y: 'calc(50% + 60px)' }, // 노트북
+                desktop: { x: 'calc(50% - 500px)', y: 'calc(50% + 120px)' }, // 데스크톱
+              }}
+            />
+          </Link>
 
-            {config && (
-              <FixedIconWrapper
-                style={{
-                  left: config.position.left,
-                  top: config.position.top,
-                  width: config.width || '200px',
-                }}
-              >
-                <IconOverlayContainer>
-                  <FixedIcon src={config.img} />
-                  <IconTextOverlay color={config.textColor}>{config.text}</IconTextOverlay>
-                </IconOverlayContainer>
-              </FixedIconWrapper>
-            )}
-
-            <Link to="/page1">
-              <FixedMainIcon
-                src={community}
-                width="380px"
-                style={{ left: '240px', top: '110px' }}
-              />
-            </Link>
-            <Link to="/page2">
-              <FixedMainIcon src={house} width="415px" style={{ left: '1010px', top: '79px' }} />
-            </Link>
-            <Link to="/page3">
-              <FixedMainIcon src={cave} width="373px" style={{ left: '180px', top: '630px' }} />
-            </Link>
-            <FixedMainIcon src={progmong} width="303px" style={{ left: '1030px', top: '590px' }} />
-          </FixedStage>
-        </ScaledWrapper>
-      ) : (
-        <MobileLayout>
-          <MobileBackground />
-          <BubbleBox>{petData.message || '...'}</BubbleBox>
-          <FixedMainIcon src={progmong2} />
-        </MobileLayout>
-      )}
+          {/* 펫(프로그몽) 아이콘 – 링크 없음 */}
+          <div style={{ display: 'contents', position: 'relative' }}>
+            <FixedMainIcon
+              $src={progmong}
+              $w={{ mobile: '320px', tablet: '300px', notebook: '220px', desktop: '320px' }}
+              $pos={{
+                mobile: { x: 'calc(50% + 10px)', y: 'calc(50% + 40px)' }, // 모바일
+                tablet: { x: 'calc(50% + 40px)', y: 'calc(50% + 100px)' }, // 태블릿
+                notebook: { x: 'calc(50% + 250px)', y: 'calc(50% + 110px)' }, // 노트북
+                desktop: { x: 'calc(50% + 350px)', y: 'calc(50% + 160px)' }, // 데스크톱
+              }}
+            >
+              <BubbleBox>{petData.message || '...'}</BubbleBox>
+            </FixedMainIcon>
+          </div>
+        </BackgroundWrapper>
+      </>
+      )
+      {/* // : (
+      //   <MobileLayout>
+      //     <MobileBackground />
+      //     <BubbleBox>{petData.message || '...'}</BubbleBox>
+      //     <FixedMainIcon src={progmong2} />
+      //   </MobileLayout>
+      // )} */}
     </Container>
   )
 }
