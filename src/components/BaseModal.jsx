@@ -18,13 +18,16 @@ const Overlay = styled.div`
 
 const ModalContainer = styled.div`
   display: flex;
+  flex-direction: column;
   background-image: url('/src/assets/modalBackground.png');
   padding: 2rem;
   border-radius: 12px;
   width: 600px;
-  height: 400px;
+  max-height: 90vh; /* 고정 높이 제거 */
   font-family: Binggrae;
+  overflow-y: auto;
 `
+
 const ModalTitle = styled.div`
   margin-top: 2rem;
   margin-bottom: 1rem;
@@ -37,12 +40,11 @@ const ModalTitle = styled.div`
 
 const ModalContent = styled.div`
   display: flex;
-  flex-grow: 1;
+  flex-direction: column;
+  gap: 1rem;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  height: max-content;
-  flex-direction: column;
+  flex: 1;
 `
 
 const BaseModal = ({ title, children, onClose }) => {
