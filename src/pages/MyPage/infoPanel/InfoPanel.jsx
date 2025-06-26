@@ -1,7 +1,7 @@
 // InfoPanel.jsx
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import BaseButton from '@/components/BaseButton'
+import BaseButton from '@/components/BaseButton.jsx'
 import PetInfo from '@/pages/MyPage/infoPanel/PetInfo.jsx'
 import UserInfo from '@/pages/MyPage/infoPanel/UserInfo.jsx'
 

@@ -19,38 +19,25 @@ const MypageResultContainer = styled.div`
   background: rgba(255, 255, 255, 0.75);
   padding: 10px;
   border-radius: 20px;
-  width: 30vw;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-`
-
-const MyPageResultHeaderRow = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 12px 20px;
-  font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 12px;
-`
-
-const MyPageResultHeaderCol = styled.div`
-  flex: ${({ flex }) => flex};
-  text-align: center;
+  width: 20vw;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 `
 
 const ResultRow = styled.div`
   display: flex;
   align-items: center;
   background-color: #ffffff;
-  padding: 12px 20px;
+  padding: 5px 10px;
   border-radius: 16px;
   box-shadow:
-    0 4px 0 #d1d8ff,
-    0 6px 0 rgba(0, 0, 0, 0.25);
-  margin-bottom: 12px;
+    0 2px 0 #d1d8ff,
+    0 3px 0 rgba(0, 0, 0, 0.25);
+  margin-bottom: 6px;
+  gap: 5px;
 `
 
 const IconWrapper = styled.div`
-  flex: 0.5;
+  flex: 0.2;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -58,7 +45,7 @@ const IconWrapper = styled.div`
 
 const IconCircle = styled.div`
   background-color: white;
-  padding: 5px;
+  padding: 2px;
   border-radius: 50%;
   box-shadow: 0 0 0 2px black;
   display: flex;
@@ -67,16 +54,16 @@ const IconCircle = styled.div`
 `
 
 const Icon = styled.img`
-  width: 15px;
-  height: 15px;
+  width: 10px;
+  height: 10px;
 `
 
 const GrayBox = styled.div`
   flex: ${({ flex }) => flex};
   background-color: #e3e3e3;
-  padding: 6px 12px;
+  padding: 5px;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 10px;
   font-weight: bold;
   text-align: center;
   white-space: nowrap;
@@ -136,9 +123,8 @@ const ExploreRecords = () => {
                 />
               </IconCircle>
             </IconWrapper>
-            <GrayBox flex="0.8">{p.tier}</GrayBox>
+            <GrayBox flex="0.5">{p.tier}</GrayBox>
             <GrayBox flex="1">{p.id}</GrayBox>
-            <GrayBox flex="2">{p.title}</GrayBox>
           </ResultRow>
         ))}
       </MypageResultContainer>

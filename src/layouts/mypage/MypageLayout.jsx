@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import InfoPanel from '../../pages/MyPage/InfoPanel.jsx'
+import InfoPanel from '../../pages/MyPage/infoPanel/InfoPanel.jsx'
 import CharacterStage from '../../pages/MyPage/CharacterStage.jsx'
 import ExploreRecords from '../../pages/MyPage/ExploreRecord.jsx'
 import InterestTags from '../../pages/MyPage/InterestTags.jsx'
