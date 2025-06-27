@@ -36,17 +36,19 @@ const MainContent = styled.div`
   gap: 24px;
 `
 
+const UpperContents = styled.div`
+  //  모바일에서 felx => block
+  display: flex;
+  flex-direction: row;
+`
+
 const BottomContents = styled.div`
+  //  모바일에서 felx => block
   display: flex;
   width: 100%;
   gap: 24px;
   align-items: center;
   justify-content: space-between;
-`
-
-const UpperContents = styled.div`
-  display: flex;
-  flex-direction: row;
 `
 
 const MyPageLayout = () => {
