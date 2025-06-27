@@ -36,6 +36,7 @@ const Title = styled.h2`
   font-family: 'Binggrae';
   font-weight: 700;
   margin-bottom: 8vh;
+
   color: #051d2f;
 `
 
@@ -70,6 +71,7 @@ const TagButton = styled.button`
   font-family: 'Binggrae';
   font-weight: 700;
   font-size: calc(11px + 0.5vw);
+
   border: none;
   border-radius: 21px;
   box-shadow: 0 4.5px 0 rgba(74, 74, 74, 0.4);
