@@ -6,6 +6,7 @@ import RightArrow from '../../assets/right-arrow.svg'
 import BaseContainer from '../../components/BaseContainer'
 import BaseInput from '../../components/BaseInput'
 import BaseButton from '../../components/BaseButton'
+import { useModal } from '@/context/ModalContext'
 
 const ProgmongEggs = [
   new URL('../../assets/egg1.svg', import.meta.url).href,
@@ -24,63 +25,71 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  // overflow: hidden;
+  overflow: hidden;
 `
 const CustomContainer = styled(BaseContainer)`
-  width: 1003.82px;
-  height: 780.32px;
+  width: 48vw; /* 기존 69.7vw -> 60vw로 줄임 */
+  height: 76.2vh;
+  max-width: 900px; /* 최대 너비도 줄임 */
+  max-height: 780px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-`
 
+  padding: 3vh 4vw;
+  box-sizing: border-box;
+
+  font-size: clamp(14px, 1.2vw, 18px);
+`
 const Title = styled.h2`
-  font-size: 48px;
+  font-size: 2.4em; /* 부모 font-size 기준으로 3배 */
   font-family: 'Binggrae';
   font-weight: 700;
   margin-bottom: 1.5rem;
   color: #fd3b40;
 
-  /* Stroke (텍스트 외곽선 흉내) */
-  -webkit-text-stroke: 1px #e8e8e8; /* 바깥쪽 외곽선 효과 */
+  -webkit-text-stroke: 1px #e8e8e8;
   text-stroke: 1px black;
-
-  /* Drop shadow */
   text-shadow: 0 2px 0 rgba(136, 8, 0, 1);
 `
 
 const EggSelector = styled.div`
   display: flex;
   align-items: center;
-  margin: 1.5rem 0;
+  justify-content: center;
+  margin: 1rem 0;
+  gap: 2em;
+  height: 30em; /* 최대 높이 제한 */
+  max-height: 30vh; /* 화면 대비 최대 높이 제한 */
+  overflow: hidden; /* 넘치는 부분 숨김 */
 `
-
+const EggImage = styled.img`
+  width: 13em;
+  max-height: 100%; /* 부모 높이 내에서만 크기 조절 */
+  object-fit: contain;
+`
 const Arrow = styled.img`
-  width: 122px;
-  height: 122px;
+  width: 4em;
+  height: auto;
   cursor: pointer;
 
   &.left {
-    margin-right: 205px;
+    margin-right: 3em;
   }
   &.right {
-    margin-left: 205px;
+    margin-left: 3em;
   }
-`
-
-const EggImage = styled.img`
-  width: 275px;
-  height: 351px;
 `
 
 const IndicatorDots = styled.div`
   margin-bottom: 1.5rem;
 
   .dot {
-    font-size: 1.2rem;
+    font-size: 1em;
     color: #ccc;
-    margin: 0 4px;
+    margin: 0 0.25em;
   }
 
   .active {
@@ -89,22 +98,26 @@ const IndicatorDots = styled.div`
 `
 
 const NicknameInput = styled(BaseInput)`
-  width: 500px;
-  height: 71px;
+  width: 18em;
+  height: 2.3em;
   padding: 0 10px;
   margin-bottom: 1.5rem;
-  font-size: 24px;
+  font-size: 1em;
   text-align: center;
 `
 
 const CustomButton = styled(BaseButton)`
-  width: 212px;
-  height: 62px;
-  font-size: 24px;
+  width: 10em;
+  height: 2.5em;
+  font-size: 1em;
+  padding: 0 10px;
 `
 
 const EggSelect = () => {
   const [currentEgg, setCurrentEgg] = useState(0)
+  const { openModal } = useModal()
+  const [nickname, setNickname] = useState('')
+  const navigate = useNavigate()
 
   const handlePrev = () => {
     setCurrentEgg((prev) => (prev - 1 + ProgmongEggs.length) % ProgmongEggs.length)
@@ -113,7 +126,6 @@ const EggSelect = () => {
     setCurrentEgg((prev) => (prev + 1) % ProgmongEggs.length)
   }
 
-  const [nickname, setNickname] = useState('') // ⬅️ 상태 선언
   const handleEvent = async () => {
     const token = localStorage.getItem('accessToken')
 
@@ -121,19 +133,50 @@ const EggSelect = () => {
       const response = await axios.post(
         '/pet/register',
         {
-          petId: currentEgg + 1, // ✅ 선택한 알 ID
+          petId: currentEgg + 1,
           nickname: nickname,
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // ✅ 인증 정보 추가
+            Authorization: `Bearer ${token}`,
           },
         },
       )
 
       console.log('서버 응답:', response.data)
+
+      // ✅ 등록 성공 시 모달 → 확인 누르면 메인 페이지로 이동
+      openModal('alert', {
+        title: '등록 완료',
+        message: '프로그몽이 성공적으로 등록되었습니다!',
+        onConfirm: () => navigate('/home'),
+      })
     } catch (error) {
-      console.error('에러 발생:', error)
+      if (axios.isAxiosError(error) && error.response) {
+        const message = error.response.data?.message
+
+        if (message?.includes('닉네임')) {
+          openModal('alert', {
+            title: '닉네임 중복',
+            message: '이미 존재하는 닉네임입니다. 다른 닉네임을 입력해주세요.',
+          })
+        } else if (message?.includes('등록된 펫')) {
+          openModal('alert', {
+            title: '등록 실패',
+            message: '이미 등록된 펫이 있습니다.',
+          })
+        } else {
+          openModal('alert', {
+            title: '에러',
+            message: message || '등록 중 문제가 발생했습니다.',
+          })
+        }
+      } else {
+        openModal('alert', {
+          title: '서버 오류',
+          message: '서버와의 연결에 실패했습니다.',
+        })
+      }
     }
   }
 
@@ -159,7 +202,18 @@ const EggSelect = () => {
         <NicknameInput
           placeholder="닉네임을 입력하세요"
           value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
+          onChange={(e) => {
+            const input = e.target.value
+            if (input.length <= 12) {
+              setNickname(input)
+            } else {
+              openModal('alert', {
+                title: '관심 태그 수정',
+                message: '닉네임은 최대 12자까지 입력할 수 있어요!',
+              })
+              //alert('닉네임은 최대 12자까지 입력할 수 있어요!')
+            }
+          }}
         />
 
         <CustomButton variant="secondary" size="mg" onClick={handleEvent}>

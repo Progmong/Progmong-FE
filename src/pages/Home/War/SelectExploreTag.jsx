@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import axios from '../../../constants/axiosInstance'
 import BaseContainer from '../../../components/BaseContainer'
 import BaseButton from '../../../components/BaseButton'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const fightBackground = new URL('../../../assets/fight.png', import.meta.url).href
 
@@ -15,68 +17,75 @@ const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  // overflow: hidden;
+  overflow: hidden;
 `
 
 const CustomContainer = styled(BaseContainer)`
-  width: 988.69px;
-  height: 784px;
+  width: 50vw;
+  max-width: 988.69px;
+  aspect-ratio: 988.69 / 784;
+  background-color: rgba(255, 255, 255, 0.7);
+  width: 50vw; // 🔽 크기 줄임
+  max-width: 988.69px; // ✅ 원래 최대 너비 유지
+  aspect-ratio: 988.69 / 784; // ✅ 원래 비율 유지
+  background-color: rgba(255, 255, 255, 0.7);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  // opacity: 0.7; //자식에게 영향줌
-  background-color: rgba(255, 255, 255, 0.7);
+  padding: 3vh 4vw; // 🔹 위아래, 좌우 여백 추가
+  box-sizing: border-box; // 🔹 패딩 포함한 전체 너비로 계산
 `
 
 const Title = styled.h2`
-  font-size: 48px;
+  font-size: clamp(20px, 3vw, 36px);
   font-family: 'Binggrae';
   font-weight: 700;
-  margin-bottom: 7rem;
+  margin-bottom: 8vh;
   color: #051d2f;
 `
 
 const FontBox = styled.div`
-  font-size: 48px;
+  font-size: clamp(18px, 2.5vw, 32px);
   font-family: 'Binggrae';
   font-weight: 700;
   color: #0a3047;
-  margin-bottom: 4rem;
+  margin-bottom: 6vh;
 `
 
 const BtnContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 30px; /* 행 간 간격 */
+  gap: 3vh;
   align-items: center;
-  padding: 10px 9px; /* 위아래 10px, 좌우 9px */
-  margin-bottom: 8rem;
+  margin-bottom: 8vh;
 `
 
 const Row = styled.div`
   display: flex;
-  gap: 30px; /* 버튼 간 간격 */
+  gap: 2vw;
+  justify-content: center;
+  flex-wrap: wrap;
 `
 
 const TagButton = styled.button`
-  width: 105px;
-  height: 50px;
+  width: min(20vw, 105px);
+  height: min(7vh, 49px);
   background-color: ${({ selected }) => (selected ? '#1C445C' : '#ffffff')};
   color: ${({ selected }) => (selected ? '#ffffff' : '#000000')};
   font-family: 'Binggrae';
   font-weight: 700;
+  font-size: calc(11px + 0.5vw);
   border: none;
   border-radius: 21px;
-  /* Drop shadow */
   box-shadow: 0 4.5px 0 rgba(74, 74, 74, 0.4);
   cursor: pointer;
 `
 
 const CustomButton = styled(BaseButton)`
-  width: 185.46px;
-  height: 54.24px;
-  font-size: 20px;
+  width: min(30vw, 178px);
+  height: min(7vh, 50px);
+  font-size: calc(12px + 0.4vw);
 `
 const TAGS = {
   1: '수학',
@@ -90,11 +99,13 @@ const TAGS = {
 }
 
 const ExploreTagSelect = () => {
+  const location = useLocation() // ✅ 함수 내부에서 선언
+  const navigate = useNavigate()
   const [selectedTags, setSelectedTags] = useState(new Set())
+  const { minLevel, maxLevel } = location.state || {}
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken')
-
     if (!token) {
       console.warn('🚫 accessToken이 없습니다. 로그인 먼저 하세요.')
       return
@@ -111,30 +122,59 @@ const ExploreTagSelect = () => {
         setSelectedTags(new Set(tagIds))
       })
       .catch((err) => {
-        console.error('❌ 관심 태그 불러오기 실패:', err)
+        console.error('❌ 관심 태그 불러오기 실패:', err)``
       })
   }, [])
 
+  const startExplore = async (minLevel, maxLevel, token) => {
+    try {
+      const res = await axios.post(
+        'http://localhost:8100/api/v1/explore',
+        { minLevel, maxLevel },
+        { headers: { Authorization: `Bearer ${token}` } },
+      )
+
+      const problems = res.data.data.recommendProblems
+      const totalExp = res.data.data.totalExp
+
+      // ✅ 다음 페이지로 이동 (useNavigate 사용)
+      navigate('/explore/')
+    } catch (err) {
+      console.error('❌ 탐험 시작 실패:', err)
+      const errorMessage = err?.response?.data?.message
+      console.log('에러메시지 : ', errorMessage)
+
+      switch (errorMessage) {
+        case '이미 추천 문제가 있습니다':
+          toast.info('이미 진행 중인 탐험이 있어요!')
+          navigate('/explore') // 기존 탐험으로 이동
+          break
+
+        case '추천할 문제가 없습니다.':
+          toast.info(
+            <>
+              조건에 맞는 문제가 없어요. <br />
+              태그를 다시 설정해주세요.
+            </>,
+          )
+          break
+
+        default:
+          toast.error(errorMessage || '알 수 없는 오류가 발생했어요.')
+      }
+    }
+  }
   const toggleTag = (id) => {
     setSelectedTags((prev) => {
       const newSet = new Set(prev)
-      if (newSet.has(id)) {
-        newSet.delete(id)
-      } else {
-        newSet.add(id)
-      }
+      newSet.has(id) ? newSet.delete(id) : newSet.add(id)
       return newSet
     })
   }
 
   const handleSubmit = () => {
-    const selectedArray = Array.from(selectedTags) // 선택된 태그 id 배열
-
+    const selectedArray = Array.from(selectedTags)
     const token = localStorage.getItem('accessToken')
-
-    //하드코딩으로 테스트
-    //const token =
-    //  'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzUwNzU4NDQ4fQ.aWcvqyvcwtDMMu7B2Uh4wg56vYMkaob-o4XJ8lAK8N6UqF8vLNUaFScx-54WVdF84jg1hjJ8HZWfhQOM9pMNNQ'
 
     axios
       .put(
@@ -144,12 +184,12 @@ const ExploreTagSelect = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // ✅ 인증 헤더 넣기
+            Authorization: `Bearer ${token}`,
           },
         },
       )
       .then((res) => {
-        alert('관심 태그가 성공적으로 갱신되었습니다!')
+        startExplore(minLevel, maxLevel, token)
       })
       .catch((err) => {
         alert('갱신 중 오류가 발생했습니다.')
@@ -178,7 +218,7 @@ const ExploreTagSelect = () => {
               </TagButton>
             ))}
           </Row>
-          <Row style={{ justifyContent: 'center' }}>
+          <Row>
             {[7, 8].map((id) => (
               <TagButton key={id} selected={selectedTags.has(id)} onClick={() => toggleTag(id)}>
                 {TAGS[id]}
