@@ -18,7 +18,7 @@ import SelectEgg from './pages/OnBoarding/SelectEgg'
 import SelectExploreTag from './pages/Home/War/SelectExploreTag'
 import MyPageLayout from './layouts/mypage/MypageLayout'
 import ExplorePage from './pages/Explore/ExplorePage'
-import MainPage from './pages/Main/MainPage'
+import MainPage from './pages/Home/Home'
 import ExploreResultPage from './pages/Explore/ExploreResultPage'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
