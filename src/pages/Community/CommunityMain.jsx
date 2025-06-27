@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { useEffect, useState } from 'react'
+import { Outlet } from 'react-router-dom'
 
 import BaseContainer from '../../components/BaseContainer'
 import useCommnunityApi from '../../Services/Community'
@@ -7,7 +8,7 @@ import FreePostEle from './FreePostEle'
 import PostList from './PostList'
 
 import BaseButton from '@/components/BaseButton'
-import BackgroundImg from '@/assets/community/community_background3.png'
+import BackgroundImg from '@/assets/community/community_background5.png'
 
 const MainBox = styled.div`
   /* background-color: #b4e0d9; */
@@ -119,14 +120,7 @@ const CommunityMain = () => {
 
       <HomeBox>
         <BoardContainer>
-          <PostList posts={posts} />
-          <BottomContainer>
-            <div></div>
-            <div></div>
-            <WriteButtonContainer>
-              <BaseButton>글쓰기</BaseButton>
-            </WriteButtonContainer>
-          </BottomContainer>
+          <Outlet context={{ posts: posts }} />
         </BoardContainer>
       </HomeBox>
     </MainBox>

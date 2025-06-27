@@ -4,13 +4,17 @@ import { createBrowserRouter } from 'react-router-dom'
 import CommunityMain from '../pages/Community/CommunityMain'
 import PostDetail from '../pages/Community/PostDetail'
 
+import PostList from '@/pages/Community/PostList'
+import CommunityLayout from '@/layouts/CommunityLayout'
+
 const router = createBrowserRouter([
   {
     path: '/community',
+    element: <CommunityLayout />,
     children: [
       {
         index: true,
-        element: <CommunityMain />,
+        element: <PostList />,
       },
       {
         path: '/community/postdetail',
