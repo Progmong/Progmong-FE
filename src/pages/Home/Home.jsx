@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
@@ -6,8 +6,6 @@ import styled from 'styled-components'
 import Home767 from '../../assets/home/background_767.png'
 import Home1440 from '../../assets/home/background_1440.png'
 import Home3000 from '../../assets/home/background_3000.png'
-import mainImage2 from '../../assets/mainWeb.png'
-import mainMobile from '../../assets/mainmobile.png'
 import community from '../../assets/shop.png'
 import house from '../../assets/house.png'
 import cave from '../../assets/cave.png'
@@ -15,7 +13,6 @@ import progmong from '../../assets/progmong.png'
 import thoughtbubble from '../../assets/ttbubble.png'
 import fightBubble from '../../assets/fightbubble.png'
 import sleepBubble from '../../assets/sleepbubble.png'
-import progmong2 from '../../assets/progmong2.png'
 
 // 브레이크포인트 헬퍼 (앞서 만든 media 객체를 쓴다)
 import { media } from '@/utils/breakpoints.js'
@@ -36,22 +33,6 @@ const CenterBox = styled.div`
       left: 50%;
       transform: translate(-50%, -50%); /* 가로·세로 모두 중앙 */
     `}
-`
-
-const ScaledWrapper = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform-origin: center center;
-`
-
-const FixedStage = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  z-index: 0;
 `
 
 const BackgroundWrapper = styled.div`
@@ -94,15 +75,6 @@ const BackgroundWrapper = styled.div`
   }
 `
 
-const MobileBackground = styled.div`
-  width: 100vw;
-  height: 100vh;
-  background-image: url(${mainMobile});
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-`
-
 const BubbleBox = styled.div`
   position: absolute;
 
@@ -130,11 +102,11 @@ const BubbleBox = styled.div`
   justify-content: center;
 
   // 패딩 크기도 추후 아래 반응형을 보내야됨
-  padding: 0px 40px 80px 30px;
+  padding: 50px 40px 80px 30px;
   box-sizing: border-box;
   text-align: center;
   color: black;
-  font-size: 30px;
+  font-size: 1.4rem;
   line-height: 1.5;
   word-break: keep-all;
 
@@ -143,6 +115,7 @@ const BubbleBox = styled.div`
     width: 100%;
     height: 70%;
 
+    font-size: 1.6rem;
     top: -60%;
     left: -70%;
   `}
@@ -151,6 +124,7 @@ const BubbleBox = styled.div`
   ${media.notebook`
     width: 150%;
     height: 90%;
+    font-size: 1.8rem;
 
     top: -70%;
     left: -130%;
@@ -160,6 +134,7 @@ const BubbleBox = styled.div`
   ${media.desktop`
    width: 150%;
     height: 90%;
+    font-size: 2rem;
 
     top: -70%;
     left: -130%;
@@ -174,17 +149,25 @@ const FixedIconWrapper = styled.div`
   width: 80%;
 
   // 원래 font-size : 30px
-  font-size: 2rem;
+  font-size: 1.2rem;
+  font-family: 'Binggrae';
   font-weight: bold;
 
-  ${media.mobile``}
-
-  ${media.tablet``}
-
-  ${media.notebook`
+  ${media.mobile`
+    font-size: 1.4rem;
     `}
 
-  ${media.desktop``}
+  ${media.tablet`
+    font-size: 1.6rem;
+    `}
+
+  ${media.notebook`
+    font-size: 1.8rem;
+    `}
+
+  ${media.desktop`
+    font-size: 2rem;
+    `}
 `
 
 const IconOverlayContainer = styled.div`
@@ -203,17 +186,6 @@ const FixedIcon = styled.img`
   display: block;
   position: absolute;
   z-index: -50;
-`
-
-const IconTextOverlay = styled.span`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: ${(props) => props.color || 'black'};
-  font-size: 30px;
-  font-family: 'Binggrae';
-  pointer-events: none;
 `
 
 // ✅ 이미지 대신 div (JSX 버전)
@@ -253,12 +225,6 @@ const FixedMainIcon = styled.div`
   `}
 `
 
-const MobileLayout = styled.div`
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-`
-
 const statusMap = {
   전투: {
     img: fightBubble,
@@ -270,7 +236,6 @@ const statusMap = {
     img: sleepBubble,
     text: '자는 중...',
     position: { left: '0px', top: '0px' },
-    width: '250px',
     textColor: 'black',
   },
 }
@@ -313,21 +278,28 @@ const OverBackgroundGausian = styled.div`
     `}
 `
 
-// const OverBackgroundImg = styled.img`
-//   src: url(${Home1440});
-//   width: 100%;
-//   height: 100%;
-// `
-
 const Home = () => {
   const [petData, setPetData] = useState(null)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [scale, setScale] = useState(1)
 
+  // 이미지 경로 생성 (동적 import 사용 불가하므로 URL 방식 사용)
+  const petImage = useMemo(() => {
+    if (!petData?.petId || !petData?.evolutionStage) return null
+
+    try {
+      return new URL(
+        `../../assets/pets/pet${petData.petId}_stage${petData.evolutionStage}.png`,
+        import.meta.url,
+      ).href
+    } catch (err) {
+      console.error('❌ 펫 이미지 로드 실패:', err)
+      return null
+    }
+  }, [petData])
+
   useEffect(() => {
-    // later : 더미토큰 다시 정상화 필요
-    const accessToken =
-      'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzUxMjc2ODcwfQ.Q32sbAXJExOyqIANdeHoVEEJl-TYlbZuWhggh3Zb4d7QESXTpSqGA_BfAG1WQtTBwfZGfAd3-TzkzIUxuh6gNg'
+    const accessToken = localStorage.getItem('accessToken')
 
     const api = axios.create({
       baseURL: 'http://localhost:8100/api/v1',
@@ -339,26 +311,14 @@ const Home = () => {
     const loadPetStatus = async () => {
       try {
         const res = await api.get('/pet/all')
-        const { status, message } = res.data.data
-        setPetData({ status, message })
+        const { status, message, petId, evolutionStage } = res.data.data
+        setPetData({ status, message, petId, evolutionStage })
       } catch (err) {
         console.error('❌ 에러 발생:', err)
       }
     }
 
     loadPetStatus()
-
-    // later : 이게 없어도 될 것 같아 캡셔닝
-    // const handleResize = () => {
-    //   const newWidth = window.innerWidth
-    //   const newScale = newWidth / 1440
-    //   setWindowWidth(newWidth)
-    //   setScale(newScale)
-    // }
-
-    // handleResize()
-    // window.addEventListener('resize', handleResize)
-    // return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   if (!petData) return <div>로딩 중...</div>
@@ -371,7 +331,6 @@ const Home = () => {
   return (
     <Container>
       <CenterBox>
-        {/* {windowWidth > 767 ? ( */}
         <>
           <BackgroundWrapper>
             {/* /page1 – 시장 아이콘 */}
@@ -388,7 +347,7 @@ const Home = () => {
               />
             </Link>
             {/* /page2 – 집 아이콘 */}
-            <Link to="/page2" style={{ display: 'contents' }}>
+            <Link to="/mypage" style={{ display: 'contents' }}>
               <FixedMainIcon
                 $src={house}
                 $w={{ mobile: '320px', tablet: '320px', notebook: '320px', desktop: '400px' }}
@@ -401,7 +360,7 @@ const Home = () => {
               />
             </Link>
             {/* /page3 – 동굴 아이콘 */}
-            <Link to="/page3" style={{ display: 'contents', position: 'relative' }}>
+            <Link to="/explore" style={{ display: 'contents', position: 'relative' }}>
               <FixedMainIcon
                 $src={cave}
                 $w={{ mobile: '320px', tablet: '300px', notebook: '320px', desktop: '400px' }}
@@ -417,7 +376,7 @@ const Home = () => {
                     <FixedIconWrapper>
                       <IconOverlayContainer>
                         <FixedIcon src={config.img} />
-                        <div>{config.text}</div>
+                        <div style={{ color: config.textColor }}>{config.text}</div>
                       </IconOverlayContainer>
                     </FixedIconWrapper>
                   )}
@@ -428,7 +387,7 @@ const Home = () => {
             {/* 펫(프로그몽) 아이콘 – 링크 없음 */}
             <div style={{ display: 'contents', position: 'relative' }}>
               <FixedMainIcon
-                $src={progmong}
+                $src={petImage || progmong} // 로드 실패 시 기본 이미지
                 $w={{ mobile: '320px', tablet: '300px', notebook: '220px', desktop: '320px' }}
                 $pos={{
                   mobile: { x: 'calc(50% + 10px)', y: 'calc(50% + 40px)' }, // 모바일
@@ -443,14 +402,7 @@ const Home = () => {
           </BackgroundWrapper>
         </>
       </CenterBox>
-      )
-      {/* // : (
-      //   <MobileLayout>
-      //     <MobileBackground />
-      //     <BubbleBox>{petData.message || '...'}</BubbleBox>
-      //     <FixedMainIcon src={progmong2} />
-      //   </MobileLayout>
-      // )} */}
+
       <OverBackgroundWrapper>
         <OverBackgroundGausian />
       </OverBackgroundWrapper>
