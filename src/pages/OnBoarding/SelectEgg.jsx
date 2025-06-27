@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import axios from 'axios'
+import axios from '@/constants/axiosInstance'
 import styled from 'styled-components'
 import LeftArrow from '../../assets/left-arrow.svg'
 import RightArrow from '../../assets/right-arrow.svg'
@@ -119,7 +119,7 @@ const EggSelect = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:8100/api/v1/pet/register',
+        '/pet/register',
         {
           petId: currentEgg + 1, // ✅ 선택한 알 ID
           nickname: nickname,
