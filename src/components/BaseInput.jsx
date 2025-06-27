@@ -3,7 +3,7 @@
 // 공통 입력 컴포넌트 (스타일만 래핑)
 
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 // 사이즈 팔레트(Size)
 const SIZE_SET = {
@@ -30,6 +30,7 @@ const InputBase = styled.input.attrs(({ size = 'md' }) => ({
 
   /* number 타입 스핀 버튼 제거 */
   &[type='number'] {
+    appearance: none;
     -moz-appearance: textfield;
   }
   &[type='number']::-webkit-outer-spin-button,
@@ -51,5 +52,5 @@ const InputBase = styled.input.attrs(({ size = 'md' }) => ({
 
 /* ref 전달까지 지원 */
 const BaseInput = React.forwardRef(({ ...rest }, ref) => <InputBase ref={ref} {...rest} />)
-
+BaseInput.displayName = 'BaseInput'
 export default BaseInput

@@ -5,6 +5,7 @@ import { fileURLToPath, URL } from 'node:url'
 import AutoImport from 'unplugin-auto-import/vite'
 // 👉 Icon 사용
 import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
 // // 👉 TailwindCSS (선택 시)
 // import tailwindcss from 'tailwindcss'
 
@@ -15,6 +16,7 @@ export default defineConfig({
 
     AutoImport({
       imports: ['react', 'react-router-dom'],
+
       dts: 'src/auto-imports.d.ts',
       eslintrc: {
         enabled: true,
