@@ -26,12 +26,17 @@ export const useExploreApi = () => {
     })
   }
 
+  const getPetInfo = async () => {
+    return await axios.get('/pet/all')
+  }
+
   return {
     startExplore,
     currentExplore,
     successProblem,
     passProblem,
     checkProblem,
+    getPetInfo,
   }
 }
 
