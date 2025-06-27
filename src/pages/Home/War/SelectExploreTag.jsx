@@ -35,7 +35,8 @@ const Title = styled.h2`
   font-size: clamp(20px, 3vw, 36px);
   font-family: 'Binggrae';
   font-weight: 700;
-  margin-bottom: 6vh;
+  margin-bottom: 8vh;
+
   color: #051d2f;
 `
 
@@ -44,7 +45,7 @@ const FontBox = styled.div`
   font-family: 'Binggrae';
   font-weight: 700;
   color: #0a3047;
-  margin-bottom: 4vh;
+  margin-bottom: 6vh;
 `
 
 const BtnContainer = styled.div`
@@ -52,7 +53,7 @@ const BtnContainer = styled.div`
   flex-direction: column;
   gap: 3vh;
   align-items: center;
-  margin-bottom: 5vh;
+  margin-bottom: 8vh;
 `
 
 const Row = styled.div`
@@ -64,12 +65,13 @@ const Row = styled.div`
 
 const TagButton = styled.button`
   width: min(20vw, 105px);
-  height: min(7vh, 50px);
+  height: min(7vh, 49px);
   background-color: ${({ selected }) => (selected ? '#1C445C' : '#ffffff')};
   color: ${({ selected }) => (selected ? '#ffffff' : '#000000')};
   font-family: 'Binggrae';
   font-weight: 700;
-  font-size: calc(12px + 0.5vw);
+  font-size: calc(11px + 0.5vw);
+
   border: none;
   border-radius: 21px;
   box-shadow: 0 4.5px 0 rgba(74, 74, 74, 0.4);
@@ -77,9 +79,9 @@ const TagButton = styled.button`
 `
 
 const CustomButton = styled(BaseButton)`
-  width: min(30vw, 185px);
-  height: min(7vh, 54px);
-  font-size: calc(14px + 0.4vw);
+  width: min(30vw, 178px);
+  height: min(7vh, 50px);
+  font-size: calc(12px + 0.4vw);
 `
 
 const TAGS = {
