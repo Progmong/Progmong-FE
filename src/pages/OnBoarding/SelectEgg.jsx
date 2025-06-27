@@ -7,6 +7,7 @@ import BaseContainer from '../../components/BaseContainer'
 import BaseInput from '../../components/BaseInput'
 import BaseButton from '../../components/BaseButton'
 import { useModal } from '@/context/ModalContext'
+import { useNavigate } from 'react-router-dom'
 
 const ProgmongEggs = [
   new URL('../../assets/egg1.svg', import.meta.url).href,
@@ -27,29 +28,27 @@ const Background = styled.div`
   align-items: center;
   overflow: hidden;
 `
-const CustomContainer = styled(BaseContainer)`
-  width: 48vw; /* 기존 69.7vw -> 60vw로 줄임 */
-  height: 76.2vh;
-  max-width: 900px; /* 최대 너비도 줄임 */
-  max-height: 780px;
 
+const CustomContainer = styled(BaseContainer)`
+  width: 48vw;
+  height: 76.2vh;
+  max-width: 900px;
+  max-height: 780px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   padding: 3vh 4vw;
   box-sizing: border-box;
-
   font-size: clamp(14px, 1.2vw, 18px);
 `
+
 const Title = styled.h2`
-  font-size: 2.4em; /* 부모 font-size 기준으로 3배 */
+  font-size: 2.4em;
   font-family: 'Binggrae';
   font-weight: 700;
   margin-bottom: 1.5rem;
   color: #fd3b40;
-
   -webkit-text-stroke: 1px #e8e8e8;
   text-stroke: 1px black;
   text-shadow: 0 2px 0 rgba(136, 8, 0, 1);
@@ -61,15 +60,17 @@ const EggSelector = styled.div`
   justify-content: center;
   margin: 1rem 0;
   gap: 2em;
-  height: 30em; /* 최대 높이 제한 */
-  max-height: 30vh; /* 화면 대비 최대 높이 제한 */
-  overflow: hidden; /* 넘치는 부분 숨김 */
+  height: 30em;
+  max-height: 30vh;
+  overflow: hidden;
 `
+
 const EggImage = styled.img`
   width: 13em;
-  max-height: 100%; /* 부모 높이 내에서만 크기 조절 */
+  max-height: 100%;
   object-fit: contain;
 `
+
 const Arrow = styled.img`
   width: 4em;
   height: auto;
@@ -115,26 +116,45 @@ const CustomButton = styled(BaseButton)`
 
 const EggSelect = () => {
   const [currentEgg, setCurrentEgg] = useState(0)
-  const { openModal } = useModal()
   const [nickname, setNickname] = useState('')
+  const { openModal } = useModal()
   const navigate = useNavigate()
 
   const handlePrev = () => {
     setCurrentEgg((prev) => (prev - 1 + ProgmongEggs.length) % ProgmongEggs.length)
   }
+
   const handleNext = () => {
     setCurrentEgg((prev) => (prev + 1) % ProgmongEggs.length)
   }
 
   const handleEvent = async () => {
+    const trimmed = nickname.trim()
     const token = localStorage.getItem('accessToken')
+
+    // ✅ 닉네임 유효성 검사
+    if (trimmed.length === 0) {
+      openModal('alert', {
+        title: '닉네임 입력 오류',
+        message: '닉네임은 공백 없이, 한 글자 이상 입력해 주세요.',
+      })
+      return
+    }
+
+    if (trimmed.length > 12) {
+      openModal('alert', {
+        title: '닉네임 입력 오류',
+        message: '닉네임은 최대 12자까지 입력할 수 있어요!',
+      })
+      return
+    }
 
     try {
       const response = await axios.post(
         'http://localhost:8100/api/v1/pet/register',
         {
           petId: currentEgg + 1,
-          nickname: nickname,
+          nickname: trimmed, // ✅ 공백 제거 후 전송
         },
         {
           headers: {
@@ -145,7 +165,6 @@ const EggSelect = () => {
 
       console.log('서버 응답:', response.data)
 
-      // ✅ 등록 성공 시 모달 → 확인 누르면 메인 페이지로 이동
       openModal('alert', {
         title: '등록 완료',
         message: '프로그몽이 성공적으로 등록되었습니다!',
@@ -203,16 +222,7 @@ const EggSelect = () => {
           placeholder="닉네임을 입력하세요"
           value={nickname}
           onChange={(e) => {
-            const input = e.target.value
-            if (input.length <= 12) {
-              setNickname(input)
-            } else {
-              openModal('alert', {
-                title: '관심 태그 수정',
-                message: '닉네임은 최대 12자까지 입력할 수 있어요!',
-              })
-              //alert('닉네임은 최대 12자까지 입력할 수 있어요!')
-            }
+            setNickname(e.target.value)
           }}
         />
 
