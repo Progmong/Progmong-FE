@@ -257,7 +257,6 @@ const MobileLayout = styled.div`
   width: 100vw;
   height: 100vh;
   position: relative;
-  background: black;
 `
 
 const statusMap = {
@@ -275,6 +274,50 @@ const statusMap = {
     textColor: 'black',
   },
 }
+
+const OverBackgroundWrapper = styled.div`
+  position: 'fixed';
+  inset: 0;
+  z-index: -500;
+`
+
+const OverBackgroundGausian = styled.div`
+  position: fixed;
+  z-index: -100;
+  background-image: url(${Home767});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100vw;
+  height: 100vw;
+  filter: blur(10px);
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1.6);
+
+  ${media.notebook`
+      transform : translate(-50%, -50%) scale(1.1);
+    `}
+
+  ${media.notebook`
+      background-image: url(${Home3000});
+      background-size: cover;
+      transform : translate(-50%, -50%) scale(1.2);
+    `}
+
+  ${media.desktop`
+      background-image: url(${Home3000});
+      background-size: cover;
+      transform : translate(-50%, -50%) scale(1.1);
+    `}
+`
+
+// const OverBackgroundImg = styled.img`
+//   src: url(${Home1440});
+//   width: 100%;
+//   height: 100%;
+// `
 
 const Home = () => {
   const [petData, setPetData] = useState(null)
@@ -408,6 +451,9 @@ const Home = () => {
       //     <FixedMainIcon src={progmong2} />
       //   </MobileLayout>
       // )} */}
+      <OverBackgroundWrapper>
+        <OverBackgroundGausian />
+      </OverBackgroundWrapper>
     </Container>
   )
 }
