@@ -22,14 +22,59 @@ import {
   resultPop,
 } from './ExploreAnimations'
 
-export const ProblemBoxContent = styled.div`
+const ExpGainText = styled.div`
+  position: fixed;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 36px;
+  font-weight: bold;
+  color: #ffea00;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+  animation: ${resultPop} 2s ease-in-out;
+  z-index: 999;
+  pointer-events: none;
+`
+const flyAway = keyframes`
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(400px, -600px) scale(1.5) rotate(1080deg); /* 3바퀴 회전 */
+    opacity: 0;
+  }
+`
+
+const AnimatedMonsterImage = styled.img`
+  width: 240px;
+  height: auto;
+  margin-bottom: 16px;
+  &.hit {
+    animation: ${monsterHit} 0.9s ease;
+  }
+  &.fly-away {
+    animation: ${flyAway} 1.3s ease forwards;
+  }
+`
+
+const getPetImageByIdAndStage = (petId, stage) => {
+  try {
+    return new URL(`../../assets/pets/pet${petId}_stage${stage}.png`, import.meta.url).href
+  } catch (e) {
+    console.error('펫 이미지 불러오기 실패', e)
+    return '' // fallback image
+  }
+}
+
+const ProblemBoxContent = styled.div`
   animation: ${fadeTransition} 0.4s ease-in-out;
 `
 
-export const requireMonster = (n) =>
+const requireMonster = (n) =>
   new URL(`../../assets/monsters/monster-${n}.png`, import.meta.url).href
 
-export const ResultImage = styled.img`
+const ResultImage = styled.img`
   position: fixed;
   top: 50%;
   left: 50%;
@@ -40,7 +85,7 @@ export const ResultImage = styled.img`
   pointer-events: none;
 `
 
-export const Background = styled.div`
+const Background = styled.div`
   background-image: url(${bgImage});
   background-size: cover;
   background-position: center;
@@ -52,7 +97,7 @@ export const Background = styled.div`
   gap: 30px;
 `
 
-export const AttackEffect = styled.img`
+const AttackEffect = styled.img`
   position: absolute;
   top: 20%;
   left: 45%;
@@ -64,7 +109,7 @@ export const AttackEffect = styled.img`
 `
 
 // 🔧 MISS 이미지 (이제 MonsterContainer 안에서 위치 잡음)
-export const MissImage = styled.img`
+const MissImage = styled.img`
   position: absolute;
   top: 0px;
   left: 25%;
@@ -74,7 +119,7 @@ export const MissImage = styled.img`
   z-index: 5;
 `
 
-export const KillImage = styled.img`
+const KillImage = styled.img`
   position: absolute;
   top: 0px;
   left: 25%;
@@ -85,22 +130,26 @@ export const KillImage = styled.img`
 `
 
 // 🔧 몬스터+MISS 묶는 컨테이너
-export const MonsterContainer = styled.div`
+const MonsterContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
 `
 
-export const Layout = styled.div`
+const Layout = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
   max-width: 1280px;
   gap: 40px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `
 
-export const TransparentBox = styled.div`
+const TransparentBox = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
   border-radius: 20px;
   padding: 24px;
@@ -110,14 +159,15 @@ export const TransparentBox = styled.div`
   align-items: center;
 `
 
-export const PetBox = styled(TransparentBox)`
+const PetBox = styled(TransparentBox)`
   width: 250px;
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* 위아래 간격 벌리기 */
   align-items: center;
 `
-export const ProblemBox = styled(TransparentBox)`
+const ProblemBox = styled(TransparentBox)`
+  font-family: 'Binggrae';
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -125,7 +175,8 @@ export const ProblemBox = styled(TransparentBox)`
   align-items: center;
   position: relative;
 `
-export const SequenceIndicator = styled.div`
+
+const SequenceIndicator = styled.div`
   position: absolute;
   top: 12px;
   right: 20px;
@@ -135,7 +186,8 @@ export const SequenceIndicator = styled.div`
   z-index: 10;
 `
 
-export const ActionButton = styled.button`
+const ActionButton = styled.button`
+  font-family: 'Binggrae';
   width: 150px;
   padding: 14px 28px;
   font-size: 18px;
@@ -162,7 +214,7 @@ export const ActionButton = styled.button`
   }
 `
 
-export const darkenColor = (color, percent) => {
+const darkenColor = (color, percent) => {
   const num = parseInt(color.replace('#', ''), 16)
   const amt = Math.round(2.55 * percent)
   const R = (num >> 16) - amt
@@ -181,22 +233,32 @@ export const darkenColor = (color, percent) => {
   )
 }
 
-export const ButtonSection = styled(TransparentBox)`
+const ButtonSection = styled(TransparentBox)`
   flex-direction: row;
   justify-content: space-around;
   width: 100%;
   max-width: 1280px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 70%;
+  }
 `
-export const ButtonWithCooldown = styled.div`
+const ButtonWithCooldown = styled.div`
   position: relative;
   width: 140px; // 버튼 고정 너비
   height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 200px;
+  }
 `
 
-export const CooldownCircleWrapper = styled.div`
+const CooldownCircleWrapper = styled.div`
   position: absolute;
   right: -70px; // 버튼 오른쪽 외부로 띄우기
   top: 50%;
@@ -207,7 +269,8 @@ export const CooldownCircleWrapper = styled.div`
 `
 /* square_bg */
 
-export const PetInfoBox = styled.div`
+const PetInfoBox = styled.div`
+  font-family: 'Binggrae';
   width: 100%;
   background-color: rgba(255, 255, 255, 0.15); // 흰색 반투명
   border-radius: 12px;
@@ -215,7 +278,7 @@ export const PetInfoBox = styled.div`
   text-align: center;
   margin-top: 20px;
 `
-export const ExpBarWrapper = styled.div`
+const ExpBarWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 20px;
@@ -225,14 +288,14 @@ export const ExpBarWrapper = styled.div`
   margin-top: 10px;
 `
 
-export const ExpBarFill = styled.div`
+const ExpBarFill = styled.div`
   height: 100%;
   width: ${({ percent }) => percent}%;
   background: linear-gradient(90deg, #ffd700, #ffa500);
   transition: width 0.3s ease;
 `
 
-export const ExpText = styled.div`
+const ExpText = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -244,7 +307,7 @@ export const ExpText = styled.div`
   pointer-events: none;
 `
 
-export const CursorWrapper = styled.div`
+const CursorWrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -252,7 +315,7 @@ export const CursorWrapper = styled.div`
   z-index: 9999;
 `
 
-export const TooltipCursor = styled.div`
+const TooltipCursor = styled.div`
   position: absolute;
   transform: translate(-50%, -100%);
   background: rgba(0, 0, 0, 0.85);
@@ -266,29 +329,23 @@ export const TooltipCursor = styled.div`
   border: 2px solid #ffd700;
 `
 
-export const MonsterImage = styled.img`
+const MonsterImage = styled.img`
   width: 240px;
   height: auto;
   margin-bottom: 16px;
 `
 
-export const AnimatedMonsterImage = styled(MonsterImage)`
-  &.hit {
-    animation: ${monsterHit} 0.9s ease;
-  }
-`
-
-export const MonsterLink = styled.a`
+const MonsterLink = styled.a`
   cursor: ${swordCursor}, auto;
 `
 
-export const ProblemTitleLink = styled.a`
+const ProblemTitleLink = styled.a`
   color: #fff;
   text-decoration: none;
   cursor: ${swordCursor}, auto;
 `
 
-export const InfoRow = styled.div`
+const InfoRow = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -296,7 +353,7 @@ export const InfoRow = styled.div`
   margin: 4px 0;
 `
 
-export const ProblemInfoBox = styled.div`
+const ProblemInfoBox = styled.div`
   width: 100%;
   background-color: rgba(255, 255, 255, 0.15);
   border-radius: 12px;
@@ -309,7 +366,7 @@ export const ProblemInfoBox = styled.div`
   align-items: center;
 `
 
-export const PetImageWrapper = styled.div`
+const PetImageWrapper = styled.div`
   width: 180px;
   height: 180px;
   border-radius: 50%;
@@ -321,7 +378,7 @@ export const PetImageWrapper = styled.div`
   overflow: hidden;
   box-shadow: 0 0 12px rgba(255, 182, 255, 0.6); /* 부드러운 빛 효과 */
 `
-export const PetImage = styled.img`
+const PetImage = styled.img`
   width: 60%; /* 적절한 비율로 조절 */
   height: auto;
   object-fit: cover;
@@ -340,7 +397,9 @@ const ExplorePage = () => {
   const [problems, setProblems] = useState([])
   const [monsterHitClass, setMonsterHitClass] = useState(false)
   const navigate = useNavigate()
-  const { currentExplore, successProblem, passProblem, checkProblem } = useExploreApi()
+  const { currentExplore, successProblem, passProblem, checkProblem, getPetInfo } = useExploreApi()
+  const [petInfo, setPetInfo] = useState(null)
+  const [gainedExp, setGainedExp] = useState(null)
 
   const handlePass = async () => {
     try {
@@ -427,6 +486,19 @@ const ExplorePage = () => {
     }
   }, [cooldown])
 
+  useEffect(() => {
+    const fetchPetInfo = async () => {
+      try {
+        const res = await getPetInfo()
+        setPetInfo(res.data.data)
+      } catch (e) {
+        console.error('펫 정보 불러오기 실패', e)
+      }
+    }
+
+    fetchPetInfo()
+  }, [])
+
   const handleAttack = async () => {
     if (cooldown > 0) return
 
@@ -453,13 +525,22 @@ const ExplorePage = () => {
             const successRes = await successProblem()
 
             const { recommendProblems, finish, totalExp } = successRes.data.data
+            try {
+              const petInfoRes = await getPetInfo()
+              setPetInfo(petInfoRes.data.data) // ✅ 현재 화면의 펫 상태 업데이트
+            } catch (e) {
+              console.error('펫 정보 새로고침 실패', e)
+            }
 
             setTimeout(() => {
+              setMonsterHitClass('fly-away')
               setKillVisible(false)
+              setGainedExp(`+${currentProblem.level * 10} EXP`)
               setSuccessVisible(true)
             }, 800)
             setTimeout(() => {
               setSuccessVisible(false)
+              setGainedExp(null)
 
               if (finish) {
                 navigate('/explore/result', {
@@ -473,7 +554,10 @@ const ExplorePage = () => {
                 setCooldown(0)
                 localStorage.removeItem('exploreCooldownEnd')
               }
-            }, 2500)
+              setTimeout(() => {
+                setMonsterHitClass('')
+              })
+            }, 2800)
           } catch (e) {
             console.error('백엔드 성공 처리 실패', e)
           }
@@ -517,37 +601,38 @@ const ExplorePage = () => {
       {successVisible && <ResultImage src={successImage} alt="성공" />}
       {failVisible && <ResultImage src={failImage} alt="실페" />}
       {passVisible && <ResultImage src={passImage} alt="패스" />}
+      {gainedExp && <ExpGainText>{gainedExp}</ExpGainText>}
       <Layout>
         {/* 왼쪽 펫 정보 */}
         <PetBox>
           <PetImageWrapper>
-            <PetImage src={petImage} alt="펫" />
+            <PetImage
+              src={getPetImageByIdAndStage(petInfo?.petId, petInfo?.evolutionStage)}
+              alt="펫"
+            />
           </PetImageWrapper>
           <PetInfoBox>
             <InfoRow>
               <span>이름</span>
-              <span>프로그몽</span>
+              <span>{petInfo?.nickname || '이름없음'}</span>
             </InfoRow>
             <InfoRow>
               <span>레벨</span>
-              <span>3</span>
+              <span>{petInfo?.level}</span>
             </InfoRow>
             <InfoRow>
               <span>상태</span>
-              <span>전투</span>
+              <span>{petInfo?.status}</span>
             </InfoRow>
             <InfoRow>
               <span>진화 단계</span>
-              <span>2단계</span>
-            </InfoRow>
-
-            <InfoRow>
-              <span>EXP</span>
+              <span>{petInfo?.evolutionStage} 단계</span>
             </InfoRow>
             <ExpBarWrapper>
-              <ExpBarFill percent={expPercent} />
+              <ExpBarFill percent={(petInfo?.currentExp / petInfo?.maxExp) * 100} />
               <ExpText>
-                {currentExp} / {maxExp} ({Math.floor(expPercent)}%)
+                {petInfo?.currentExp} / {petInfo?.maxExp} (
+                {Math.floor((petInfo?.currentExp / petInfo?.maxExp) * 100)}%)
               </ExpText>
             </ExpBarWrapper>
           </PetInfoBox>
@@ -624,7 +709,9 @@ const ExplorePage = () => {
 
       {/* 하단 버튼 */}
       <ButtonSection>
-        <ActionButton color="#C3F154">나가기</ActionButton>
+        <ActionButton color="#C3F154" onClick={() => navigate('/home')}>
+          나가기
+        </ActionButton>
 
         <ButtonWithCooldown>
           <ActionButton color="#FD3B40" onClick={handleAttack} disabled={cooldown > 0}>

@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import axios from 'axios'
 import BaseContainer from '../../../components/BaseContainer'
 import BaseButton from '../../../components/BaseButton'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const fightBackground = new URL('../../../assets/fight.png', import.meta.url).href
 
@@ -22,6 +24,10 @@ const CustomContainer = styled(BaseContainer)`
   width: 50vw;
   max-width: 988.69px;
   aspect-ratio: 988.69 / 784;
+  background-color: rgba(255, 255, 255, 0.7);
+  width: 50vw; // 🔽 크기 줄임
+  max-width: 988.69px; // ✅ 원래 최대 너비 유지
+  aspect-ratio: 988.69 / 784; // ✅ 원래 비율 유지
   background-color: rgba(255, 255, 255, 0.7);
   display: flex;
   flex-direction: column;
@@ -79,8 +85,8 @@ const TagButton = styled.button`
 const CustomButton = styled(BaseButton)`
   width: min(30vw, 178px);
   height: min(7vh, 50px);
-  font-size: calc(12px + 0.4vw);`
-
+  font-size: calc(12px + 0.4vw);
+`
 const TAGS = {
   1: '수학',
   2: '구현',
@@ -93,7 +99,10 @@ const TAGS = {
 }
 
 const ExploreTagSelect = () => {
+  const location = useLocation() // ✅ 함수 내부에서 선언
+  const navigate = useNavigate()
   const [selectedTags, setSelectedTags] = useState(new Set())
+  const { minLevel, maxLevel } = location.state || {}
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken')
@@ -117,6 +126,44 @@ const ExploreTagSelect = () => {
       })
   }, [])
 
+  const startExplore = async (minLevel, maxLevel, token) => {
+    try {
+      const res = await axios.post(
+        'http://localhost:8100/api/v1/explore',
+        { minLevel, maxLevel },
+        { headers: { Authorization: `Bearer ${token}` } },
+      )
+
+      const problems = res.data.data.recommendProblems
+      const totalExp = res.data.data.totalExp
+
+      // ✅ 다음 페이지로 이동 (useNavigate 사용)
+      navigate('/explore/')
+    } catch (err) {
+      console.error('❌ 탐험 시작 실패:', err)
+      const errorMessage = err?.response?.data?.message
+      console.log('에러메시지 : ', errorMessage)
+
+      switch (errorMessage) {
+        case '이미 추천 문제가 있습니다':
+          toast.info('이미 진행 중인 탐험이 있어요!')
+          navigate('/explore') // 기존 탐험으로 이동
+          break
+
+        case '추천할 문제가 없습니다.':
+          toast.info(
+            <>
+              조건에 맞는 문제가 없어요. <br />
+              태그를 다시 설정해주세요.
+            </>,
+          )
+          break
+
+        default:
+          toast.error(errorMessage || '알 수 없는 오류가 발생했어요.')
+      }
+    }
+  }
   const toggleTag = (id) => {
     setSelectedTags((prev) => {
       const newSet = new Set(prev)
@@ -139,8 +186,8 @@ const ExploreTagSelect = () => {
           },
         },
       )
-      .then(() => {
-        alert('관심 태그가 성공적으로 갱신되었습니다!')
+      .then((res) => {
+        startExplore(minLevel, maxLevel, token)
       })
       .catch((err) => {
         alert('갱신 중 오류가 발생했습니다.')
