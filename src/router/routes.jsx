@@ -12,6 +12,8 @@ import MainPage from '../pages/Main/MainPage'
 import ExploreResultPage from '../pages/Explore/ExploreResultPage'
 import Home from '../pages/Home/Home'
 
+import Home from '../pages/Home/Home'
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -53,7 +55,6 @@ const router = createBrowserRouter([
     path: '/home',
     element: <Home />,
   },
-
 ])
 
 export default router
