@@ -1,11 +1,14 @@
+
 import React, { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
 
+
 import Home767 from '../../assets/home/background_767.png'
 import Home1440 from '../../assets/home/background_1440.png'
 import Home3000 from '../../assets/home/background_3000.png'
+
 import community from '../../assets/shop.png'
 import house from '../../assets/house.png'
 import cave from '../../assets/cave.png'
@@ -77,7 +80,7 @@ const BackgroundWrapper = styled.div`
 
 const BubbleBox = styled.div`
   position: absolute;
-
+  
   /* width: 380px;
   height: 380px;
 
@@ -229,6 +232,7 @@ const statusMap = {
   전투: {
     img: fightBubble,
     text: '전투 중 ...',
+
     position: { left: '0px', top: '0px' },
     textColor: 'red',
   },
@@ -277,7 +281,6 @@ const OverBackgroundGausian = styled.div`
       transform : translate(-50%, -50%) scale(1.1);
     `}
 `
-
 const Home = () => {
   const [petData, setPetData] = useState(null)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)

@@ -10,6 +10,7 @@ import MyPageLayout from '../layouts/mypage/MypageLayout.jsx'
 import ExplorePage from '../pages/Explore/ExplorePage'
 import MainPage from '../pages/Main/MainPage'
 import ExploreResultPage from '../pages/Explore/ExploreResultPage'
+import Home from '../pages/Home/Home'
 
 import Home from '../pages/Home/Home'
 
@@ -48,7 +49,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/explore/result',
-    element: <ExploreResultPage />,
+    element: <ExploreResultPage />
   },
   {
     path: '/home',
