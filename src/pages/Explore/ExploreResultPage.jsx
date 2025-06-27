@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import bgImage from '../../assets/explore-bg.png'
 import checkIcon from '../../assets/check-icon.png'
 import passIcon from '../../assets/pass-icon.png'
+import ConvexButton from '@/components/BaseButton'
 
 const Background = styled.div`
   background-image: url(${bgImage});
@@ -15,6 +16,7 @@ const Background = styled.div`
 `
 
 const ResultContainer = styled.div`
+  font-family: 'Binggrae';
   background: rgba(255, 255, 255, 0.75);
   padding: 40px;
   border-radius: 20px;
@@ -28,6 +30,10 @@ const TotalExpText = styled.div`
   font-weight: bold;
   margin-bottom: 24px;
   font-family: 'Binggrae';
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `
 
 const HeaderRow = styled.div`
@@ -37,6 +43,9 @@ const HeaderRow = styled.div`
   font-weight: bold;
   font-size: 18px;
   margin-bottom: 12px;
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `
 
 const HeaderCol = styled.div`
@@ -90,6 +99,9 @@ const GrayBox = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0 6px; /* ✅ 좌우 여백 추가 */
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
 `
 
 const ExitButton = styled.button`
@@ -101,13 +113,19 @@ const ExitButton = styled.button`
   border-radius: 12px;
   font-size: 18px;
   font-weight: bold;
-  color: #333;
+  color: white;
   cursor: pointer;
   box-shadow: 0 4px 0 #80cc33;
 
   &:hover {
     background-color: #92e632;
   }
+`
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
 `
 
 const ExploreResultPage = () => {
@@ -155,8 +173,15 @@ const ExploreResultPage = () => {
             <GrayBox flex="2">{p.title}</GrayBox>
           </ResultRow>
         ))}
-
-        <ExitButton onClick={() => navigate('/main')}>나가기</ExitButton>
+        <ButtonWrapper>
+          <ConvexButton
+            variant="secondary" // primary · secondary · success · pass
+            size="md" // sm · md · lg
+            onClick={() => navigate('/home', { replace: true })}
+          >
+            나가기
+          </ConvexButton>
+        </ButtonWrapper>
       </ResultContainer>
     </Background>
   )

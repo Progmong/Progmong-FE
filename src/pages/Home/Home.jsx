@@ -1,9 +1,7 @@
-
 import React, { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
-
 
 import Home767 from '../../assets/home/background_767.png'
 import Home1440 from '../../assets/home/background_1440.png'
@@ -19,6 +17,7 @@ import sleepBubble from '../../assets/sleepbubble.png'
 
 // 브레이크포인트 헬퍼 (앞서 만든 media 객체를 쓴다)
 import { media } from '@/utils/breakpoints.js'
+import { useNavigate } from 'react-router-dom'
 
 const Container = styled.div`
   position: fixed;
@@ -80,7 +79,7 @@ const BackgroundWrapper = styled.div`
 
 const BubbleBox = styled.div`
   position: absolute;
-  
+
   /* width: 380px;
   height: 380px;
 
@@ -281,10 +280,21 @@ const OverBackgroundGausian = styled.div`
       transform : translate(-50%, -50%) scale(1.1);
     `}
 `
+
 const Home = () => {
   const [petData, setPetData] = useState(null)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [scale, setScale] = useState(1)
+  const navigate = useNavigate()
+  const handleCaveClick = () => {
+    if (!petData) return
+
+    if (petData.status === '전투') {
+      navigate('/explore')
+    } else {
+      navigate('/levelselect')
+    }
+  }
 
   // 이미지 경로 생성 (동적 import 사용 불가하므로 URL 방식 사용)
   const petImage = useMemo(() => {
@@ -363,7 +373,10 @@ const Home = () => {
               />
             </Link>
             {/* /page3 – 동굴 아이콘 */}
-            <Link to="/explore" style={{ display: 'contents', position: 'relative' }}>
+            <div
+              onClick={handleCaveClick}
+              style={{ display: 'contents', position: 'relative', cursor: 'pointer' }}
+            >
               <FixedMainIcon
                 $src={cave}
                 $w={{ mobile: '320px', tablet: '300px', notebook: '320px', desktop: '400px' }}
@@ -385,7 +398,7 @@ const Home = () => {
                   )}
                 </div>
               </FixedMainIcon>
-            </Link>
+            </div>
 
             {/* 펫(프로그몽) 아이콘 – 링크 없음 */}
             <div style={{ display: 'contents', position: 'relative' }}>
