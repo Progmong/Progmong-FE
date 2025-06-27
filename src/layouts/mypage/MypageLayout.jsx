@@ -104,14 +104,14 @@ const MyPageLayout = () => {
       <Container>
         <Wrapper>
           <UpperContents>
-            <InfoPanel />
+            <InfoPanel user={mockData.user} pet={mockData.pet} />
             <MainContent>
-              <CharacterStage />
+              <CharacterStage pet={mockData.pet} message={mockData.message} />
             </MainContent>
           </UpperContents>
           <BottomContents>
-            <ExploreRecords />
-            <InterestTags />
+            <ExploreRecords problems={mockData.exploreRecords} />
+            <InterestTags tags={mockData.interestTags} />
           </BottomContents>
         </Wrapper>
       </Container>

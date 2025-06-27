@@ -66,7 +66,7 @@ const TAGS = {
   8: '기하학',
 }
 
-const InterestTags = () => {
+const InterestTags = ({ tags = [] }) => {
   const { openModal } = useModal()
   const [selectedTags, setSelectedTags] = useState(new Set())
   const mockTagIds = [1, 2, 5, 8]

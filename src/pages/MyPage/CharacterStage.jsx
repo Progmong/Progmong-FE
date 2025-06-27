@@ -75,7 +75,7 @@ const mockPetData = {
   name: '에라그몽프로그몽',
 }
 
-const CharacterStage = ({ pet = mockPetData, message = mockMessage }) => {
+const CharacterStage = ({ pet, message }) => {
   const { openModal } = useModal()
   const petImage = petImagesMap[pet.type]?.[pet.stage]
 

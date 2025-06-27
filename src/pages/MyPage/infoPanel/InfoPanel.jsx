@@ -37,26 +37,19 @@ const ContentBox = styled.div`
   min-height: 100px;
   font-size: 14px;
 `
+const mockPet = {
+  name: '에라그몽프로그몽',
+  stage: '알',
+  level: 20,
+  exp: 70,
+  expMax: 100,
+  growthProgress: 5,
+  growthMax: 10,
+  solved: 120,
+}
 
-const InfoPanel = () => {
+const InfoPanel = ({ user, pet }) => {
   const [mode, setMode] = useState('pet')
-
-  const mockPet = {
-    name: '에라그몽프로그몽',
-    stage: '알',
-    level: 20,
-    exp: 70,
-    expMax: 100,
-    growthProgress: 5,
-    growthMax: 10,
-    solved: 120,
-  }
-
-  const mockUser = {
-    nickname: '애라모르겠다',
-    email: 'progmong@gmail.com',
-    baekjoonId: 'progmong',
-  }
 
   return (
     <Panel>
@@ -77,9 +70,7 @@ const InfoPanel = () => {
           유저정보
         </BaseButton>
       </ToggleGroup>
-      <ContentBox>
-        {mode === 'pet' ? <PetInfo pet={mockPet} /> : <UserInfo user={mockUser} />}
-      </ContentBox>
+      <ContentBox>{mode === 'pet' ? <PetInfo pet={pet} /> : <UserInfo user={user} />}</ContentBox>
     </Panel>
   )
 }
