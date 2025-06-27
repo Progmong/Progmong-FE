@@ -10,6 +10,10 @@ export const useAuthApi = () => {
     })
   }
 
+  const checkAuth = async () => {
+    return await axios.get('/health-data')
+  }
+
   const login = async (email, password) => {
     return await axios.post('/users/login', {
       email,
@@ -62,6 +66,7 @@ export const useAuthApi = () => {
     generateBojCode,
     verifyBojCode,
     checkPet,
+    checkAuth,
   }
 }
 
