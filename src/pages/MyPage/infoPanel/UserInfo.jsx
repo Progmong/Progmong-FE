@@ -43,7 +43,7 @@ const UserInfo = ({ user }) => {
       </LabelRow>
       <LabelRow>
         <div>백준 ID</div>
-        <div>{user.baekjoonId}</div>
+        <div>{user.bjId}</div>
       </LabelRow>
       <ButtonGroup>
         <BaseButton onClick={handleEditNickname}>닉네임 수정</BaseButton>
