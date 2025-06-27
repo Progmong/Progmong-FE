@@ -52,6 +52,53 @@ const BottomContents = styled.div`
 `
 
 const MyPageLayout = () => {
+  const mockData = {
+    pet: {
+      type: 2, // pet2
+      stage: 3, // stage3
+      name: '에라그몽프로그몽',
+    },
+    user: {
+      nickname: '애라모르겠다',
+      email: 'progmong@gmail.com',
+      bjId: 'progmong',
+    },
+    interestTags: [1, 2, 5],
+    message: '애라 모르겠다~!',
+    exploreRecords: [
+      {
+        id: 1001,
+        tier: 'Gold V',
+        title: '부분 수열의 합',
+        status: '성공',
+      },
+      {
+        id: 2020,
+        tier: 'Silver I',
+        title: 'LCS',
+        status: '패스',
+      },
+      {
+        id: 3010,
+        tier: 'Bronze II',
+        title: 'DFS와 BFS',
+        status: '성공',
+      },
+      {
+        id: 4040,
+        tier: 'Silver III',
+        title: '토마토',
+        status: '패스',
+      },
+      {
+        id: 5050,
+        tier: 'Gold IV',
+        title: '다익스트라',
+        status: '성공',
+      },
+    ],
+  }
+
   return (
     <BackgroundContainer>
       <Container>
