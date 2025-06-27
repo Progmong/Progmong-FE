@@ -1,22 +1,22 @@
+import React, { useState } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
-import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useMediaQuery } from 'react-responsive'
 
 import logo from '../../assets/progmong-logo.png'
-import bgImage from '../../assets/bg-img.gif'
 import bgVideo from '../../assets/bg-video.mp4'
 import BaseButton from '../../components/BaseButton'
 import BaseInput from '../../components/BaseInput/'
 import BaseContainer from '../../components/BaseContainer'
 import useAuthApi from '../../constants/auth'
-import { useMediaQuery } from 'react-responsive'
 import { useModal } from '@/context/ModalContext'
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
-  font-family: 'Binggrae';
+    font-family: 'Binggrae';
   }
 `
+
 const Bg = styled.div`
   position: relative;
   height: 100vh;
@@ -33,7 +33,7 @@ const BackgroundVideo = styled.video`
   object-fit: cover;
   width: 100%;
   height: 100%;
-  z-index: -1; /* 뒤로 보내기 */
+  z-index: -1;
 `
 const Logo = styled.div`
   position: absolute;
@@ -45,7 +45,6 @@ const Logo = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   z-index: 2;
-  /* 강렬한 효과 */
   animation: glow 2.5s ease-in-out infinite alternate;
   filter: drop-shadow(0 0 10px #ff4b4b) drop-shadow(0 0 20px #ff7e7e);
 
@@ -83,10 +82,10 @@ const StyleLink = styled(Link)`
 
 const Login = () => {
   const { login, checkPet } = useAuthApi()
+  const { openModal } = useModal()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { openModal } = useModal()
-  const navigate = useNavigate()
 
   const isMobile = useMediaQuery({
     query: '(max-width:767px)',
@@ -106,22 +105,24 @@ const Login = () => {
         const loginSuccess = response.data.message
 
         const res = await checkPet()
-        console.log(res.data.userPetId)
+        console.log(res.data.message)
         if (res.data.message === '사용자 펫 정보가 없습니다.') {
           openModal('alert', {
             message: `${response.data.message} 신규 사용자는 알을 선택해주세요.`,
+            onConfirm: () => navigate('/selectEgg'),
           })
-          navigate('/SelectEgg')
         } else {
-          openModal('alert', { message: `${response.data.message}` })
-          navigate('/main')
+          openModal('alert', {
+            message: `${response.data.message}`,
+            onConfirm: () => navigate('/main'),
+          })
         }
       } else {
         openModal('alert', { message: `${response.data.message}` })
       }
     } catch (error) {
       console.error(error)
-      openModal('alert', { message: `${error.response.data.message}` })
+      openModal('alert', { message: `${error.response?.data?.message || '로그인 실패'}` })
     }
   }
 
@@ -142,8 +143,8 @@ const Login = () => {
             display: 'flex',
             justifyContent: 'center',
             padding: isMobile ? '1.5rem' : '2rem',
-            position: 'relative', // 중요: 자식 absolute 기준이 됨
-            paddingTop: '6rem', // 로고 겹침 여유 공간 확보
+            position: 'relative',
+            paddingTop: '6rem',
           }}
         >
           <Logo />
