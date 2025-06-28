@@ -49,6 +49,10 @@ const router = createBrowserRouter([
     path: '/levelselect',
     element: <LevelSelect />,
   },
+  {
+    path: '/home',
+    element: <Home />,
+  },
 ])
 
 export default router

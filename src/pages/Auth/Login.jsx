@@ -81,6 +81,7 @@ const StyleLink = styled(Link)`
 `
 
 const Login = () => {
+  const navigate = useNavigate();
   const { login, checkPet } = useAuthApi()
   const { openModal } = useModal()
 
@@ -106,23 +107,28 @@ const Login = () => {
 
         const res = await checkPet()
         console.log(res.data.message)
-        if (res.data.message === '사용자 펫 정보가 없습니다.') {
-          openModal('alert', {
-            message: `${response.data.message} 신규 사용자는 알을 선택해주세요.`,
-            onConfirm: () => navigate('/selectEgg'),
-          })
-        } else {
+         
           openModal('alert', {
             message: `${response.data.message}`,
-            onConfirm: () => navigate('/main'),
+            onConfirm: () => navigate('/home'),
           })
-        }
+        
       } else {
         openModal('alert', { message: `${response.data.message}` })
       }
-    } catch (error) {
-      console.error(error)
-      openModal('alert', { message: `${error.response?.data?.message || '로그인 실패'}` })
+    } catch (err) {
+      const errMsg = err.response?.data?.message
+      if (errMsg === '해당 유저의 펫 정보가 없습니다.') {
+        openModal('alert', {
+          message: ` 신규 사용자는 알을 선택해주세요.`,
+          onConfirm: () => navigate('/selectEgg'),
+        })
+      } else {
+        openModal('alert', {
+          title: '에러',
+          message: errMsg || '알 수 없는 오류',
+        })
+      }
     }
   }
 
