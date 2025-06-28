@@ -91,10 +91,17 @@ const Register = () => {
       setStep('boj_verify')
     } catch (err) {
       console.log(err)
+
+      if (err.response.status === 401) {
+        openModal('alert', { message: `${err.response.data}` })
+      } else {
+        openModal('alert', { message: `${err.response.data}` })
+
       if (err.response.status === 400) {
         openModal('alert', { message: `${err.response.data}` })
       } else {
         openModal('alert', { message: '인증 코드 생성 실패' })
+
       }
     }
   }
@@ -102,8 +109,9 @@ const Register = () => {
   const handleVerifyBojCode = async () => {
     try {
       const res = await verifyBojCode(bojId)
+      console.log(res)
+
       if (res.data.verified) {
-        console.log(res)
         openModal('alert', { message: `${res.data.message}` })
         setStep('email')
       }

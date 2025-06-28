@@ -10,6 +10,8 @@ import BaseInput from '../../components/BaseInput/'
 import BaseContainer from '../../components/BaseContainer'
 import useAuthApi from '../../constants/auth'
 import { useModal } from '@/context/ModalContext'
+import { useAuth } from '../../constants/AuthContext'
+
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
@@ -80,11 +82,31 @@ const StyleLink = styled(Link)`
   }
 `
 
+// JWT 디코딩 함수
+const decodeJWT = (token) => {
+  try {
+    if (!token) return null
+    const rawToken = token.includes(' ') ? token.split(' ')[1] : token
+    const base64Url = rawToken.split('.')[1]
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
+        .join(''),
+    )
+    return JSON.parse(jsonPayload)
+  } catch (error) {
+    console.error('JWT 디코딩 실패:', error)
+    return null
+  }
+}
+
 const Login = () => {
-  const navigate = useNavigate();
   const { login, checkPet } = useAuthApi()
   const { openModal } = useModal()
-
+  const navigate = useNavigate()
+  const { dispatch } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -100,35 +122,38 @@ const Login = () => {
     try {
       const response = await login(email, password)
       const accessToken = response.data.data.accessToken
+      const refreshToken = response.data.data.refreshToken
+
       if (accessToken) {
-        localStorage.setItem('accessToken', accessToken) // 토큰 저장
-        console.log(response)
-        const loginSuccess = response.data.message
+        localStorage.setItem('accessToken', accessToken)
+        localStorage.setItem('refreshToken', refreshToken)
+
+        // 유저 정보 디코딩 후 전역 상태에 저장
+        const userInfo = decodeJWT(accessToken)
+        if (userInfo) {
+          dispatch({ type: 'LOGIN', payload: userInfo })
+        }
 
         const res = await checkPet()
         console.log(res.data.message)
-         
+        if (res.data.message === '사용자 펫 정보가 없습니다.') {
+          navigate('/selectEgg') // 여기서 navigate를 사용하지 않으면 PublicRoute때문에 /main으로 리다이렉트됨
+          openModal('alert', {
+            message: `${response.data.message} 신규 사용자는 알을 선택해주세요.`,
+            // onConfirm: () => navigate('/selectEgg'),
+          })
+        } else {
           openModal('alert', {
             message: `${response.data.message}`,
-            onConfirm: () => navigate('/home'),
+            onConfirm: () => navigate('/main'),
           })
-        
+        }
       } else {
         openModal('alert', { message: `${response.data.message}` })
       }
-    } catch (err) {
-      const errMsg = err.response?.data?.message
-      if (errMsg === '해당 유저의 펫 정보가 없습니다.') {
-        openModal('alert', {
-          message: ` 신규 사용자는 알을 선택해주세요.`,
-          onConfirm: () => navigate('/selectEgg'),
-        })
-      } else {
-        openModal('alert', {
-          title: '에러',
-          message: errMsg || '알 수 없는 오류',
-        })
-      }
+    } catch (error) {
+      console.error(error)
+      openModal('alert', { message: `${error.response?.data?.message || '로그인 실패'}` })
     }
   }
 

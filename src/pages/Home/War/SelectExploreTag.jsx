@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import axios from 'axios'
+import axios from '../../../constants/axiosInstance'
 import BaseContainer from '../../../components/BaseContainer'
 import BaseButton from '../../../components/BaseButton'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -112,7 +112,7 @@ const ExploreTagSelect = () => {
     }
 
     axios
-      .get('http://localhost:8100/api/v1/tag', {
+      .get('/tag', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -178,8 +178,10 @@ const ExploreTagSelect = () => {
 
     axios
       .put(
-        'http://localhost:8100/api/v1/tag',
-        { tagIds: selectedArray },
+        '/tag',
+        {
+          tagIds: selectedArray, // ✅ userId 제거
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
