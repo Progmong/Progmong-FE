@@ -54,7 +54,7 @@ export default defineConfig([
       // JSX 사용 시 React 자동 인식
       'react/react-in-jsx-scope': 'off',
 
-      'linebreak-style': ['warn', 'unix'], // or 'auto'
+      'linebreak-style': ['warn', 'auto'], // or 'auto'
 
       // 리액트 프롭스 검사 끄기
       'react/prop-types': 'off',
