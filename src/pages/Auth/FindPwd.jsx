@@ -11,21 +11,13 @@ import BaseInput from '../../components/BaseInput'
 import BaseContainer from '../../components/BaseContainer'
 import useAuthApi from '../../constants/auth'
 import { useMediaQuery } from 'react-responsive'
+import { useModal } from '@/context/ModalContext'
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
-    /* font-family: 'NEXON Bazzi Code', 'Comic Sans MS'; */
       font-family: 'Binggrae';
-    
-  }
-  @font-face {
-    font-family: 'NEXON Bazzi Code';
-    src: url('../assets/Bazzi.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
   }
 `
-
 const Bg = styled.div`
   position: relative;
   height: 100vh;
@@ -35,7 +27,6 @@ const Bg = styled.div`
   justify-content: center;
   align-items: center;
 `
-
 const BackgroundVideo = styled.video`
   position: absolute;
   top: 0;
@@ -45,7 +36,6 @@ const BackgroundVideo = styled.video`
   height: 100%;
   z-index: -1; /* 뒤로 보내기 */
 `
-
 const Title = styled.h1`
   text-align: center;
   font-size: 30px;
@@ -57,7 +47,6 @@ const LoginContainer = styled.div`
   flex-direction: column;
   gap: 10px;
 `
-
 const Label = styled.label`
   font-weight: bold;
   font-size: 18px;
@@ -79,6 +68,9 @@ const FindPwd = () => {
   const [code, setCode] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPwd, setConfirmPwd] = useState('')
+  const [isEmailSending, setIsEmailSending] = useState(false) // 버튼 잠금 상태
+  const { openModal } = useModal()
+
   const navigate = useNavigate()
 
   const isMobile = useMediaQuery({
@@ -87,36 +79,43 @@ const FindPwd = () => {
 
   const handleSendEmail = async () => {
     if (!email) {
-      alert('이메일을 입력해주세요.')
+      openModal('alert', { message: '이메일을 입력해주세요.' })
       return
     }
     try {
-      await sendResetEmail(email)
-      alert('인증 코드가 이메일로 전송되었습니다.')
+      setIsEmailSending(true)
+      const res = await sendResetEmail(email)
+      console.log(res)
+      openModal('alert', {
+        message: `${res.data.message}`,
+      })
       setStep('code')
     } catch (error) {
-      console.error(error)
-      alert('이메일 전송 실패')
+      openModal('alert', {
+        message: `${error.response.data.message}`,
+      })
+    } finally {
+      setIsEmailSending(false)
     }
   }
 
   const handleVerifyCodeAndChangePwd = async () => {
     if (!code || !password || !confirmPwd) {
-      alert('모든 항목을 입력해주세요.')
+      openModal('alert', { message: '모든 항목을 입력해주세요.' })
       return
     }
     if (password !== confirmPwd) {
-      alert('비밀번호가 일치하지 않습니다.')
+      openModal('alert', { message: '비밀번호가 일치하지 않습니다.' })
       return
     }
 
     try {
-      await verifyResetEmail(code, password)
-      alert('비밀번호가 변경되었습니다.')
+      const res = await verifyResetEmail(code, password)
+      openModal('alert', { message: `${res.data.message}` })
       navigate('/')
     } catch (error) {
       console.error(error)
-      alert('비밀번호 변경 실패')
+      openModal('alert', { message: `${error.response.data.message}` })
     }
   }
 
@@ -131,10 +130,13 @@ const FindPwd = () => {
           style={{
             backgroundColor: '#ffffffb9',
             width: '40%',
+            maxWidth: '700px',
             minWidth: isMobile ? '280px' : '360px',
             display: 'flex',
             justifyContent: 'center',
             padding: isMobile ? '1.5rem' : '2rem',
+            position: 'relative', // 중요: 자식 absolute 기준이 됨
+            paddingTop: '2rem', // 로고 겹침 여유 공간 확보
           }}
         >
           <LoginContainer>
@@ -153,6 +155,7 @@ const FindPwd = () => {
                   variant="secondary"
                   onClick={handleSendEmail}
                   style={{ marginTop: '15px' }}
+                  disabled={isEmailSending}
                 >
                   이메일 인증
                 </BaseButton>

@@ -11,18 +11,12 @@ import BaseInput from '../../components/BaseInput'
 import BaseContainer from '../../components/BaseContainer'
 import useAuthApi from '../../constants/auth'
 import { useMediaQuery } from 'react-responsive'
+import { useModal } from '@/context/ModalContext'
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
-  /* font-family: 'NEXON Bazzi Code', 'Comic Sans MS'; */
   font-family: 'Binggrae';
   }
-  @font-face {
-  font-family: 'NEXON Bazzi Code';
-  src: url('../assets/Bazzi.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
 `
 const Bg = styled.div`
   position: relative;
@@ -33,7 +27,6 @@ const Bg = styled.div`
   justify-content: center;
   align-items: center;
 `
-
 const BackgroundVideo = styled.video`
   position: absolute;
   top: 0;
@@ -43,19 +36,6 @@ const BackgroundVideo = styled.video`
   height: 100%;
   z-index: -1; /* 뒤로 보내기 */
 `
-
-// const MainContainer = styled.div`
-//   width: 50%;
-//   background-color: #fffeffb3; /* 배경만 투명 */
-//   border-radius: 20px;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   box-shadow:
-//     0 3px #d1d8ffb3,
-//     0 5px #6b0300b3;
-// `
-
 const Title = styled.h1`
   text-align: center;
   font-size: 30px;
@@ -67,12 +47,10 @@ const LoginContainer = styled.div`
   flex-direction: column;
   gap: 10px;
 `
-
 const Label = styled.label`
   font-weight: bold;
   font-size: 18px;
 `
-
 const StyleLink = styled(Link)`
   text-decoration: none;
   color: #2c2c2c;
@@ -82,18 +60,6 @@ const StyleLink = styled(Link)`
     transform: scale(1.1);
   }
 `
-// const Input = styled.input`
-//   border-radius: 20px;
-//   padding: 15px;
-//   margin-bottom: 30px;
-//   font-size: 20px;
-//   border-style: none;
-//   outline: none;
-//   box-shadow:
-//     0 3px #d1d8ffb3,
-//     0 5px #bfa385b3;
-//   background-color: white;
-// `
 
 const Register = () => {
   const [email, setEmail] = useState('')
@@ -107,6 +73,7 @@ const Register = () => {
   const [bojId, setBojId] = useState('')
   const navigate = useNavigate()
   const [isEmailSending, setIsEmailSending] = useState(false) // 버튼 잠금 상태
+  const { openModal } = useModal()
 
   const isMobile = useMediaQuery({
     query: '(max-width:767px)',
@@ -114,7 +81,7 @@ const Register = () => {
 
   const handleGenerateBojCode = async () => {
     if (!bojId) {
-      alert('아이디를 입력해주세요.')
+      openModal('alert', { message: '아이디를 입력해주세요.' })
       return
     }
     try {
@@ -123,10 +90,11 @@ const Register = () => {
       setBojCode(code)
       setStep('boj_verify')
     } catch (err) {
-      if (err.response.data === '이미 인증된 사용자입니다.') {
-        alert(err.response.data)
+      console.log(err)
+      if (err.response.status === 400) {
+        openModal('alert', { message: `${err.response.data}` })
       } else {
-        alert('인증코드 생성 실패')
+        openModal('alert', { message: '인증 코드 생성 실패' })
       }
     }
   }
@@ -135,27 +103,29 @@ const Register = () => {
     try {
       const res = await verifyBojCode(bojId)
       if (res.data.verified) {
-        alert('인증 성공')
+        console.log(res)
+        openModal('alert', { message: `${res.data.message}` })
         setStep('email')
       }
     } catch (error) {
-      alert(error.response.data)
+      openModal('alert', { message: `${error.response.data}` })
     }
   }
 
   const handleSendEmail = async () => {
     if (!email) {
-      alert('이메일을 입력해주세요.')
+      openModal('alert', { message: '이메일을 입력해주세요.' })
       return
     }
 
     try {
       setIsEmailSending(true)
-      await sendEmail(email)
-      alert('인증 코드가 해당 이메일로 전송되었습니다.')
+      const res = await sendEmail(email)
+      openModal('alert', { message: `${res.data.message}` })
       setStep('code')
     } catch (error) {
-      alert('서버 오류로 이메일을 전송하지 못했습니다.')
+      console.log(error)
+      openModal('alert', { message: `${error.response.data.message}` })
     } finally {
       setIsEmailSending(false)
     }
@@ -163,33 +133,35 @@ const Register = () => {
 
   const handleVerifyCode = async () => {
     if (!code) {
-      alert('인증 코드를 입력해주세요.')
+      openModal('alert', { message: '인증 코드를 입력해주세요.' })
       return
     }
     try {
-      await verifyEmail(code)
-      alert('인증 완료')
+      const res = await verifyEmail(code)
+      openModal('alert', { message: `${res.data.message}` })
       setStep('register')
     } catch (error) {
-      alert('서버 오류')
+      openModal('alert', { message: `${error.response.data.message}` })
     }
   }
 
   const handleRegister = async () => {
-    if (!email || !password || !confirmPwd) {
-      alert('모든 항목을 입력해주세요.')
+    if (!nickname || !password || !confirmPwd) {
+      openModal('alert', { message: '모든 항목을 입력해주세요.' })
       return
     }
     if (password !== confirmPwd) {
-      alert('비밀번호가 일치하지 않습니다.')
+      openModal('alert', { message: '비밀번호가 일치하지 않습니다.' })
       return
     }
     try {
-      await register(email, bojId, nickname, password)
-      alert('회원가입 완료')
-      navigate('/') // 로그인 페이지로 이동
+      const res = await register(email, bojId, nickname, password)
+      console.log(res)
+      openModal('alert', { message: `${res.data.message}` })
+      navigate('/')
     } catch (error) {
-      alert(error.response.data.message)
+      console.log(error)
+      openModal('alert', { message: `${error.response.data.message}` })
     }
   }
 
@@ -204,10 +176,13 @@ const Register = () => {
           style={{
             backgroundColor: '#ffffffb9',
             width: '40%',
+            maxWidth: '700px',
             minWidth: isMobile ? '280px' : '360px',
             display: 'flex',
             justifyContent: 'center',
             padding: isMobile ? '1.5rem' : '2rem',
+            position: 'relative', // 중요: 자식 absolute 기준이 됨
+            paddingTop: '2rem', // 로고 겹침 여유 공간 확보
           }}
         >
           <LoginContainer>
@@ -315,7 +290,7 @@ const Register = () => {
                     if (input.length <= 12) {
                       setNickname(input)
                     } else {
-                      alert('닉네임 12자 초과')
+                      openModal('alert', { message: '닉네임 12자 초과' })
                     }
                   }}
                 />
@@ -358,7 +333,7 @@ const Register = () => {
                     fontWeight: 'bold',
                   }}
                 >
-                  Solved.ac 프로필 바로가기
+                  Solved.ac 프로필
                 </StyleLink>
               )}
               <StyleLink
