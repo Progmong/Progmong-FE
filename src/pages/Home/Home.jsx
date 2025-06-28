@@ -49,7 +49,7 @@ const BackgroundWrapper = styled.div`
   place-items: center;
 
   inset: 0;
-  overflow: hidden;
+  // overflow: hidden;
 
   @media (min-width: 767px) {
     width: 767px;
@@ -281,10 +281,44 @@ const OverBackgroundGausian = styled.div`
     `}
 `
 
+const JumpingIcon = styled(FixedMainIcon)`
+  cursor: pointer;
+  animation-fill-mode: forwards;
+
+  &.jump {
+    animation: jumpAnimation 0.6s ease;
+  }
+
+  @keyframes jumpAnimation {
+    0% {
+      transform: translateY(0);
+    }
+    30% {
+      transform: translateY(-30px);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+`
+const HoverableIcon = styled(FixedMainIcon)`
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05) translateY(-5px);
+  }
+`
+
 const Home = () => {
   const [petData, setPetData] = useState(null)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [scale, setScale] = useState(1)
+
+  const [isJumping, setIsJumping] = useState(false)
+
   const navigate = useNavigate()
   const handleCaveClick = () => {
     if (!petData) return
@@ -337,9 +371,16 @@ const Home = () => {
   if (!petData) return <div>로딩 중...</div>
 
   // 현재 펫 상태를 풀러와 config에 저장
-  // 펫의 상태는 아래와 같음
   // petData.status = ['전투', '휴식' ]
   const config = statusMap[petData.status]
+
+  const handleJump = () => {
+    if (isJumping) return // 이미 점프 중이면 무시
+    setIsJumping(true)
+    setTimeout(() => {
+      setIsJumping(false)
+    }, 600) // 애니메이션 시간과 동일하게 맞춤
+  }
 
   return (
     <Container>
@@ -348,20 +389,20 @@ const Home = () => {
           <BackgroundWrapper>
             {/* /page1 – 시장 아이콘 */}
             <Link to="/page1" style={{ display: 'contents' }}>
-              <FixedMainIcon
+              <HoverableIcon
                 $src={community}
                 $w={{ mobile: '320px', tablet: '320px', notebook: '320px', desktop: '400px' }}
                 $pos={{
-                  mobile: { x: 'calc(50% - 160px)', y: 'calc(50% - 200px)' }, // 모바일
-                  tablet: { x: 'calc(50% - 320px)', y: 'calc(50% - 390px)' }, // 태블릿
-                  notebook: { x: 'calc(50% - 320px)', y: 'calc(50% - 330px)' }, // 노트북
-                  desktop: { x: 'calc(50% - 400px)', y: 'calc(50% - 390px)' }, // 데스크톱
+                  mobile: { x: 'calc(50% - 160px)', y: 'calc(50% - 200px)' },
+                  tablet: { x: 'calc(50% - 320px)', y: 'calc(50% - 390px)' },
+                  notebook: { x: 'calc(50% - 300px)', y: 'calc(50% - 300px)' },
+                  desktop: { x: 'calc(50% - 400px)', y: 'calc(50% - 390px)' },
                 }}
               />
             </Link>
             {/* /page2 – 집 아이콘 */}
             <Link to="/mypage" style={{ display: 'contents' }}>
-              <FixedMainIcon
+              <HoverableIcon
                 $src={house}
                 $w={{ mobile: '320px', tablet: '320px', notebook: '320px', desktop: '400px' }}
                 $pos={{
@@ -377,7 +418,7 @@ const Home = () => {
               onClick={handleCaveClick}
               style={{ display: 'contents', position: 'relative', cursor: 'pointer' }}
             >
-              <FixedMainIcon
+              <HoverableIcon
                 $src={cave}
                 $w={{ mobile: '320px', tablet: '300px', notebook: '320px', desktop: '400px' }}
                 $pos={{
@@ -397,12 +438,13 @@ const Home = () => {
                     </FixedIconWrapper>
                   )}
                 </div>
-              </FixedMainIcon>
+              </HoverableIcon>
             </div>
 
             {/* 펫(프로그몽) 아이콘 – 링크 없음 */}
-            <div style={{ display: 'contents', position: 'relative' }}>
-              <FixedMainIcon
+            <div style={{ display: 'contents', position: 'relative' }} onClick={handleJump}>
+              <JumpingIcon
+                className={isJumping ? 'jump' : ''}
                 $src={petImage || progmong} // 로드 실패 시 기본 이미지
                 $w={{ mobile: '320px', tablet: '300px', notebook: '220px', desktop: '320px' }}
                 $pos={{
@@ -413,7 +455,7 @@ const Home = () => {
                 }}
               >
                 <BubbleBox>{petData.message || '...'}</BubbleBox>
-              </FixedMainIcon>
+              </JumpingIcon>
             </div>
           </BackgroundWrapper>
         </>
