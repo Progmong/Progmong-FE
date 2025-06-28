@@ -23,7 +23,7 @@ const PostList = () => {
     <div>
       <ListContainer>
         {posts.map((post) => (
-          <FreePostEle key={post.id} post={post} />
+          <FreePostEle key={post.postId} post={post} />
         ))}
       </ListContainer>
       <BottomContainer>
