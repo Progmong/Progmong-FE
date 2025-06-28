@@ -9,7 +9,7 @@ import Home3000 from '../../assets/home/background_3000.png'
 
 import community from '../../assets/shop.png'
 import house from '../../assets/house.png'
-import cave from '../../assets/cave.png'
+import cave from '../../assets/dungeon.png'
 import progmong from '../../assets/progmong.png'
 import thoughtbubble from '../../assets/ttbubble.png'
 import fightBubble from '../../assets/fightbubble.png'
