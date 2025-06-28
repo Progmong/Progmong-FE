@@ -12,6 +12,7 @@ import useAuthApi from '../../constants/auth'
 import { useModal } from '@/context/ModalContext'
 import { useAuth } from '../../constants/AuthContext'
 
+
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
     font-family: 'Binggrae';
@@ -106,7 +107,6 @@ const Login = () => {
   const { openModal } = useModal()
   const navigate = useNavigate()
   const { dispatch } = useAuth()
-
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
