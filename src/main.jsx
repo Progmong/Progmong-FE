@@ -2,6 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 
+import './Styles/reset.css'
+import './Styles/base.css'
+
 // Contexts
 import { AuthProvider } from './constants/AuthContext'
 import { ModalProvider } from './context/ModalContext'
@@ -20,6 +23,7 @@ import MyPageLayout from './layouts/mypage/MypageLayout'
 import ExplorePage from './pages/Explore/ExplorePage'
 import MainPage from './pages/Home/Home'
 import ExploreResultPage from './pages/Explore/ExploreResultPage'
+import LevelSelectPage from './pages/Explore/LevelSelectPage'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
@@ -53,7 +57,6 @@ root.render(
               </PublicRoute>
             }
           />
-
           {/* 🔐 Protected Routes */}
           <Route
             path="/selectEgg"
@@ -103,7 +106,14 @@ root.render(
               </ProtectedRoute>
             }
           />
-
+          <Route
+            path="/levelselect"
+            element={
+              <ProtectedRoute>
+                <LevelSelectPage />
+              </ProtectedRoute>
+            }
+          />
           {/* 🛑 Catch-All: 잘못된 경로는 로그인으로 */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
