@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 
 import BaseContainer from '../../components/BaseContainer'
-import useCommnunityApi from '../../Services/Community'
+import useCommnunityApi from '@/constants/Community'
 import FreePostEle from './FreePostEle'
 import PostList from './PostList'
 

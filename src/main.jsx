@@ -24,6 +24,9 @@ import ExplorePage from './pages/Explore/ExplorePage'
 import MainPage from './pages/Home/Home'
 import ExploreResultPage from './pages/Explore/ExploreResultPage'
 import LevelSelectPage from './pages/Explore/LevelSelectPage'
+import CommunityLayout from './layouts/CommunityLayout'
+import PostList from './pages/Community/PostList'
+import PostDetail from './pages/Community/PostDetail'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
@@ -98,6 +101,20 @@ root.render(
               </ProtectedRoute>
             }
           />
+          {/* 커뮤니티 전체 보호 */}
+          <Route
+            path="/community"
+            element={
+              <ProtectedRoute>
+                <CommunityLayout />
+              </ProtectedRoute>
+            }
+          >
+            {/* /community 에서는 PostList */}
+            <Route index element={<PostList />} />
+            {/* /community/postdetail 에서는 PostDetail */}
+            <Route path="postdetail" element={<PostDetail />} />
+          </Route>
           <Route
             path="/explore/result"
             element={
