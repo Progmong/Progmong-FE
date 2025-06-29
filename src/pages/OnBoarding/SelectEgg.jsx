@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import axios from 'axios'
+import usePetApi from '../../constants/pet'
 import styled from 'styled-components'
 import LeftArrow from '../../assets/left-arrow.svg'
 import RightArrow from '../../assets/right-arrow.svg'
@@ -10,9 +10,10 @@ import { useModal } from '@/context/ModalContext'
 import { useNavigate } from 'react-router-dom'
 
 const ProgmongEggs = [
-  new URL('../../assets/egg1.svg', import.meta.url).href,
-  new URL('../../assets/egg2.svg', import.meta.url).href,
-  new URL('../../assets/egg3.svg', import.meta.url).href,
+  new URL('../../assets/pets/pet1_stage1.png', import.meta.url).href,
+  new URL('../../assets/pets/pet2_stage1.png', import.meta.url).href,
+  new URL('../../assets/pets/pet3_stage1.png', import.meta.url).href,
+  new URL('../../assets/pets/pet4_stage1.png', import.meta.url).href,
 ]
 
 const introBackground = new URL('../../assets/background-img1.png', import.meta.url).href
@@ -33,6 +34,7 @@ const CustomContainer = styled(BaseContainer)`
   width: 48vw;
   height: 76.2vh;
   max-width: 900px;
+  min-width: 320px; // ✅ 너무 작아지지 않게
   max-height: 780px;
   display: flex;
   flex-direction: column;
@@ -59,7 +61,7 @@ const EggSelector = styled.div`
   align-items: center;
   justify-content: center;
   margin: 1rem 0;
-  gap: 2em;
+  gap: clamp(0.3em, 2vw, 1.5em);
   height: 30em;
   max-height: 30vh;
   overflow: hidden;
@@ -77,10 +79,10 @@ const Arrow = styled.img`
   cursor: pointer;
 
   &.left {
-    margin-right: 3em;
+    margin-right: 1em;
   }
   &.right {
-    margin-left: 3em;
+    margin-left: 1em;
   }
 `
 
@@ -114,11 +116,12 @@ const CustomButton = styled(BaseButton)`
   padding: 0 10px;
 `
 
-const EggSelect = () => {
+const SelectEgg = () => {
   const [currentEgg, setCurrentEgg] = useState(0)
   const [nickname, setNickname] = useState('')
   const { openModal } = useModal()
   const navigate = useNavigate()
+  const { registerPet } = usePetApi()
 
   const handlePrev = () => {
     setCurrentEgg((prev) => (prev - 1 + ProgmongEggs.length) % ProgmongEggs.length)
@@ -130,7 +133,7 @@ const EggSelect = () => {
 
   const handleEvent = async () => {
     const trimmed = nickname.trim()
-    const token = localStorage.getItem('accessToken')
+    //const token = localStorage.getItem('accessToken')
 
     // ✅ 닉네임 유효성 검사
     if (trimmed.length === 0) {
@@ -150,20 +153,7 @@ const EggSelect = () => {
     }
 
     try {
-      const response = await axios.post(
-        'http://localhost:8100/api/v1/pet/register',
-        {
-          petId: currentEgg + 1,
-          nickname: trimmed, // ✅ 공백 제거 후 전송
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
-
-      console.log('서버 응답:', response.data)
+      const response = await registerPet(currentEgg + 1, trimmed)
 
       openModal('alert', {
         title: '등록 완료',
@@ -171,15 +161,15 @@ const EggSelect = () => {
         onConfirm: () => navigate('/home'),
       })
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        const message = error.response.data?.message
+      const message = error?.response?.data?.message
 
-        if (message?.includes('닉네임')) {
+      if (typeof message === 'string') {
+        if (message.includes('닉네임')) {
           openModal('alert', {
             title: '닉네임 중복',
             message: '이미 존재하는 닉네임입니다. 다른 닉네임을 입력해주세요.',
           })
-        } else if (message?.includes('등록된 펫')) {
+        } else if (message.includes('등록된 펫')) {
           openModal('alert', {
             title: '등록 실패',
             message: '이미 등록된 펫이 있습니다.',
@@ -234,4 +224,4 @@ const EggSelect = () => {
   )
 }
 
-export default EggSelect
+export default SelectEgg
