@@ -5,6 +5,7 @@ import BaseContainer from '../../../components/BaseContainer'
 import BaseButton from '../../../components/BaseButton'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import useExploreApi from '@/constants/explore'
 
 const fightBackground = new URL('../../../assets/fight.png', import.meta.url).href
 
@@ -103,6 +104,7 @@ const ExploreTagSelect = () => {
   const navigate = useNavigate()
   const [selectedTags, setSelectedTags] = useState(new Set())
   const { minLevel, maxLevel } = location.state || {}
+  const { startExplore } = useExploreApi()
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken')
@@ -126,18 +128,10 @@ const ExploreTagSelect = () => {
       })
   }, [])
 
-  const startExplore = async (minLevel, maxLevel, token) => {
+  const start_Explore = async (minLevel, maxLevel) => {
     try {
-      const res = await axios.post(
-        'http://localhost:8100/api/v1/explore',
-        { minLevel, maxLevel },
-        { headers: { Authorization: `Bearer ${token}` } },
-      )
-
-      const problems = res.data.data.recommendProblems
-      const totalExp = res.data.data.totalExp
-
-      // ✅ 다음 페이지로 이동 (useNavigate 사용)
+      const res = await startExplore(minLevel,maxLevel)
+      
       navigate('/explore/')
     } catch (err) {
       console.error('❌ 탐험 시작 실패:', err)
@@ -189,7 +183,7 @@ const ExploreTagSelect = () => {
         },
       )
       .then((res) => {
-        startExplore(minLevel, maxLevel, token)
+        start_Explore(minLevel, maxLevel)
       })
       .catch((err) => {
         alert('갱신 중 오류가 발생했습니다.')
