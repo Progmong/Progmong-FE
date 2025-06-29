@@ -24,6 +24,13 @@ import ExplorePage from './pages/Explore/ExplorePage'
 import MainPage from './pages/Home/Home'
 import ExploreResultPage from './pages/Explore/ExploreResultPage'
 import LevelSelectPage from './pages/Explore/LevelSelectPage'
+import CommunityLayout from './layouts/CommunityLayout'
+import PostList from './pages/Community/PostList'
+import PostDetail from './pages/Community/PostDetail'
+
+// Toast 메시지
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
@@ -31,6 +38,7 @@ root.render(
   <AuthProvider>
     <ModalProvider>
       <Router>
+        <ToastContainer position="top-center" autoClose={2000} />
         <Routes>
           {/* 🟢 Public Routes */}
           <Route
@@ -98,6 +106,20 @@ root.render(
               </ProtectedRoute>
             }
           />
+          {/* 커뮤니티 전체 보호 */}
+          <Route
+            path="/community"
+            element={
+              <ProtectedRoute>
+                <CommunityLayout />
+              </ProtectedRoute>
+            }
+          >
+            {/* /community 에서는 PostList */}
+            <Route index element={<PostList />} />
+            {/* /community/postdetail 에서는 PostDetail */}
+            <Route path="postdetail" element={<PostDetail />} />
+          </Route>
           <Route
             path="/explore/result"
             element={

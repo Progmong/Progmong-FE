@@ -6,6 +6,7 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const IconMdiKeyboardBackspace: typeof import('~icons/mdi/keyboard-backspace.jsx')['default']
   const IconMdiClockOutline: typeof import('~icons/mdi/clock-outline.jsx')['default']
   const Link: typeof import('react-router-dom')['Link']
   const NavLink: typeof import('react-router-dom')['NavLink']
@@ -18,6 +19,7 @@ declare global {
   const lazy: typeof import('react')['lazy']
   const memo: typeof import('react')['memo']
   const startTransition: typeof import('react')['startTransition']
+  const styled: typeof import('styled-components')['default']
   const useCallback: typeof import('react')['useCallback']
   const useContext: typeof import('react')['useContext']
   const useDebugValue: typeof import('react')['useDebugValue']

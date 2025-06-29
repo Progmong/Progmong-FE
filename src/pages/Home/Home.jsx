@@ -379,8 +379,8 @@ const Home = () => {
       <CenterBox>
         <>
           <BackgroundWrapper>
-            {/* /page1 – 시장 아이콘 */}
-            <Link to="/page1" style={{ display: 'contents' }}>
+            {/* /community – 시장 아이콘 */}
+            <Link to="/community" style={{ display: 'contents' }}>
               <HoverableIcon
                 $src={community}
                 $w={{ mobile: '320px', tablet: '320px', notebook: '320px', desktop: '400px' }}
@@ -416,8 +416,8 @@ const Home = () => {
                 $pos={{
                   mobile: { x: 'calc(50% - 170px)', y: 'calc(50% + 40px)' }, // 모바일
                   tablet: { x: 'calc(50% - 320px)', y: 'calc(50% + 150px)' }, // 태블릿
-                  notebook: { x: 'calc(50% - 400px)', y: 'calc(50% + 60px)' }, // 노트북
-                  desktop: { x: 'calc(50% - 500px)', y: 'calc(50% + 120px)' }, // 데스크톱
+                  notebook: { x: 'calc(50% - 400px)', y: 'calc(50% + 40px)' }, // 노트북
+                  desktop: { x: 'calc(50% - 500px)', y: 'calc(50% + 80px)' }, // 데스크톱
                 }}
               >
                 <div style={{ position: 'relative', height: '100%' }}>

@@ -6,6 +6,7 @@ import BaseContainer from '../../../components/BaseContainer'
 import BaseButton from '../../../components/BaseButton'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import useExploreApi from '@/constants/explore'
 
 const fightBackground = new URL('../../../assets/fight.png', import.meta.url).href
 
@@ -104,6 +105,7 @@ const ExploreTagSelect = () => {
   const navigate = useNavigate()
   const [selectedTags, setSelectedTags] = useState(new Set())
   const { minLevel, maxLevel } = location.state || {}
+  const { startExplore } = useExploreApi()
 
   const { getUserTags, updateUserTags } = useInterestTagApi()
   const { startExplore } = useExploreApi()
@@ -122,7 +124,6 @@ const ExploreTagSelect = () => {
   const start_Explore = async (minLevel, maxLevel) => {
     try {
       const res = await startExplore(minLevel, maxLevel)
-
       navigate('/explore/')
     } catch (err) {
       console.error('❌ 탐험 시작 실패:', err)
@@ -159,7 +160,6 @@ const ExploreTagSelect = () => {
 
   const handleSubmit = () => {
     const selectedArray = Array.from(selectedTags)
-
     updateUserTags(selectedArray)
       .then(() => {
         start_Explore(minLevel, maxLevel)
