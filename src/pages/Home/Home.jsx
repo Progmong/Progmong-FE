@@ -425,7 +425,7 @@ const Home = () => {
                   mobile: { x: 'calc(50% - 170px)', y: 'calc(50% + 40px)' }, // 모바일
                   tablet: { x: 'calc(50% - 320px)', y: 'calc(50% + 150px)' }, // 태블릿
                   notebook: { x: 'calc(50% - 400px)', y: 'calc(50% + 40px)' }, // 노트북
-                  desktop: { x: 'calc(50% - 500px)', y: 'calc(50% + 60px)' }, // 데스크톱
+                  desktop: { x: 'calc(50% - 500px)', y: 'calc(50% + 80px)' }, // 데스크톱
                 }}
               >
                 <div style={{ position: 'relative', height: '100%' }}>
