@@ -15,7 +15,26 @@ export default defineConfig({
     react(),
 
     AutoImport({
-      imports: ['react', 'react-router-dom'],
+      imports: [
+        'react',
+        'react-router-dom',
+        {
+          'styled-components': [
+            ['default', 'styled'], // styled-components의 default export
+          ],
+        },
+      ],
+      'unplugin-icons/react': [
+        // 사용하는 아이콘들을 명시하거나,
+        // '*'로 모두 허용
+        ['*', 'Icon'], // ex: IconMdiKeyboardBackspace 등
+      ],
+      resolvers: [
+        IconsResolver({
+          prefix: 'Icon',
+          extension: 'jsx',
+        }),
+      ],
 
       dts: 'src/auto-imports.d.ts',
       eslintrc: {
