@@ -1,4 +1,6 @@
 @import './variables.css';
+@import url('https://cdn.quilljs.com/1.3.6/quill.snow.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github.min.css');
 
 /* 기본 전역 스타일 지정하는 곳 */
 :root {

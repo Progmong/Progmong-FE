@@ -1,204 +1,222 @@
-import React, { useState, useRef } from 'react'
-import { useEditor, EditorContent } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import Placeholder from '@tiptap/extension-placeholder'
-import Link from '@tiptap/extension-link' // 설치된 확장
-import Underline from '@tiptap/extension-underline' // 설치된 확장
-import Image from '@tiptap/extension-image'
-import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
-import { createLowlight, all } from 'lowlight' // core 대신 createLowlight
-import javascript from 'highlight.js/lib/languages/javascript.js'
-import cpp from 'highlight.js/lib/languages/cpp.js'
-import axios from 'axios'
-import styled from 'styled-components'
+import PostEditor from './PostEditor'
 
-// lowlight 인스턴스 생성 및 언어 등록
-const lowlight = createLowlight(all)
+import BaseInput from '@/components/BaseInput'
+import BaseButton from '@/components/BaseButton'
 
-// …(이하 이전 예시와 동일한 코드)…
+import { useQuill } from 'react-quilljs'
+import MagicUrl from 'quill-magic-url' // Babel·TypeScript 환경
+import useCommnunityApi from '@/constants/Community'
+import PostDetail from './PostDetail'
 
-// styled-components 정의
-const Container = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 `
+
 const TitleInput = styled.input`
   width: 100%;
-  padding: 10px;
-  font-size: 18px;
-  margin-bottom: 12px;
-  box-sizing: border-box;
-`
-const Toolbar = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 12px;
-  background: #f0f0f0;
-  padding: 8px;
-  border-radius: 4px;
-`
-const ToolbarButton = styled.button`
+  font-size: 1.5rem;
+  font-weight: 700;
   border: none;
-  background: ${(props) => (props.active ? '#333' : '#fff')};
-  color: ${(props) => (props.active ? '#fff' : '#000')};
-  padding: 6px 12px;
-  font-size: 14px;
-  cursor: pointer;
-  border-radius: 4px;
+  border-bottom: 2px solid #e0e0e0;
+  padding: 12px 0;
+  margin-bottom: 32px;
+  outline: none;
+
+  &::placeholder {
+    color: #b0b0b0;
+  }
+
+  &:focus {
+    border-bottom-color: #d3a76b;
+  }
+
   &:disabled {
-    opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
   }
 `
-const EditorArea = styled.div`
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  min-height: 300px;
-  padding: 12px;
-`
-const SubmitButton = styled.button`
-  margin-top: 16px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
+
+const BottomContainer = styled.div`
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
 `
 
-// 툴바 버튼 렌더링
-const MenuBar = ({ editor }) => {
-  if (!editor) return null
-  return (
-    <Toolbar>
-      <ToolbarButton
-        onClick={() => editor.chain().focus().toggleBold().run()}
-        active={editor.isActive('bold')}
-      >
-        Bold
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={() => editor.chain().focus().toggleItalic().run()}
-        active={editor.isActive('italic')}
-      >
-        Italic
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={() => editor.chain().focus().toggleStrike().run()}
-        active={editor.isActive('strike')}
-      >
-        Strike
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={() => editor.chain().focus().toggleCode().run()}
-        active={editor.isActive('code')}
-      >
-        Code
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={() => {
-          const url = prompt('URL 입력')
-          if (url) editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
-        }}
-        active={editor.isActive('link')}
-      >
-        Link
-      </ToolbarButton>
-      <ToolbarButton onClick={() => editor.chain().focus().toggleBulletList().run()}>
-        Bullet
-      </ToolbarButton>
-      <ToolbarButton onClick={() => editor.chain().focus().toggleOrderedList().run()}>
-        List
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        active={editor.isActive('blockquote')}
-      >
-        Quote
-      </ToolbarButton>
-      <ToolbarButton
-        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        active={editor.isActive('codeBlock')}
-      >
-        CodeBlock
-      </ToolbarButton>
-      <ToolbarButton onClick={() => editor.chain().focus().undo().run()}>Undo</ToolbarButton>
-      <ToolbarButton onClick={() => editor.chain().focus().redo().run()}>Redo</ToolbarButton>
-    </Toolbar>
-  )
-}
+const WriteButtonContainer = styled.div`
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+`
 
-export default function SimpleEditor() {
+const PostWrite = () => {
+  const { write, modify, deletePost } = useCommnunityApi()
+
+  const { state } = useLocation()
+  const navigate = useNavigate()
+
+  // 제목
   const [title, setTitle] = useState('')
-  const fileInputRef = useRef(null)
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Placeholder.configure({ placeholder: '내용을 입력하세요...' }),
-      Link.configure({ openOnClick: false }),
-      Underline,
-      Image,
-      CodeBlockLowlight.configure({ lowlight }),
-    ],
-    content: '',
-  })
 
-  // 이미지 업로드 후 에디터에 삽입
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0]
-    if (!file || !editor) return
-    const form = new FormData()
-    form.append('image', file)
-    try {
-      const { data } = await axios.post('/api/upload', form, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
-      editor.chain().focus().setImage({ src: data.url }).run()
-    } catch (err) {
-      console.error('이미지 업로드 실패', err)
+  // 자식(텍스트에디터)의 상태를 부모가 가지게 함
+  const modules = { magicUrl: true }
+  const theme = state.theme || 'snow'
+  const readOnly = state.readOnly || false
+  const { quill, quillRef, Quill } = useQuill({ theme, modules, readOnly })
+
+  //onMound작업
+  // mode == 수정 일경우
+  // quill 은 보기 모드로
+
+  // if (Quill && !quill) {
+  //   // For execute this line only once.
+  //   Quill.register('modules/magicUrl', MagicUrl)
+  // }
+
+  // ① quill 이 준비되면
+  useEffect(() => {
+    if (!quill) return // quill 인스턴스가 아직 없으면 탈출
+
+    if (state.mode === '보기') {
+      // ② 제목 세팅
+      setTitle(state.detail.title)
+
+      // ③ Delta JSON 형태로 보관된 본문 불러오기
+      const delta = JSON.parse(state.detail.content)
+      console.log(delta)
+      console.log('본문 불러옴')
+      quill.setContents(delta, 'api') // Delta 그대로 주입
+
+      // 또는 HTML 형태로 저장했다면
+      // quill.clipboard.dangerouslyPasteHTML(state.detail.html)
+
+      // ④ 읽기 전용 모드이면 비활성화
+      quill.enable(false)
+    }
+  }, [quill, state.mode, state.detail])
+
+  useEffect(() => {
+    if (!quill) return
+
+    console.log('다른곳에서옴')
+    if (state.mode === '보기') {
+      // 여기에 실제 로직 넣기
+    }
+  }, [quill, state.postId, state.mode])
+
+  const isCickWrite = async (mode) => {
+    console.log(quill.getLength())
+    quill.disable()
+    // 수정 버튼을 누르면 수정 가능하게 모드 변경
+
+    // 삭제를 누르면 확인 후 삭제 >> 전 페이지로 이동
+
+    // 제목 검증
+    if (title.length === 0) {
+      console.log('제목을 입력')
+      return
+    }
+
+    if (title.length > 50) {
+      console.log('제목이 너무 깁니다 (< 50자)')
+      return
+    }
+
+    // 본문
+    if (quill.getLength() === 1) {
+      console.log('본문을 입력')
+      return
+    }
+
+    if (mode === '쓰기') {
+      // 서버로 글 보내기
+      const res = await write(title, JSON.stringify(quill.getContents()), '알고리즘')
+      if (res.status === 200) {
+        console.log('게시글 쓰기 성공')
+        console.log(res.data.data)
+        navigate('/community/write', {
+          replace: true,
+          state: { mode: '보기', detail: res.data.data, theme: 'bubble' },
+        })
+      } else {
+        console.log('게시글 쓰기 실패')
+      }
+    } else {
+      // 수정
+      const res = await modify(state.postId, title, JSON.stringify(quill.getContents()))
+      if (res.status === 200) {
+        console.log('게시글 쓰기 성공')
+        handleFinish()
+      } else {
+        console.log('게시글 쓰기 실패')
+      }
     }
   }
 
-  // 제목·내용을 서버로 전송
-  const handleSubmit = async () => {
-    if (!editor) return
-    try {
-      await axios.post('/api/posts', {
-        title,
-        content: editor.getHTML(),
-      })
-      alert('게시글 등록 완료')
-      setTitle('')
-      editor.commands.clearContent()
-    } catch (err) {
-      console.error('게시글 등록 실패', err)
+  const handleFinish = () => {
+    // 1) 뒤로 가기
+    navigate(-1)
+    // 2) 이전 페이지 강제 새로고침
+    window.location.reload()
+  }
+
+  const isCickDelete = async () => {
+    // 삭제
+    const res = await deletePost(state.postId)
+    if (res.status === 200) {
+      console.log('게시글 삭제 성공')
+      handleFinish()
+    } else {
+      console.log('게시글 삭제 실패')
     }
   }
 
   return (
-    <Container>
+    <Wrapper key={theme}>
       <TitleInput
         placeholder="제목을 입력하세요"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        disabled={state.mode === '보기'}
       />
-      <MenuBar editor={editor} />
-      <EditorArea>
-        <EditorContent editor={editor} />
-      </EditorArea>
-
-      {/* 이미지 업로드 버튼 */}
-      <Toolbar>
-        <ToolbarButton onClick={() => fileInputRef.current.click()}>이미지 업로드</ToolbarButton>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-          style={{ display: 'none' }}
-        />
-      </Toolbar>
-
-      <SubmitButton onClick={handleSubmit}>등록하기</SubmitButton>
-    </Container>
+      <div style={{ flexGrow: 1 }}>
+        <PostEditor state={{ quill, quillRef, Quill }} />
+      </div>
+      <BottomContainer>
+        <div>
+          {state.mode === '수정' ? (
+            <BaseButton variant="secondary" onClick={isCickDelete}>
+              삭제
+            </BaseButton>
+          ) : null}
+        </div>
+        <div></div>
+        <WriteButtonContainer>
+          {state.mode === '수정' ? (
+            <BaseButton
+              variant="pass"
+              onClick={() => {
+                isCickWrite('수정')
+              }}
+            >
+              수정
+            </BaseButton>
+          ) : state.mode === '쓰기' ? (
+            <BaseButton
+              onClick={() => {
+                isCickWrite('쓰기')
+              }}
+            >
+              글쓰기
+            </BaseButton>
+          ) : null}
+        </WriteButtonContainer>
+      </BottomContainer>
+    </Wrapper>
   )
 }
+export default PostWrite

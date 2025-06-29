@@ -2,6 +2,13 @@ import FreePostEle from './FreePostEle'
 
 import BaseButton from '@/components/BaseButton'
 
+const BaseContainer = styled.div`
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+`
+
 const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -19,8 +26,13 @@ const WriteButtonContainer = styled.div`
 `
 const PostList = () => {
   const { posts } = useOutletContext()
+  const navigate = useNavigate()
+
+  const goWrite = () => {
+    navigate('/community/write', { state: { mode: '쓰기' } })
+  }
   return (
-    <div>
+    <BaseContainer>
       <ListContainer>
         {posts.map((post) => (
           <FreePostEle key={post.postId} post={post} />
@@ -30,10 +42,10 @@ const PostList = () => {
         <div></div>
         <div></div>
         <WriteButtonContainer>
-          <BaseButton>글쓰기</BaseButton>
+          <BaseButton onClick={goWrite}>글쓰기</BaseButton>
         </WriteButtonContainer>
       </BottomContainer>
-    </div>
+    </BaseContainer>
   )
 }
 export default PostList

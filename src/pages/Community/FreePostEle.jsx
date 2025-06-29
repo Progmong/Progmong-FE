@@ -2,6 +2,20 @@ import styled from 'styled-components'
 
 import BaseContainer from '../../components/BaseContainer'
 import formatRelativeTime from '../../utils/formatRelativeTime'
+import useCommnunityApi from '@/constants/Community'
+
+const Wrapper = styled.div`
+  border-radius: 30px;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+
+  &:hover {
+    transform: scale(1.02); /* 2% 확대 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+  }
+`
 
 const Container = styled.div`
   display: grid; /* 그리드 레이아웃 활성화 */
@@ -33,18 +47,39 @@ const CreatedBox = styled.div`
 `
 
 const FreePostEle = (props) => {
+  const navigate = useNavigate()
+  const { isWriter } = useCommnunityApi()
+
+  const goPostDetail = async () => {
+    console.log(props.post.postId)
+    const res = await isWriter(props.post.postId)
+    console.log(res)
+    // 글 주인인 경우
+    if (res.data.success !== true) {
+      navigate('/community/write', {
+        state: { mode: '보기', theme: 'bubble', readOnly: true, postId: props.post.postId },
+      })
+    } else {
+      navigate('/community/write', {
+        state: { mode: '수정', theme: 'snow', readOnly: false, postId: props.post.postId },
+      })
+    }
+  }
+
   const formatedTime = formatRelativeTime(props.post.createdAt)
   return (
-    <BaseContainer style={{ border: '1px solid #ccc' }}>
-      <Container>
-        <TitleBox>{props.post.title}</TitleBox>
-        <AuthorBox>
-          <AuthorTextBox>{props.post.nickname}</AuthorTextBox>
-        </AuthorBox>
+    <Wrapper onClick={goPostDetail}>
+      <BaseContainer style={{ border: '1px solid #ccc' }}>
+        <Container>
+          <TitleBox>{props.post.title}</TitleBox>
+          <AuthorBox>
+            <AuthorTextBox>{props.post.nickname}</AuthorTextBox>
+          </AuthorBox>
 
-        <CreatedBox>{formatedTime}</CreatedBox>
-      </Container>
-    </BaseContainer>
+          <CreatedBox>{formatedTime}</CreatedBox>
+        </Container>
+      </BaseContainer>
+    </Wrapper>
   )
 }
 export default FreePostEle

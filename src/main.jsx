@@ -26,6 +26,7 @@ import ExploreResultPage from './pages/Explore/ExploreResultPage'
 import LevelSelectPage from './pages/Explore/LevelSelectPage'
 import CommunityLayout from './layouts/CommunityLayout'
 import PostList from './pages/Community/PostList'
+import PostWrite from './pages/Community/PostWrite'
 import PostDetail from './pages/Community/PostDetail'
 
 // Toast 메시지
@@ -118,7 +119,8 @@ root.render(
             {/* /community 에서는 PostList */}
             <Route index element={<PostList />} />
             {/* /community/postdetail 에서는 PostDetail */}
-            <Route path="postdetail" element={<PostDetail />} />
+            <Route path="detail/:postId" element={<PostWrite />} />
+            <Route path="write" element={<PostWrite />} />
           </Route>
           <Route
             path="/explore/result"
