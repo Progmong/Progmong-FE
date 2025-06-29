@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
+import usePetApi from '../../constants/pet'
 import styled from 'styled-components'
 
 import Home767 from '../../assets/home/background_767.png'
@@ -316,7 +316,6 @@ const Home = () => {
   const [petData, setPetData] = useState(null)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [scale, setScale] = useState(1)
-
   const [isJumping, setIsJumping] = useState(false)
 
   const navigate = useNavigate()
@@ -346,22 +345,15 @@ const Home = () => {
   }, [petData])
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken')
-
-    const api = axios.create({
-      baseURL: 'http://localhost:8100/api/v1',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
+    const { getPetInfo } = usePetApi()
 
     const loadPetStatus = async () => {
       try {
-        const res = await api.get('/pet/all')
+        const res = await getPetInfo()
         const { status, message, petId, evolutionStage } = res.data.data
         setPetData({ status, message, petId, evolutionStage })
       } catch (err) {
-        console.error('❌ 에러 발생:', err)
+        console.error('❌ 펫 정보 로드 실패:', err)
       }
     }
 

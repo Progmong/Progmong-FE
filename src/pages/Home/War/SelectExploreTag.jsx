@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import axios from '../../../constants/axiosInstance'
+import useInterestTagApi from '../../../constants/InterestTag'
+import useExploreApi from '@/constants/explore'
 import BaseContainer from '../../../components/BaseContainer'
 import BaseButton from '../../../components/BaseButton'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -99,45 +100,29 @@ const TAGS = {
 }
 
 const ExploreTagSelect = () => {
-  const location = useLocation() // ✅ 함수 내부에서 선언
+  const location = useLocation()
   const navigate = useNavigate()
   const [selectedTags, setSelectedTags] = useState(new Set())
   const { minLevel, maxLevel } = location.state || {}
 
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken')
-    if (!token) {
-      console.warn('🚫 accessToken이 없습니다. 로그인 먼저 하세요.')
-      return
-    }
+  const { getUserTags, updateUserTags } = useInterestTagApi()
+  const { startExplore } = useExploreApi()
 
-    axios
-      .get('/tag', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+  useEffect(() => {
+    getUserTags()
       .then((res) => {
         const tagIds = res.data.data.map((tag) => tag.id)
         setSelectedTags(new Set(tagIds))
       })
       .catch((err) => {
-        console.error('❌ 관심 태그 불러오기 실패:', err)``
+        console.error('❌ 관심 태그 불러오기 실패:', err)
       })
   }, [])
 
-  const startExplore = async (minLevel, maxLevel, token) => {
+  const start_Explore = async (minLevel, maxLevel) => {
     try {
-      const res = await axios.post(
-        'http://localhost:8100/api/v1/explore',
-        { minLevel, maxLevel },
-        { headers: { Authorization: `Bearer ${token}` } },
-      )
+      const res = await startExplore(minLevel, maxLevel)
 
-      const problems = res.data.data.recommendProblems
-      const totalExp = res.data.data.totalExp
-
-      // ✅ 다음 페이지로 이동 (useNavigate 사용)
       navigate('/explore/')
     } catch (err) {
       console.error('❌ 탐험 시작 실패:', err)
@@ -174,22 +159,10 @@ const ExploreTagSelect = () => {
 
   const handleSubmit = () => {
     const selectedArray = Array.from(selectedTags)
-    const token = localStorage.getItem('accessToken')
 
-    axios
-      .put(
-        '/tag',
-        {
-          tagIds: selectedArray, // ✅ userId 제거
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
-      .then((res) => {
-        startExplore(minLevel, maxLevel, token)
+    updateUserTags(selectedArray)
+      .then(() => {
+        start_Explore(minLevel, maxLevel)
       })
       .catch((err) => {
         alert('갱신 중 오류가 발생했습니다.')
