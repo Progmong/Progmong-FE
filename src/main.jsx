@@ -25,12 +25,17 @@ import MainPage from './pages/Home/Home'
 import ExploreResultPage from './pages/Explore/ExploreResultPage'
 import LevelSelectPage from './pages/Explore/LevelSelectPage'
 
+// Toast 메시지
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 root.render(
   <AuthProvider>
     <ModalProvider>
       <Router>
+        <ToastContainer position="top-center" autoClose={2000} />
         <Routes>
           {/* 🟢 Public Routes */}
           <Route
