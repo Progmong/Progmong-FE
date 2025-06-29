@@ -1,9 +1,9 @@
 ---
 name: Fix Request
 about: 새로운 수정 요청을 작성해 주세요.
-title: "[FIX] 기능 설명"
+title: '[FIX] 기능 설명'
 labels: FIX
-assignees: ""
+assignees: ''
 ---
 
 ## ❓ 어떤 수정인가요?

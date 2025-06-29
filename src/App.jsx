@@ -1,8 +1,9 @@
-import { RouterProvider } from 'react-router-dom'
-import router from './router/routes'
-// 기본 적인 라우터 설정은 여기서 한다
-function App() {
-  return <RouterProvider router={router} />
+// App.js
+import React from 'react'
+import { Navigate } from 'react-router-dom'
+
+const App = () => {
+  return <Navigate to="/" replace />
 }
 
 export default App

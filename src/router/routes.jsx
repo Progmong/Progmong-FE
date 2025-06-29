@@ -1,32 +1,45 @@
-// routes.jsx
-import { createBrowserRouter } from 'react-router-dom'
+// import { createBrowserRouter } from 'react-router-dom'
 
-import CommunityMain from '../pages/Community/CommunityMain'
-import PostDetail from '../pages/Community/PostDetail'
-import PostWrite from '@/pages/Community/PostWrite'
+// import Login from '../pages/Auth/Login'
+// import FindPwd from '../pages/Auth/FindPwd'
+// import Register from '../pages/Auth/Register'
+// import SelectEgg from '../pages/OnBoarding/SelectEgg'
+// import SelectExploreTag from '../pages/Home/War/SelectExploreTag'
+// import MyPageLayout from '../layouts/mypage/MypageLayout.jsx'
+// import ExplorePage from '../pages/Explore/ExplorePage'
+// import MainPage from '../pages/Main/MainPage'
+// import ExploreResultPage from '../pages/Explore/ExploreResultPage'
+// import Home from '@/pages/Home/Home'
+// import RequireAuth from '../components/RequireAuth'
 
-import PostList from '@/pages/Community/PostList'
-import CommunityLayout from '@/layouts/CommunityLayout'
+// const router = createBrowserRouter([
+//   // ❌ 인증 없이 접근 가능한 경로
+//   {
+//     path: '/',
+//     element: <Login />,
+//   },
+//   {
+//     path: '/register',
+//     element: <Register />,
+//   },
+//   {
+//     path: '/findpwd',
+//     element: <FindPwd />,
+//   },
 
-const router = createBrowserRouter([
-  {
-    path: '/community',
-    element: <CommunityLayout />,
-    children: [
-      {
-        index: true,
-        element: <PostList />,
-      },
-      {
-        path: '/community/postdetail',
-        element: <PostDetail />,
-      },
-      {
-        path: '/community/write',
-        element: <PostWrite />,
-      },
-    ],
-  },
-])
+//   // ✅ 인증이 필요한 모든 경로
+//   {
+//     path: '/auth',
+//     element: <RequireAuth />,
+//     children: [
+//       { path: 'SelectEgg', element: <SelectEgg /> },
+//       { path: 'SelectExploreTag', element: <SelectExploreTag /> },
+//       { path: 'mypage', element: <MyPageLayout /> },
+//       { path: 'explore', element: <ExplorePage /> },
+//       { path: 'main', element: <MainPage /> },
+//       { path: 'explore/result', element: <ExploreResultPage /> },
+//     ],
+//   },
+// ])
 
-export default router
+// export default router
