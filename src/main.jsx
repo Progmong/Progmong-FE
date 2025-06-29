@@ -28,12 +28,17 @@ import CommunityLayout from './layouts/CommunityLayout'
 import PostList from './pages/Community/PostList'
 import PostDetail from './pages/Community/PostDetail'
 
+// Toast 메시지
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 root.render(
   <AuthProvider>
     <ModalProvider>
       <Router>
+        <ToastContainer position="top-center" autoClose={2000} />
         <Routes>
           {/* 🟢 Public Routes */}
           <Route
