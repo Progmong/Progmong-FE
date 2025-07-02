@@ -24,13 +24,25 @@ const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
 `
-
-const AlertModal = ({ title = '알림', message, onConfirm, confirmText, cancelText , buttonText = '확인' }) => {
+const RecordContainer = styled.div``
+const AlertModal = ({
+  title = '알림',
+  message,
+  onConfirm,
+  confirmText,
+  cancelText,
+  buttonText = '확인',
+}) => {
   const { closeModal } = useModal()
 
-  const handleClick = () => {
+  const callGetRecordApi = () => {
+    // API 호출 로직
+    console.log('getRecord API 호출')
+  }
+
+  const handleClick = (ac) => {
     if (onConfirm) {
-      onConfirm()
+      callGetRecordApi()
     }
     closeModal()
   }
@@ -38,13 +50,15 @@ const AlertModal = ({ title = '알림', message, onConfirm, confirmText, cancelT
   return (
     <BaseModal title={title} onClose={closeModal}>
       <Message>{message}</Message>
+      <RecordContainer></RecordContainer>
       <ButtonWrapper>
-        <BaseButton variant="secondary" onClick={handleClick}>{confirmText}</BaseButton>
-        {cancelText && (
-          <BaseButton  onClick={closeModal} style={{ marginLeft: '10px' }}>
-            {cancelText}
-          </BaseButton>
-        )}
+        {/*buttons for page move*/}
+        <BaseButton variant="secondary"
+                    onClick={handleClick(before)}>
+          이전</BaseButton>
+
+        <BaseButton onClick={handleClick(next)} style={{ marginLeft: '10px' }}>
+          다음</BaseButton>
       </ButtonWrapper>
     </BaseModal>
   )

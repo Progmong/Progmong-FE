@@ -1,16 +1,17 @@
-// InfoPanel.jsx
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import BaseButton from '@/components/BaseButton.jsx'
 import PetInfo from '@/pages/MyPage/infoPanel/PetInfo.jsx'
 import UserInfo from '@/pages/MyPage/infoPanel/UserInfo.jsx'
+import { useMyPage } from '@/context/MyPageContext.jsx'
 
 const Panel = styled.div`
-  min-width: 300px;
-  max-width: 400px;
+  min-width: 200px;
+  max-width: 300px;
+  min-height: 200px;
   background-color: white;
   border-radius: 16px;
-  padding: 16px;
+  padding: 14px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
@@ -25,8 +26,9 @@ const Title = styled.h2`
 `
 
 const ToggleGroup = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   gap: 10px;
 `
 
@@ -37,40 +39,37 @@ const ContentBox = styled.div`
   min-height: 100px;
   font-size: 14px;
 `
-const mockPet = {
-  name: '에라그몽프로그몽',
-  stage: '알',
-  level: 20,
-  exp: 70,
-  expMax: 100,
-  growthProgress: 5,
-  growthMax: 10,
-  solved: 120,
-}
 
-const InfoPanel = ({ user, pet }) => {
+const InfoPanel = () => {
   const [mode, setMode] = useState('pet')
+  const { mypageData } = useMyPage()
+  const user = mypageData?.user
+  const pet = mypageData?.userPet
 
   return (
     <Panel>
       <Title>내 정보</Title>
       <ToggleGroup>
         <BaseButton
-          variant={mode === 'pet' ? 'secondary' : 'pass'}
+          $variant={mode === 'pet' ? 'secondary' : 'pass'}
           size="sm"
           onClick={() => setMode('pet')}
+          style={{ width: '120px' }}
         >
           프로그몽
         </BaseButton>
         <BaseButton
-          variant={mode === 'user' ? 'secondary' : 'pass'}
+          $variant={mode === 'user' ? 'secondary' : 'pass'}
           size="sm"
           onClick={() => setMode('user')}
+          style={{ width: '120px' }}
         >
           유저정보
         </BaseButton>
       </ToggleGroup>
-      <ContentBox>{mode === 'pet' ? <PetInfo pet={pet} /> : <UserInfo user={user} />}</ContentBox>
+      <ContentBox>
+        {mode === 'pet' ? <PetInfo /> : <UserInfo />}
+      </ContentBox>
     </Panel>
   )
 }

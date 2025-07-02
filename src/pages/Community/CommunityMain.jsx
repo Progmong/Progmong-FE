@@ -1,13 +1,7 @@
 import styled from 'styled-components'
 import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
-
-import BaseContainer from '../../components/BaseContainer'
 import useCommnunityApi from '@/constants/Community'
-import FreePostEle from './FreePostEle'
-import PostList from './PostList'
-
-import BaseButton from '@/components/BaseButton'
 import BackgroundImg from '@/assets/community/community_background5.png'
 
 const MainBox = styled.div`
@@ -67,6 +61,7 @@ const CateBox = styled.div`
 
 const CateText = styled.div`
   margin-bottom: 30px;
+
   &:hover {
     cursor: default;
   }

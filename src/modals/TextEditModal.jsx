@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import BaseModal from '../components/BaseModal'
@@ -34,30 +34,49 @@ const StyledButton = styled(BaseButton)`
   padding: 0.6rem 1.5rem;
   font-size: 1rem;
 `
+const Message = styled.p`
+  text-align: center;
+  font-size: 1.1rem;
+  margin: 1.5rem 0 2rem;
+  white-space: pre-wrap; /* 줄바꿈 지원 */
+`
 
-const TextEditModal = (props) => {
+const TextEditModal = ({ title, message, placeholder, value, onSubmit, buttonText }) => {
   const { closeModal } = useModal()
+  const [inputValue, setInputValue] = useState(value ?? '')
 
-  const handleClick = () => {
-    if (props.onSubmit) {
-      props.onSubmit()
+  useEffect(() => {
+    setInputValue(value ?? '')
+  }, [value])
+
+  const handleClick = async () => {
+    if (onSubmit) {
+      try {
+        await onSubmit(inputValue)
+        closeModal()
+      } catch (err) {
+        console.error(err)
+        alert('요청 실패')
+      }
+    } else {
+      closeModal()
     }
-    closeModal()
   }
 
   return (
-    <BaseModal title={props.title} onClose={closeModal}>
+    <BaseModal title={title} onClose={closeModal}>
       <ContentWrapper>
+        {message && <Message>{message}</Message>}
         <InputWrapper>
           <StyledInput
-            placeholder={props.placeholder}
-            onChange={props.onChange}
-            value={props.value}
+            placeholder={placeholder}
+            onChange={(e) => setInputValue(e.target.value)}
+            value={inputValue}
             autoFocus
           />
         </InputWrapper>
         <ButtonWrapper>
-          <StyledButton onClick={handleClick}>{props.buttonText || '저장'}</StyledButton>
+          <StyledButton onClick={handleClick}>{buttonText || '저장'}</StyledButton>
         </ButtonWrapper>
       </ContentWrapper>
     </BaseModal>

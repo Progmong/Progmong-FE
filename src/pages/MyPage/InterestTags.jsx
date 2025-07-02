@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import BaseButton from '../../components/BaseButton.jsx'
 import { useModal } from '../../context/ModalContext.jsx'
 import React, { useEffect, useState } from 'react'
+import { useMyPage } from '@/context/MyPageContext.jsx'
 
 const Box = styled.div`
   background-color: white;
@@ -12,8 +13,8 @@ const Box = styled.div`
 `
 
 const Title = styled.div`
-  font-size: 16px;
-  font-family: 'Binggrae';
+  font-size: 20px;
+  font-family: 'Binggrae', serif;
   font-weight: 700;
   margin: 10px;
   padding: 5px;
@@ -21,11 +22,14 @@ const Title = styled.div`
 `
 
 const BtnContainer = styled.div`
+  background-color: #cccccc;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
-  gap: 20px; /* 행 간 간격 */
+  gap: 30px; /* 행 간 간격 */
   align-items: center;
-  padding: 10px 9px; /* 위아래 10px, 좌우 9px */
+  padding: 25px 9px; /* 위아래 10px, 좌우 9px */
+  margin-top: 30px; /* 상단 여백 */
 `
 
 const Row = styled.div`
@@ -34,7 +38,7 @@ const Row = styled.div`
 `
 
 const TagButton = styled.button`
-  width: 105px;
+  width: 80px;
   height: 50px;
   background-color: ${({ selected }) => (selected ? '#1C445C' : '#ffffff')};
   color: ${({ selected }) => (selected ? '#ffffff' : '#000000')};
@@ -43,17 +47,17 @@ const TagButton = styled.button`
   border: none;
   border-radius: 21px;
   /* Drop shadow */
-  box-shadow: 0 4.5px 0 rgba(74, 74, 74, 0.4);
-  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(74, 74, 74, 0.4);
+  cursor: default;
 `
 const InterestTagsHeader = styled.div`
   display: flex;
   flex-direction: row;
   align-content: space-between;
-  justify-content: space-between;
+  justify-content: space-around;
   margin: 5px;
 `
-const BasButtonWraper = styled.div``
+const BasButtonWrapper = styled.div``
 
 const TAGS = {
   1: '수학',
@@ -66,45 +70,54 @@ const TAGS = {
   8: '기하학',
 }
 
-const InterestTags = ({ tags = [] }) => {
+const InterestTags = () => {
   const { openModal } = useModal()
+  const { mypageData } = useMyPage()
+  const interestTags = mypageData?.interestTags ?? []
   const [selectedTags, setSelectedTags] = useState(new Set())
-  const mockTagIds = [1, 2, 5, 8]
+
+  const stableInterestTags = useMemo(() => JSON.stringify(interestTags), [interestTags])
 
   useEffect(() => {
-    setSelectedTags(new Set(mockTagIds))
-  }, [])
+    setSelectedTags(new Set(JSON.parse(stableInterestTags)))
+  }, [stableInterestTags])
+
 
   return (
     <Box>
       <InterestTagsHeader>
         <Title>관심 태그</Title>
-        <BasButtonWraper>
+        <BasButtonWrapper>
           <BaseButton
-            onClick={() => openModal('alert', { title: '관심 태그 수정', message: '돌아가!' })}
+            onClick={() =>
+              openModal('alert', {
+                title: '관심 태그 수정',
+                message: '돌아가!',
+              })
+            }
           >
             태그 수정
           </BaseButton>
-        </BasButtonWraper>
+        </BasButtonWrapper>
       </InterestTagsHeader>
       <BtnContainer>
         <Row>
           {[1, 2, 3].map((id) => (
-            <TagButton key={id} selected={selectedTags.has(id)} onClick={() => toggleTag(id)}>
+            <TagButton key={id} selected={selectedTags.has(id)}>
               {TAGS[id]}
             </TagButton>
           ))}
         </Row>
         <Row>
           {[4, 5, 6].map((id) => (
-            <TagButton key={id} selected={selectedTags.has(id)} onClick={() => toggleTag(id)}>
+            <TagButton key={id} selected={selectedTags.has(id)}>
               {TAGS[id]}
             </TagButton>
           ))}
         </Row>
         <Row>
           {[7, 8].map((id) => (
-            <TagButton key={id} selected={selectedTags.has(id)} onClick={() => toggleTag(id)}>
+            <TagButton key={id} selected={selectedTags.has(id)}>
               {TAGS[id]}
             </TagButton>
           ))}

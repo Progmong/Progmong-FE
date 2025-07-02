@@ -175,7 +175,7 @@ const ExploreResultPage = () => {
         ))}
         <ButtonWrapper>
           <ConvexButton
-            variant="secondary" // primary · secondary · success · pass
+            $variant="secondary" // primary · secondary · success · pass
             size="md" // sm · md · lg
             onClick={() => navigate('/home', { replace: true })}
           >

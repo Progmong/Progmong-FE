@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom'
 
 import './Styles/reset.css'
 import './Styles/base.css'
@@ -31,6 +31,7 @@ import PostDetail from './pages/Community/PostDetail'
 // Toast 메시지
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { MyPageProvider } from '@/context/MyPageContext.jsx'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
@@ -86,7 +87,9 @@ root.render(
             path="/mypage"
             element={
               <ProtectedRoute>
-                <MyPageLayout />
+                <MyPageProvider>
+                  <MyPageLayout />
+                </MyPageProvider>
               </ProtectedRoute>
             }
           />

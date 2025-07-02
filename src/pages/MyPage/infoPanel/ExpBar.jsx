@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
+  max-width: 150px;
   width: 100%;
   background: #e5e7eb;
   border-radius: 8px;
@@ -27,7 +28,8 @@ const Label = styled.div`
 `
 
 const ExpBar = ({ current, max, label }) => {
-  const percentage = Math.min((current / max) * 100, 100)
+  const percentage = max > 0 ? Math.round((current / max) * 100) : 0;
+
   return (
     <Wrapper>
       <Fill percentage={percentage} />
