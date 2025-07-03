@@ -27,6 +27,7 @@ import LevelSelectPage from './pages/Explore/LevelSelectPage'
 import CommunityLayout from './layouts/CommunityLayout'
 import PostList from './pages/Community/PostList'
 import PostDetail from './pages/Community/PostDetail'
+import PostWrite from './pages/Community/PostWrite'
 
 // Toast 메시지
 import { ToastContainer } from 'react-toastify'
@@ -119,6 +120,7 @@ root.render(
             <Route index element={<PostList />} />
             {/* /community/postdetail 에서는 PostDetail */}
             <Route path="postdetail" element={<PostDetail />} />
+            <Route path="postwrite" element={<PostWrite />} />
           </Route>
           <Route
             path="/explore/result"
