@@ -55,6 +55,29 @@ const MyPageContext = createContext()
 // Context 접근 훅
 export const useMyPage = () => useContext(MyPageContext)
 
+const formatMyPageData = (data) => ({
+  pet: {
+    type: data.userPet.petId,
+    stage: data.userPet.evolutionStage,
+    name: data.userPet.nickname,
+    level: data.userPet.level,
+    exp: data.userPet.currentExp,
+    expMax: data.userPet.maxExp,
+    status: data.userPet.status,
+    message: data.userPet.message,
+    proud: data.userPet.proud,
+  },
+  user: {
+    id: data.user.id,
+    nickname: data.user.nickname,
+    email: data.user.email,
+    bjId: data.user.bojId,
+  },
+  interestTags: data.interestTags ?? [],
+  message: data.userPet.message,
+  exploreRecords: data.recentExplores?.recommendProblems ?? [],
+})
+
 // Provider 컴포넌트
 export const MyPageProvider = ({ children }) => {
   const [myPageData, setMyPageData] = useState(null)
@@ -63,7 +86,8 @@ export const MyPageProvider = ({ children }) => {
   const fetchMyPageData = async () => {
     try {
       const res = await AxiosInstance.get('/mypage')
-      setMyPageData(res.data)
+      const data = res.data.data
+      setMyPageData(formatMyPageData(data))
     } catch (error) {
       console.error('마이페이지 데이터 가져오기 실패:', error)
       setMyPageData(mockData)
@@ -78,7 +102,12 @@ export const MyPageProvider = ({ children }) => {
 
   return (
     <MyPageContext.Provider
-      value={{ mypageData: myPageData, setMypageData: setMyPageData, loading }}
+      value={{
+        myPageData: myPageData,
+        setMyPageData: setMyPageData,
+        loading,
+        refreshMyPageData: fetchMyPageData, // optional
+      }}
     >
       {children}
     </MyPageContext.Provider>

@@ -4,6 +4,7 @@ import InfoPanel from '../../pages/MyPage/infoPanel/InfoPanel.jsx'
 import CharacterStage from '../../pages/MyPage/CharacterStage.jsx'
 import ExploreRecords from '../../pages/MyPage/ExploreRecord.jsx'
 import InterestTags from '../../pages/MyPage/InterestTags.jsx'
+import { MyPageProvider } from '@/context/MyPageContext.jsx'
 
 const BackgroundContainer = styled.div`
   background-color: #fff5db;
@@ -100,22 +101,25 @@ const MyPageLayout = () => {
   }
 
   return (
-    <BackgroundContainer>
-      <Container>
-        <Wrapper>
-          <UpperContents>
-            <InfoPanel user={mockData.user} pet={mockData.pet} />
-            <MainContent>
-              <CharacterStage pet={mockData.pet} message={mockData.message} />
-            </MainContent>
-          </UpperContents>
-          <BottomContents>
-            <ExploreRecords problems={mockData.exploreRecords} />
-            <InterestTags tags={mockData.interestTags} />
-          </BottomContents>
-        </Wrapper>
-      </Container>
-    </BackgroundContainer>
+    // 마이페이지 컨텍스트 제공자 => 사용시 useMyPage 훅을 통해 데이터 접근 가능(컨슈머 대신  커스텀 훅 방식 사용)
+    <MyPageProvider>
+      <BackgroundContainer>
+        <Container>
+          <Wrapper>
+            <UpperContents>
+              <InfoPanel user={mockData.user} pet={mockData.pet} />
+              <MainContent>
+                <CharacterStage pet={mockData.pet} message={mockData.message} />
+              </MainContent>
+            </UpperContents>
+            <BottomContents>
+              <ExploreRecords problems={mockData.exploreRecords} />
+              <InterestTags tags={mockData.interestTags} />
+            </BottomContents>
+          </Wrapper>
+        </Container>
+      </BackgroundContainer>
+    </MyPageProvider>
   )
 }
 
