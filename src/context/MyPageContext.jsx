@@ -86,7 +86,16 @@ export const MyPageProvider = ({ children }) => {
   const fetchMyPageData = async () => {
     try {
       const res = await AxiosInstance.get('/mypage')
-      const data = res.data.data
+      console.log("[AxiosInstance] - get('/mypage')")
+      console.log(res.data)
+
+      const data = res.data?.data || res.data
+      if (!data) {
+        throw new Error('마이페이지-응답 데이터 없음')
+      }
+      if (!res.data || !res.data.data) {
+        throw new Error('마이페이지-응답 데이터 구조 오류')
+      }
       setMyPageData(formatMyPageData(data))
     } catch (error) {
       console.error('마이페이지 데이터 가져오기 실패:', error)
