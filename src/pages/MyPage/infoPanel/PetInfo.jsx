@@ -13,35 +13,35 @@ const PetInfo = () => {
   const { myPageData, loading } = useMyPage()
   if (loading || !myPageData) return <div>로딩 중...</div>
 
-  const {
-    type = 1,
-    stage = 1,
-    name = '펫정보-기본',
-    level = 1,
-    exp = 0,
-    expMax = 50,
-    status = '휴식',
-    message = '펫정보-기본 메시지',
-    proud = false,
-  } = myPageData?.pet ?? {}
+  const pet = myPageData.pet || {
+    type: 1,
+    stage: 1,
+    name: '펫정보-기본',
+    level: 1,
+    exp: 0,
+    expMax: 50,
+    status: '휴식',
+    message: '펫정보-기본 메시지',
+    proud: false,
+  }
 
-  const growthProgress = level % 5
+  const growthProgress = pet.level % 5
   const growthMax = 5
-  const growthLabel = `${level} / ${Math.floor(level / 5) * 5 + 5} 레벨`
+  const growthLabel = `${pet.level} / ${Math.floor(pet.level / 5) * 5 + 5} 레벨`
 
   return (
     <>
       <LabelRow>
         <div>단계</div>
-        <div>{stage === 1 ? '알' : stage === 2 ? '성장기' : '성인기'}</div>
+        <div>{pet.stage === 1 ? '알' : pet.stage === 2 ? '성장기' : '성인기'}</div>
       </LabelRow>
       <LabelRow>
         <div>레벨</div>
-        <div>{level}</div>
+        <div>{pet.level}</div>
       </LabelRow>
       <LabelRow>
         <div>경험치</div>
-        <ExpBar current={exp} max={expMax} />
+        <ExpBar current={pet.exp} max={pet.expMax} />
       </LabelRow>
       <LabelRow>
         <div>다음 성장까지</div>
