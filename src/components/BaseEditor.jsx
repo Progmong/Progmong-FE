@@ -67,6 +67,8 @@ import 'ckeditor5/ckeditor5.css'
 
 import '@/Styles/editor.css'
 
+import axios from 'axios'
+
 /**
  * Create a free account with a trial: https://portal.ckeditor.com/checkout?plan=free
  */
@@ -94,7 +96,8 @@ export default function BaseEditor() {
   class CustomUploadAdapter {
     constructor(loader) {
       this.loader = loader
-      this.uploadUrl = '/api/upload' // 실제 백엔드 업로드 엔드포인트로 변경
+      // 추창우의 이미지 서버로 보내기
+      this.uploadUrl = 'http://choohouse.iptime.org:8200/api/v1/images/upload'
     }
 
     upload() {
@@ -124,6 +127,7 @@ export default function BaseEditor() {
 
     return {
       editorConfig: {
+        extraPlugins: [CustomUploadAdapterPlugin],
         toolbar: {
           items: [
             'undo',
@@ -157,6 +161,8 @@ export default function BaseEditor() {
             'numberedList',
             'outdent',
             'indent',
+            '|',
+            'insertImage', // URL로 이미지 삽입 버튼 (ImageInsertViaUrl 플러그인)
           ],
           shouldNotGroupWhenFull: true,
         },
@@ -213,6 +219,7 @@ export default function BaseEditor() {
           TableToolbar,
           TextTransformation,
           Underline,
+          ImageInsertViaUrl,
         ],
         fontFamily: {
           supportAllValues: true,
