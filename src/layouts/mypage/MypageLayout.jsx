@@ -7,6 +7,7 @@ import InterestTags from '../../pages/MyPage/InterestTags.jsx'
 import { MyPageProvider } from '@/context/MyPageContext.jsx'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import navBackground from '@/assets/modalBackground.png'
 
 const BackgroundContainer = styled.div`
   background-color: #fff5db;
@@ -56,7 +57,7 @@ const BottomContents = styled.div`
   min-height: 310px;
 `
 const MyPageNav = styled.div`
-  background-image: url('../../assets/modalBackground.png');
+  background-image: url(${navBackground});
   display: flex;
   flex-direction: row;
   justify-content: space-between;
