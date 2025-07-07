@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const AxiosInstance = axios.create({
-  baseURL: 'http://3.37.128.98:8100/api/v1',
+  baseURL: 'https://api-progmong.shop/api/v1',
 })
 
 // 요청 인터셉터
