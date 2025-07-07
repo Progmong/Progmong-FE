@@ -1,338 +1,297 @@
-import React, { useEffect, useState, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect, useMemo } from 'react'
 import usePetApi from '../../constants/pet'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
+import { useNavigate } from 'react-router-dom'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Navigation } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/navigation'
 
-import Home767 from '../../assets/home/background_767.png'
-import Home1440 from '../../assets/home/background_1440.png'
-import Home3000 from '../../assets/home/background_3000.png'
+import { media } from '@/utils/breakpoints.js'
 
-import community from '../../assets/shop.png'
-import house from '../../assets/house.png'
-import cave from '../../assets/dungeon.png'
-import progmong from '../../assets/progmong.png'
+// 이미지 리소스들
+import communityImg from '../../assets/shop.png'
+import desktopBg from '../../assets/home_background.png'
+import mobileBg from '../../assets/home_background_mobile.png'
+import baseBackground from '../../assets/base-background.png'
+import dungeonImg from '../../assets/main_dungeon.png'
+import mypageImg from '../../assets/main_mypage.png'
+import boardImg from '../../assets/main_board.png'
+import progmongImg from '../../assets/progmong.png'
 import thoughtbubble from '../../assets/ttbubble.png'
 import fightBubble from '../../assets/fightbubble.png'
 import sleepBubble from '../../assets/sleepbubble.png'
+import LeftArrowImg from '../../assets/left-arrow2.png'
+import RightArrowImg from '../../assets/right-arrow2.png'
 
-// 브레이크포인트 헬퍼 (앞서 만든 media 객체를 쓴다)
-import { media } from '@/utils/breakpoints.js'
-import { useNavigate } from 'react-router-dom'
+//걷기 테스트
+import walking from '../../assets/walking22.gif'
+import standing from '../../assets/defaultstand.png'
 
-const Container = styled.div`
+const DESIGN_WIDTH = 1536
+const DESIGN_HEIGHT = 1024
+
+const BackgroundContainer = styled.div`
   position: fixed;
   inset: 0;
-  overflow: hidden;
-  background: black;
-  /* z-index: -1; */
+  z-index: -2;
+  background-image: url(${baseBackground});
 `
 
-const CenterBox = styled.div`
-  // 모바일 폰 이상에서는 가운데 정렬이 필요해서 추가함
-  ${media.tablet`
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%); /* 가로·세로 모두 중앙 */
-    `}
-`
-
-const BackgroundWrapper = styled.div`
-  position: relative;
-  width: 100%;
+const BackgroundImage = styled.img`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  user-select: none;
+  width: 100vw;
   height: 100vh;
-  background: url(${Home767}) center / cover no-repeat;
-
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  place-items: center;
-
-  inset: 0;
-  // overflow: hidden;
-
-  @media (min-width: 767px) {
-    width: 767px;
-    height: 1000px;
-    background-size: contain;
-    background-image: url(${Home767});
-  }
-
-  @media (min-width: 1024px) {
-    width: 1024px;
-    height: 1100px;
-    background-image: url(${Home1440});
-  }
-
-  @media (min-width: 1440px) {
-    width: 1440px;
-    height: 1100px;
-    background-image: url(${Home3000});
-  }
-
-  @media (min-width: 2560px) {
-    width: 3000px;
-    height: 1700px;
-    background-image: url(${Home3000});
-  }
+  object-fit: contain;
 `
 
-const BubbleBox = styled.div`
+const ScalingStage = styled.div`
   position: absolute;
-
-  /* width: 380px;
-  height: 380px;
-
-  top: -250px;
-  left: -380px; */
-
-  width: 45%;
-  height: 25%;
-
-  top: 40%;
-  left: 25%;
-
-  font-family: 'Binggrae';
-  font-weight: bold;
-  z-index: 2;
-
-  background: url(${thoughtbubble}) no-repeat center;
-  background-size: 100% 100%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  // 패딩 크기도 추후 아래 반응형을 보내야됨
-  padding: 50px 40px 80px 30px;
-  box-sizing: border-box;
-  text-align: center;
-  color: black;
-  font-size: 1.4rem;
-  line-height: 1.5;
-  word-break: keep-all;
-
-  /* 태블릿 이상 */
-  ${media.tablet`
-    width: 100%;
-    height: 70%;
-
-    font-size: 1.6rem;
-    top: -60%;
-    left: -70%;
-  `}
-
-  /* 노트북 이상 */
-  ${media.notebook`
-    width: 150%;
-    height: 90%;
-    font-size: 1.8rem;
-
-    top: -70%;
-    left: -130%;
-  `}
-
-  /* 데스크톱 이상 */
-  ${media.desktop`
-   width: 150%;
-    height: 90%;
-    font-size: 2rem;
-
-    top: -70%;
-    left: -130%;
-  `}
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(${(props) => props.scale});
+  transform-origin: center center;
+  width: ${DESIGN_WIDTH}px;
+  height: ${DESIGN_HEIGHT}px;
+  overflow: hidden;
 `
 
-// 동굴위에 전투중 표시
-// config의 position
-const FixedIconWrapper = styled.div`
-  position: absolute;
-  z-index: 10;
-  width: 80%;
-
-  // 원래 font-size : 30px
-  font-size: 1.2rem;
-  font-family: 'Binggrae';
-  font-weight: bold;
-
-  ${media.mobile`
-    font-size: 1.4rem;
-    `}
-
-  ${media.tablet`
-    font-size: 1.6rem;
-    `}
-
-  ${media.notebook`
-    font-size: 1.8rem;
-    `}
-
-  ${media.desktop`
-    font-size: 2rem;
-    `}
-`
-
-const IconOverlayContainer = styled.div`
+const StageContent = styled.div`
   position: relative;
-  width: 100%;
-  display: inline-block;
-  text-align: center;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: ${DESIGN_WIDTH}px;
+  height: ${DESIGN_HEIGHT}px;
 `
 
-const FixedIcon = styled.img`
+const BackgroundImageInStage = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: ${DESIGN_WIDTH}px;
+  height: ${DESIGN_HEIGHT}px;
+  object-fit: cover;
+  z-index: -1;
+  user-select: none;
+`
+
+const DesktopMenuIcon = styled.img`
+  position: absolute;
+  width: ${(props) => props.$size}px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  &:hover {
+    transform: scale(1.05) translateY(-5px);
+  }
+`
+
+const jumpAnimation = keyframes`
+  0% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-30px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+`
+
+const PetImageWrapper = styled.div`
+  position: absolute;
+  cursor: pointer;
+  width: ${(props) => props.size}px;
+  top: ${(props) => props.top}px;
+  left: ${(props) => props.left}px;
+  transition: transform 0.2s ease;
+  z-index: 10;
+  &:hover {
+    transform: scale(1.05) translateY(-5px);
+  }
+`
+
+const PetImage = styled.img`
   width: 100%;
   display: block;
-  position: absolute;
-  z-index: -50;
+  animation-fill-mode: forwards;
+  &.jump {
+    animation: ${jumpAnimation} 0.6s ease;
+  }
 `
 
-// ✅ 이미지 대신 div (JSX 버전)
-const FixedMainIcon = styled.div`
-  /* 공통 배경 설정 */
-  background-image: ${({ $src }) => `url(${$src})`};
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain; /* 종횡비 유지 */
+const PetBubble = styled.div`
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  padding: 15px;
+  background: url(${thoughtbubble}) no-repeat center;
+  background-size: contain;
+  font-family: 'Binggrae';
+  font-weight: bold;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  text-align: center;
+  color: black;
+  pointer-events: none; /* 말풍선 클릭 안 되게 */
+`
 
-  /* 모바일 기본값 */
-  width: 80%;
-  aspect-ratio: 1 / 1; /* 높이 확보 */
-  justify-self: center;
-  align-self: center;
+const ThoughtBubble = styled.img`
+  position: absolute;
+  width: 200px;
+  top: 440px;
+  left: 670px;
+  font-family: 'Binggrae';
+  animation: fadeIn 0.4s ease-in-out;
+`
 
-  /* 태블릿 이상 */
-  ${media.tablet`
-    position: absolute;
-    width: ${({ $w }) => $w.tablet};
-    left: ${({ $pos }) => $pos.tablet.x};
-    top:  ${({ $pos }) => $pos.tablet.y};
-  `}
+const ThoughtText = styled.div`
+  position: absolute;
+  top: 470px;
+  left: 700px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  width: 120px;
+  text-align: center;
+  line-height: 1.2;
+  animation: fadeIn 0.4s ease-in-out;
+`
 
-  /* 노트북 이상 */
-  ${media.notebook`
-    width: ${({ $w }) => $w.notebook};
-    left: ${({ $pos }) => $pos.notebook.x};
-    top:  ${({ $pos }) => $pos.notebook.y};
-  `}
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`
 
-  /* 데스크톱 이상 */
-  ${media.desktop`
-    width: ${({ $w }) => $w.desktop};
-    left: ${({ $pos }) => $pos.desktop.x};
-    top:  ${({ $pos }) => $pos.desktop.y};
-  `}
+const ArrowButton = styled.div`
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  cursor: pointer;
+  transform: translateY(-50%);
+  &.custom-swiper-button-prev {
+    left: 10px;
+  }
+  &.custom-swiper-button-next {
+    right: 10px;
+  }
+  img {
+    width: 50px;
+    height: 50px;
+  }
+`
+
+const MobileSliderWrapper = styled.div`
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+`
+
+const MobileMenuIcon = styled.img`
+  position: relative;
+  width: 40vw;
+  max-width: 200px;
+  cursor: pointer;
+  transition: transform 0.2s;
+`
+
+const MobileMenuWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
 const statusMap = {
   전투: {
     img: fightBubble,
     text: '전투 중 ...',
-
-    position: { left: '0px', top: '0px' },
+    position: { left: '620px', top: '45px' }, // ← 원하는 위치로 수정
+    size: '235px', // ← 원하는 크기
     textColor: 'red',
   },
   휴식: {
     img: sleepBubble,
     text: '자는 중...',
-    position: { left: '0px', top: '0px' },
+    position: { left: '640px', top: '45px' },
+    size: '190px',
     textColor: 'black',
   },
 }
+const progmongPosition = {
+  top: 700,
+  left: 1070,
+  size: 200,
+}
 
-const OverBackgroundWrapper = styled.div`
-  position: 'fixed';
-  inset: 0;
-  z-index: -500;
+const allItems = [
+  { name: '커뮤니티', src: communityImg, top: 250, left: 330, size: 270, route: '/community' },
+  { name: '던전', src: dungeonImg, top: 30, left: 670, size: 350, route: '/levelselect' },
+  { name: '마이페이지', src: mypageImg, top: 280, left: 970, size: 310, route: '/mypage' },
+  { name: '게시판', src: boardImg, top: 650, left: 210, size: 310, route: '/main' },
+]
+
+//걷기 테스트
+const MobilePetWrapper = styled.div`
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
-const OverBackgroundGausian = styled.div`
-  position: fixed;
-  z-index: -100;
-  background-image: url(${Home767});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  width: 100vw;
-  height: 100vw;
-  filter: blur(10px);
-
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(1.6);
-
-  ${media.notebook`
-      transform : translate(-50%, -50%) scale(1.1);
-    `}
-
-  ${media.notebook`
-      background-image: url(${Home3000});
-      background-size: cover;
-      transform : translate(-50%, -50%) scale(1.2);
-    `}
-
-  ${media.desktop`
-      background-image: url(${Home3000});
-      background-size: cover;
-      transform : translate(-50%, -50%) scale(1.1);
-    `}
+const MobilePetImage = styled.img`
+  width: 100px;
+  height: auto;
+  transform: ${({ $direction }) => ($direction === 'left' ? 'scaleX(-1)' : 'scaleX(1)')};
 `
 
-const JumpingIcon = styled(FixedMainIcon)`
-  cursor: pointer;
-  animation-fill-mode: forwards;
-
-  &.jump {
-    animation: jumpAnimation 0.6s ease;
-  }
-
-  @keyframes jumpAnimation {
-    0% {
-      transform: translateY(0);
-    }
-    30% {
-      transform: translateY(-30px);
-    }
-    50% {
-      transform: translateY(-15px);
-    }
-    100% {
-      transform: translateY(0);
-    }
-  }
-`
-const HoverableIcon = styled(FixedMainIcon)`
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: scale(1.05) translateY(-5px);
-  }
+const MobilePetBubble = styled.div`
+  width: 160px;
+  padding: 10px;
+  background: url(${thoughtbubble}) no-repeat center;
+  background-size: contain;
+  font-family: 'Binggrae';
+  font-weight: bold;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  text-align: center;
+  margin-bottom: 10px;
 `
 
 const Home = () => {
   const [petData, setPetData] = useState(null)
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767)
   const [scale, setScale] = useState(1)
   const [isJumping, setIsJumping] = useState(false)
-
   const navigate = useNavigate()
-  const handleCaveClick = () => {
-    if (!petData) return
 
-    if (petData.status === '전투') {
-      navigate('/explore')
-    } else {
-      navigate('/levelselect')
-    }
+  //걷기 테스트
+  const [isWalking, setIsWalking] = useState(false)
+  const [direction, setDirection] = useState('right') // 타입 지정 없이
+
+  const handleJump = () => {
+    if (isJumping) return
+    setIsJumping(true)
+    setTimeout(() => setIsJumping(false), 600)
   }
 
-  // 이미지 경로 생성 (동적 import 사용 불가하므로 URL 방식 사용)
+  const handleCaveClick = () => {
+    if (!petData) return
+    if (petData.status === '전투') navigate('/explore')
+    else navigate('/levelselect')
+  }
+
   const petImage = useMemo(() => {
     if (!petData?.petId || !petData?.evolutionStage) return null
-
     try {
       return new URL(
         `../../assets/pets/pet${petData.petId}_stage${petData.evolutionStage}.png`,
@@ -345,6 +304,11 @@ const Home = () => {
   }, [petData])
 
   useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 767)
+      setScale(window.innerHeight / DESIGN_HEIGHT)
+    }
+
     const { getPetInfo } = usePetApi()
 
     const loadPetStatus = async () => {
@@ -358,105 +322,169 @@ const Home = () => {
     }
 
     loadPetStatus()
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   if (!petData) return <div>로딩 중...</div>
 
-  // 현재 펫 상태를 풀러와 config에 저장
-  // petData.status = ['전투', '휴식' ]
+  const backgroundImage = isMobile ? mobileBg : desktopBg
   const config = statusMap[petData.status]
 
-  const handleJump = () => {
-    if (isJumping) return // 이미 점프 중이면 무시
-    setIsJumping(true)
-    setTimeout(() => {
-      setIsJumping(false)
-    }, 600) // 애니메이션 시간과 동일하게 맞춤
-  }
-
   return (
-    <Container>
-      <CenterBox>
-        <>
-          <BackgroundWrapper>
-            {/* /community – 시장 아이콘 */}
-            <Link to="/community" style={{ display: 'contents' }}>
-              <HoverableIcon
-                $src={community}
-                $w={{ mobile: '320px', tablet: '320px', notebook: '320px', desktop: '400px' }}
-                $pos={{
-                  mobile: { x: 'calc(50% - 160px)', y: 'calc(50% - 200px)' },
-                  tablet: { x: 'calc(50% - 320px)', y: 'calc(50% - 390px)' },
-                  notebook: { x: 'calc(50% - 300px)', y: 'calc(50% - 300px)' },
-                  desktop: { x: 'calc(50% - 400px)', y: 'calc(50% - 390px)' },
+    <BackgroundContainer>
+      <BackgroundImage src={backgroundImage} alt="background" />
+      {isMobile ? (
+        <MobileSliderWrapper>
+          <ArrowButton className="custom-swiper-button-prev">
+            <img src={LeftArrowImg} alt="이전" />
+          </ArrowButton>
+          <ArrowButton className="custom-swiper-button-next">
+            <img src={RightArrowImg} alt="다음" />
+          </ArrowButton>
+          <Swiper
+            loop
+            navigation={{
+              nextEl: '.custom-swiper-button-next',
+              prevEl: '.custom-swiper-button-prev',
+            }}
+            modules={[Navigation]}
+            //걷기 테스트
+            onSlideChangeTransitionStart={(swiper) => {
+              const current = swiper.activeIndex
+              const previous = swiper.previousIndex
+              setDirection(current > previous ? 'right' : 'left') // 방향 결정
+              setIsWalking(true) // 걷기 시작
+            }}
+            onSlideChangeTransitionEnd={() => {
+              setIsWalking(false) // 걷기 멈춤
+            }}
+          >
+            {allItems.map((item) => (
+              <SwiperSlide key={item.name}>
+                <MobileMenuWrapper>
+                  <MobileMenuIcon
+                    src={item.src}
+                    alt={item.name}
+                    onClick={() => navigate(item.route)}
+                  />
+                </MobileMenuWrapper>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          {/* 걷기 테스트 */}
+          {/* 👇 여기 추가하면 됨 */}
+          <MobilePetWrapper>
+            <MobilePetImage src={isWalking ? walking : standing} alt="펫" $direction={direction} />
+          </MobilePetWrapper>
+        </MobileSliderWrapper>
+      ) : (
+        <ScalingStage scale={scale}>
+          <StageContent>
+            <BackgroundImageInStage src={backgroundImage} alt="bg" />
+            {allItems.map((item) => (
+              <DesktopMenuIcon
+                key={item.name}
+                src={item.src}
+                alt={item.name}
+                $size={item.size}
+                style={{ top: `${item.top}px`, left: `${item.left}px` }}
+                onClick={() => {
+                  if (item.name === '던전') handleCaveClick()
+                  else navigate(item.route)
                 }}
               />
-            </Link>
-            {/* /page2 – 집 아이콘 */}
-            <Link to="/mypage" style={{ display: 'contents' }}>
-              <HoverableIcon
-                $src={house}
-                $w={{ mobile: '320px', tablet: '320px', notebook: '320px', desktop: '400px' }}
-                $pos={{
-                  mobile: { x: 'calc(50% +  10px)', y: 'calc(50% - 200px)' },
-                  tablet: { x: 'calc(50% + 10px)', y: 'calc(50% - 390px)' },
-                  notebook: { x: 'calc(50% + 160px)', y: 'calc(50% - 330px)' }, // 노트북
-                  desktop: { x: 'calc(50% + 250px)', y: 'calc(50% - 390px)' },
+            ))}
+
+            {petImage && (
+              <PetImageWrapper
+                style={{
+                  position: 'absolute',
+                  top: '700px', // 프로그몽 위치 top
+                  left: '1070px', // 프로그몽 위치 left
+                  width: '200px',
+                  cursor: 'pointer',
+                  zIndex: 10,
                 }}
-              />
-            </Link>
-            {/* /page3 – 동굴 아이콘 */}
-            <div
-              onClick={handleCaveClick}
-              style={{ display: 'contents', position: 'relative', cursor: 'pointer' }}
-            >
-              <HoverableIcon
-                $src={cave}
-                $w={{ mobile: '320px', tablet: '300px', notebook: '320px', desktop: '400px' }}
-                $pos={{
-                  mobile: { x: 'calc(50% - 170px)', y: 'calc(50% + 40px)' }, // 모바일
-                  tablet: { x: 'calc(50% - 320px)', y: 'calc(50% + 150px)' }, // 태블릿
-                  notebook: { x: 'calc(50% - 400px)', y: 'calc(50% + 40px)' }, // 노트북
-                  desktop: { x: 'calc(50% - 500px)', y: 'calc(50% + 80px)' }, // 데스크톱
-                }}
+                onClick={handleJump}
               >
-                <div style={{ position: 'relative', height: '100%' }}>
-                  {config && (
-                    <FixedIconWrapper>
-                      <IconOverlayContainer>
-                        <FixedIcon src={config.img} />
-                        <div style={{ color: config.textColor }}>{config.text}</div>
-                      </IconOverlayContainer>
-                    </FixedIconWrapper>
-                  )}
+                <PetImage
+                  src={petImage || progmongImg}
+                  alt="pet"
+                  className={isJumping ? 'jump' : ''}
+                />
+
+                {/* 💬 말풍선 이미지 */}
+                <img
+                  src={thoughtbubble}
+                  alt="bubble"
+                  style={{
+                    position: 'absolute',
+                    top: '-195px', // 펫 이미지 위쪽
+                    left: '-330px',
+                    width: '290px',
+                    pointerEvents: 'none',
+                  }}
+                />
+
+                {/* 💬 말풍선 텍스트 */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '-110px',
+                    left: '-290px',
+                    width: '200px',
+                    fontSize: '25px',
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    lineHeight: 1.3,
+                    fontFamily: 'Binggrae', // 이 부분 중요!
+                    color: '#333',
+                    pointerEvents: 'none',
+                  }}
+                >
+                  {petData.message || '...'}
                 </div>
-              </HoverableIcon>
-            </div>
+              </PetImageWrapper>
+            )}
 
-            {/* 펫(프로그몽) 아이콘 – 링크 없음 */}
-            <div style={{ display: 'contents', position: 'relative' }} onClick={handleJump}>
-              <JumpingIcon
-                className={isJumping ? 'jump' : ''}
-                $src={petImage || progmong} // 로드 실패 시 기본 이미지
-                $w={{ mobile: '320px', tablet: '300px', notebook: '220px', desktop: '320px' }}
-                $pos={{
-                  mobile: { x: 'calc(50% + 10px)', y: 'calc(50% + 40px)' }, // 모바일
-                  tablet: { x: 'calc(50% + 40px)', y: 'calc(50% + 100px)' }, // 태블릿
-                  notebook: { x: 'calc(50% + 250px)', y: 'calc(50% + 110px)' }, // 노트북
-                  desktop: { x: 'calc(50% + 350px)', y: 'calc(50% + 160px)' }, // 데스크톱
-                }}
-              >
-                <BubbleBox>{petData.message || '...'}</BubbleBox>
-              </JumpingIcon>
-            </div>
-          </BackgroundWrapper>
-        </>
-      </CenterBox>
-
-      <OverBackgroundWrapper>
-        <OverBackgroundGausian />
-      </OverBackgroundWrapper>
-    </Container>
+            {config && (
+              <>
+                <img
+                  src={config.img}
+                  alt="status bubble"
+                  style={{
+                    position: 'absolute',
+                    top: config.position.top,
+                    left: config.position.left,
+                    width: config.size,
+                    zIndex: 10,
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: `calc(${config.position.top} + 29px)`,
+                    left: `calc(${config.position.left} + 10px)`,
+                    width: '190px',
+                    color: config.textColor,
+                    fontSize: '25px',
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    zIndex: 11,
+                    fontFamily: 'Binggrae',
+                    pointerEvents: 'none', // 클릭 막기
+                  }}
+                >
+                  {config.text}
+                </div>
+              </>
+            )}
+          </StageContent>
+        </ScalingStage>
+      )}
+    </BackgroundContainer>
   )
 }
 
