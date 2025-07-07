@@ -7,6 +7,15 @@ const ListContainer = styled.div`
   flex-direction: column;
   gap: 10px;
 `
+
+const ElementContainer = styled.div`
+  transition: all 0.2s ease; /* 부드러운 트랜지션 */
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02); /* 살짝 띄우고 확대 */
+    cursor: pointer; /* 클릭 가능 커서 */
+  }
+`
 const BottomContainer = styled.div`
   margin-top: 10px;
   display: grid;
@@ -23,7 +32,9 @@ const PostList = () => {
     <div>
       <ListContainer>
         {posts.map((post) => (
-          <FreePostEle key={post.postId} post={post} />
+          <ElementContainer>
+            <FreePostEle key={post.postId} post={post} />
+          </ElementContainer>
         ))}
       </ListContainer>
       <BottomContainer>

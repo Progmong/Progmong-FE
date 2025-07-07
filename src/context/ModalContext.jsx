@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useState } from 'react'
 
-import ModalRenderer from './ModalRenderer'
+import ModalRenderer from './Modalrenderer'
 
 const ModalContext = createContext()
 
