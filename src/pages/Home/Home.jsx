@@ -15,6 +15,7 @@ import progmong from '../../assets/progmong.png'
 import thoughtbubble from '../../assets/ttbubble.png'
 import fightBubble from '../../assets/fightbubble.png'
 import sleepBubble from '../../assets/sleepbubble.png'
+import logoutLogo from '../../assets/logout.png'
 
 // 브레이크포인트 헬퍼 (앞서 만든 media 객체를 쓴다)
 import { media } from '@/utils/breakpoints.js'
@@ -313,6 +314,22 @@ const HoverableIcon = styled(FixedMainIcon)`
   }
 `
 
+const LogoutLogoBtn = styled.button`
+  position: fixed;
+  top: 20px;
+  right: 50px;
+  z-index: 100;
+
+  width: 60px;
+  height: 60px;
+  background-image: url(${logoutLogo});
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+`
+
 const Home = () => {
   const [petData, setPetData] = useState(null)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
@@ -387,7 +404,7 @@ const Home = () => {
 
   return (
     <Container>
-      <button onClick={() => logout()}>로그아웃</button>
+      <LogoutLogoBtn onClick={() => logout()} />
       <CenterBox>
         <>
           <BackgroundWrapper>
