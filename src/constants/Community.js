@@ -1,4 +1,4 @@
-import axios from './AxiosInstance'
+import axios from '@/constants/axiosInstance'
 
 export const useCommnunityApi = () => {
   const all = async () => {
