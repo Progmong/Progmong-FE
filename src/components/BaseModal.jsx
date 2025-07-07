@@ -19,7 +19,7 @@ const Overlay = styled.div`
 const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
-  background-image: url('/src/assets/modalBackground.png');
+  background-image: url('../assets/modalBackground.png');
   padding: 2rem;
   border-radius: 12px;
   width: 600px;
