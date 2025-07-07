@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import useInterestTagApi from '../../../constants/InterestTag'
-import useExploreApi from '@/constants/explore'
 import BaseContainer from '../../../components/BaseContainer'
 import BaseButton from '../../../components/BaseButton'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -104,7 +103,7 @@ const ExploreTagSelect = () => {
   const navigate = useNavigate()
   const [selectedTags, setSelectedTags] = useState(new Set())
   const { minLevel, maxLevel } = location.state || {}
-  const { startExplore } = useExploreApi()
+  
 
   const { getUserTags, updateUserTags } = useInterestTagApi()
 
