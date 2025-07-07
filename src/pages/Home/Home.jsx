@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import usePetApi from '../../constants/pet'
 import styled from 'styled-components'
+import axios from '../../constants/axiosInstance'
 
 import Home767 from '../../assets/home/background_767.png'
 import Home1440 from '../../assets/home/background_1440.png'
@@ -374,8 +375,19 @@ const Home = () => {
     }, 600) // 애니메이션 시간과 동일하게 맞춤
   }
 
+  const logout = async () => {
+    try {
+      await axios.post('/users/logout', {}, { withCredentials: true })
+      localStorage.removeItem('accessToken')
+      window.location.href = '/login'
+    } catch (err) {
+      console.error('로그아웃 실패:', err)
+    }
+  }
+
   return (
     <Container>
+      <button onClick={() => logout()}>로그아웃</button>
       <CenterBox>
         <>
           <BackgroundWrapper>
@@ -452,7 +464,6 @@ const Home = () => {
           </BackgroundWrapper>
         </>
       </CenterBox>
-
       <OverBackgroundWrapper>
         <OverBackgroundGausian />
       </OverBackgroundWrapper>
