@@ -11,6 +11,12 @@ const ButtonGroup = styled.div`
   gap: 8px;
   margin-top: 12px;
 `
+const InfoWrapper = styled.div`
+  width: 90%;
+  background-color: #f9fafb;
+  border-radius: 12px;
+  padding: 10px;
+`
 
 const UserInfo = () => {
   const handleEditNickname = () => {
@@ -35,14 +41,16 @@ const UserInfo = () => {
     // 에러 핸들링을 위한 기본값
     nickname: '유저정보-기본닉네임',
     email: '유저정보-기본이메일',
-    bjId: '유저정보-기본백준ID'
+    bjId: '유저정보-기본백준ID',
   }
 
   return (
     <>
-      <InfoRow label="닉네임" value={user.nickname} />
-      <InfoRow label="이메일" value={user.email} />
-      <InfoRow label="백준 ID" value={user.bjId} />
+      <InfoWrapper>
+        <InfoRow label="닉네임" value={user.nickname} />
+        <InfoRow label="이메일" value={user.email} />
+        <InfoRow label="백준 ID" value={user.bjId} />
+      </InfoWrapper>
       <ButtonGroup>
         <BaseButton onClick={handleEditNickname}>닉네임 수정</BaseButton>
         <BaseButton onClick={handleChangePassword}>비밀번호 변경</BaseButton>

@@ -8,20 +8,35 @@ const Box = styled.div`
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  width: 510px;
+  height: 330px;
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+  margin: 10px;
 `
 
 const Title = styled.h3`
   font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 12px;
+  font-family: 'Binggrae',serif;
+  font-weight: 700;
+  margin: 10px;
+  padding: 5px;
+  color: #051d2f;
 `
 
 const MypageResultContainer = styled.div`
   background: rgba(255, 255, 255, 0.75);
   padding: 10px;
   border-radius: 20px;
-  width: 20vw;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  min-width: 450px;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  //gap: 4px;
+  align-content: center;
 `
 
 const ResultRow = styled.div`
@@ -38,7 +53,7 @@ const ResultRow = styled.div`
 `
 
 const IconWrapper = styled.div`
-  flex: 0.2;
+  flex: 0.4;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -64,7 +79,7 @@ const GrayBox = styled.div`
   background-color: #e3e3e3;
   padding: 5px;
   border-radius: 8px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: bold;
   text-align: center;
   white-space: nowrap;
@@ -120,8 +135,10 @@ const ExploreRecords = ({ problems = mockExploreRecords }) => {
                 />
               </IconCircle>
             </IconWrapper>
-            <GrayBox flex="0.5">{p.tier}</GrayBox>
+            <GrayBox flex="1.5">{p.tier}</GrayBox>
             <GrayBox flex="1">{p.id}</GrayBox>
+            <GrayBox flex="2">{p.title}</GrayBox>
+            <GrayBox flex="1">{p.status}</GrayBox>
           </ResultRow>
         ))}
       </MypageResultContainer>

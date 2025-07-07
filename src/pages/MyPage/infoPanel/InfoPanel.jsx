@@ -7,8 +7,8 @@ import UserInfo from '@/pages/MyPage/infoPanel/UserInfo.jsx'
 import { useMyPage } from '@/context/MyPageContext.jsx'
 
 const Panel = styled.div`
-  min-width: 300px;
-  max-width: 400px;
+  min-width: 280px;
+  max-width: 700px;
   background-color: white;
   border-radius: 16px;
   padding: 16px;
@@ -16,13 +16,15 @@ const Panel = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin: 10px;
 `
 
 const Title = styled.div`
   font-family: Binggrae, serif;
   font-size: 20px;
   font-weight: bold;
-  margin-bottom: px;
+  margin-top: 5px;
+  margin-left: 10px;
 `
 
 const ToggleGroup = styled.div`
@@ -35,10 +37,10 @@ const ToggleGroup = styled.div`
 `
 
 const ContentBox = styled.div`
+  display: flex;
+  flex-direction: column;
   padding: 12px;
-  background-color: #f9fafb;
-  border-radius: 12px;
-  min-height: 100px;
+  min-height: 330px;
   font-size: 14px;
 `
 

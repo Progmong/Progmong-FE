@@ -4,11 +4,19 @@ import { useMyPage } from '@/context/MyPageContext'
 import InfoRow from '@/pages/MyPage/infoPanel/InfoRow.jsx'
 import { memo } from 'react'
 
+
+
+const InfoWrapper = styled.div`
+  width: 90%;
+  background-color: #f9fafb;
+  border-radius: 12px;
+  padding: 10px;
+`
+
 const ButtonGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 12px;
 `
 
 const PetInfo = () => {
@@ -41,22 +49,25 @@ const PetInfo = () => {
 
   const growthProgress = pet.level % 5
   const growthMax = 5
-  const growthLabel = `${pet.level} / ${Math.floor(pet.level / 5) * 5 + 5} 레벨`
+  const growthNextStage = Math.floor(pet.level / 5) + 1
+  const growthLabel = `${growthProgress} / ${growthMax} (Lv.${growthNextStage*5})`
   const expLabel = `${pet.exp} / ${pet.expMax}`
 
   return (
     <>
+      <InfoWrapper>
       <InfoRow
         label="단계"
         value={pet.stage === 1 ? '알' : pet.stage === 2 ? '성장기' : '성인기'}
       />
-      <InfoRow label="레벨" value={pet.level} />
+      <InfoRow label="레벨" value={'Lv.'+pet.level} />
       <InfoRow label="경험치" expData={{ exp: pet.exp, expMax: pet.expMax, label: expLabel }} />
       <InfoRow
-        label="다음 성장까지"
+        label="다음성장"
         expData={{ exp: growthProgress, expMax: growthMax, label: growthLabel }}
       />
       <InfoRow label="상태" value={pet.status} />
+      </InfoWrapper>
       <div style={{ textAlign: 'center', marginTop: '12px' }}>
         <ButtonGroup>
           <BaseButton onClick={handlePetNameChange}>애칭 수정</BaseButton>

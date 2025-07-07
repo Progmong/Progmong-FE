@@ -1,7 +1,12 @@
 import styled from 'styled-components'
-
 import BaseButton from '../../components/BaseButton.jsx'
 import { useModal } from '@/context/ModalContext.jsx'
+import { useMyPage } from '@/context/MyPageContext.jsx'
+import { useMediaQuery } from 'react-responsive'
+import { memo } from 'react'
+import stageImage from '@/assets/mypage/stage_background.png'
+
+// 펫 이미지 맵
 import pet1_stage1 from '@/assets/pets/pet1_stage1.png'
 import pet1_stage2 from '@/assets/pets/pet1_stage2.png'
 import pet1_stage3 from '@/assets/pets/pet1_stage3.png'
@@ -11,73 +16,107 @@ import pet2_stage3 from '@/assets/pets/pet2_stage3.png'
 import pet3_stage1 from '@/assets/pets/pet3_stage1.png'
 import pet3_stage2 from '@/assets/pets/pet3_stage2.png'
 import pet3_stage3 from '@/assets/pets/pet3_stage3.png'
-import { useMyPage } from '@/context/MyPageContext.jsx'
-import { memo } from 'react'
+import pet4_stage1 from '@/assets/pets/pet4_stage1.png'
+import pet4_stage2 from '@/assets/pets/pet4_stage2.png'
+import pet4_stage3 from '@/assets/pets/pet4_stage3.png'
 
-const Stage = styled.section`
+const Stage = styled.div`
+  display: flex;
+  flex-direction: column;
   background-color: white;
   border-radius: 16px;
-  margin: 4px;
-  padding: 30px;
-  text-align: center;
+  margin: 10px;
+  padding: 16px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  min-width: 600px;
+  gap: 8px;
+`
+
+const Title = styled.div`
+  font-family: Binggrae, serif;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 5px;
+  margin-left: 10px;
+`
+
+const StageContainer = styled.div`
+  width: ${({ $isMobile }) => ($isMobile ? '360px' : '100%')};
+  //max-width: ${({ $isMobile }) => ($isMobile ? '380px' : '500px')};
+  height: ${({ $isMobile }) => ($isMobile ? '220px' : '350px')};
+  position: relative;
+  background-image: url(${stageImage});
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 10px;
+  margin-bottom: 12px;
+`
+const PetName = styled.div`
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: Binggrae, serif;
+  font-size: 24px;
+  font-weight: bold;
+  color: #051d2f;
+  text-align: center;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 5px 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 const CharacterImage = styled.img`
-  width: 200px;
-  height: 300px;
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: ${({ $isMobile }) => ($isMobile ? '60%' : '70%')};
+  max-height: 200px;
   object-fit: contain;
-  margin-bottom: 16px;
+  height: auto;
 `
 
 const MessageBox = styled.div`
-  margin-top: 20px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  display: ${({ $isMobile }) => ($isMobile ? 'block' : 'flex')};
+  gap: 10px;
+  width: 100%;
   justify-content: space-between;
-  gap: 12px;
+  align-items: center;
 `
 
 const MessageText = styled.div`
+  background-color: rgba(255, 255, 255, 0.3);
   border: 1px solid #ccc;
   border-radius: 10px;
-  padding: 10px;
-  font-size: 16px;
+  padding: 5px;
+  font-size: 14px;
   color: #333;
   flex: 1;
   text-align: center;
-
+  max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `
 
 const petImagesMap = {
-  1: {
-    1: pet1_stage1,
-    2: pet1_stage2,
-    3: pet1_stage3,
-  },
-  2: {
-    1: pet2_stage1,
-    2: pet2_stage2,
-    3: pet2_stage3,
-  },
-  3: {
-    1: pet3_stage1,
-    2: pet3_stage2,
-    3: pet3_stage3,
-  },
-}
-const mockMessage = ' message'
-const mockPetData = {
-  type: 2, // pet2
-  stage: 3, // stage3
-  name: '에라그몽프로그몽',
+  1: { 1: pet1_stage1, 2: pet1_stage2, 3: pet1_stage3 },
+  2: { 1: pet2_stage1, 2: pet2_stage2, 3: pet2_stage3 },
+  3: { 1: pet3_stage1, 2: pet3_stage2, 3: pet3_stage3 },
+  4: { 1: pet4_stage1, 2: pet4_stage2, 3: pet4_stage3 },
 }
 
 const CharacterStage = () => {
+  const isMobile = useMediaQuery({ query: '(max-width:767px)' })
   const { openModal } = useModal()
   const { myPageData, loading } = useMyPage()
 
@@ -88,16 +127,28 @@ const CharacterStage = () => {
 
   return (
     <Stage>
-      <section>
-        <CharacterImage src={petImage} alt={`pet${pet.type}_stage${pet.stage}`} />
+      <Title>나의 프로그몽</Title>
 
-        <MessageBox>
-          <MessageText>{message}</MessageText>
-          <BaseButton onClick={() => openModal('text-edit', { title: '오늘의 한마디 수정' } )}>
-            수정하기
-          </BaseButton>
-        </MessageBox>
-      </section>
+      <StageContainer $isMobile={isMobile}>
+        <PetName>
+          {pet.name}
+        </PetName>
+        <CharacterImage
+          src={petImage}
+          alt={`pet${pet.type}_stage${pet.stage}`}
+          $isMobile={isMobile}
+        />
+      </StageContainer>
+
+      <MessageBox $isMobile={isMobile}>
+        <MessageText $isMobile={isMobile}>{message}</MessageText>
+        <BaseButton
+          style={{ width: '80px', padding: '5px 3px', fontSize: '14px' }}
+          onClick={() => openModal('text-edit', { title: '오늘의 한마디 수정' })}
+        >
+          수정하기
+        </BaseButton>
+      </MessageBox>
     </Stage>
   )
 }

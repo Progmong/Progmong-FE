@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-  width: 180px;
+  width: 90%;
   background: #e5e7eb;
   border-radius: 8px;
   height: 24px;
-  overflow: hidden;
   position: relative;
+  
 `
 
 const Fill = styled.div`
@@ -19,12 +19,15 @@ const Fill = styled.div`
 
 const Label = styled.div`
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   text-align: center;
   font-size: 14px;
-  color: #333;
   line-height: 24px;
+  color: #333;
+  pointer-events: none;
 `
 
 const ExpBar = ({ current, max, label }) => {
