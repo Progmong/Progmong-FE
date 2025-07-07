@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
+import axios from '../../constants/axiosInstance'
 
 import { media } from '@/utils/breakpoints.js'
 
@@ -23,6 +24,7 @@ import fightBubble from '../../assets/fightbubble.png'
 import sleepBubble from '../../assets/sleepbubble.png'
 import LeftArrowImg from '../../assets/left-arrow2.png'
 import RightArrowImg from '../../assets/right-arrow2.png'
+import LogoutLogo from '../../assets/stone_logout2.png'
 
 //걷기 테스트
 import walking from '../../assets/walking22.gif'
@@ -266,6 +268,37 @@ const MobilePetBubble = styled.div`
   text-align: center;
   margin-bottom: 10px;
 `
+const LogoutBtn = styled.button`
+  position: fixed;
+  top: 100px;
+  right: 100px;
+  width: 200px;
+  height: 200px;
+  border: none;
+  background: transparent;
+
+  background-image: url(${LogoutLogo});
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`
+
+const logout = async () => {
+  try {
+    await axios.post('/users/logout', {}, { withCredentials: true })
+    localStorage.removeItem('accessToken')
+    window.location.href = '/login'
+  } catch (err) {
+    console.error('로그아웃 실패:', err)
+  }
+}
 
 const Home = () => {
   const [petData, setPetData] = useState(null)
@@ -383,6 +416,7 @@ const Home = () => {
         <ScalingStage scale={scale}>
           <StageContent>
             <BackgroundImageInStage src={backgroundImage} alt="bg" />
+            <LogoutBtn onClick={() => logout()} />
             {allItems.map((item) => (
               <DesktopMenuIcon
                 key={item.name}
