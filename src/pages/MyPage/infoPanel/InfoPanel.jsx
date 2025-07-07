@@ -1,55 +1,56 @@
 // InfoPanel.jsx
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import styled from 'styled-components'
 import BaseButton from '@/components/BaseButton.jsx'
 import PetInfo from '@/pages/MyPage/infoPanel/PetInfo.jsx'
 import UserInfo from '@/pages/MyPage/infoPanel/UserInfo.jsx'
+import { useMyPage } from '@/context/MyPageContext.jsx'
 
 const Panel = styled.div`
-  min-width: 300px;
-  max-width: 400px;
+  min-width: 280px;
+  max-width: 700px;
   background-color: white;
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
+  margin: 10px;
 `
 
-const Title = styled.h2`
-  font-family: Binggrae;
-  font-size: 18px;
+const Title = styled.div`
+  font-family: Binggrae, serif;
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 8px;
+  margin-top: 5px;
+  margin-left: 10px;
 `
 
 const ToggleGroup = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 10px;
+
+  & > * {
+    flex: 1;
+  }
 `
 
 const ContentBox = styled.div`
+  display: flex;
+  flex-direction: column;
   padding: 12px;
-  background-color: #f9fafb;
-  border-radius: 12px;
-  min-height: 100px;
+  min-height: 330px;
   font-size: 14px;
 `
-const mockPet = {
-  name: '에라그몽프로그몽',
-  stage: '알',
-  level: 20,
-  exp: 70,
-  expMax: 100,
-  growthProgress: 5,
-  growthMax: 10,
-  solved: 120,
-}
 
-const InfoPanel = ({ user, pet }) => {
+const InfoPanel = () => {
   const [mode, setMode] = useState('pet')
+  const { myPageData, loading } = useMyPage()
+
+  if (loading || !myPageData) return <div>로딩 중...</div>
+
+  const { user, pet } = myPageData
 
   return (
     <Panel>
@@ -70,9 +71,9 @@ const InfoPanel = ({ user, pet }) => {
           유저정보
         </BaseButton>
       </ToggleGroup>
-      <ContentBox>{mode === 'pet' ? <PetInfo pet={pet} /> : <UserInfo user={user} />}</ContentBox>
+      <ContentBox>{mode === 'pet' ? <PetInfo /> : <UserInfo />}</ContentBox>
     </Panel>
   )
 }
 
-export default InfoPanel
+export default memo(InfoPanel)
