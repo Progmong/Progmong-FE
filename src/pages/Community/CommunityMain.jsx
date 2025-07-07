@@ -113,14 +113,14 @@ const WriteButtonContainer = styled.div`
 `
 
 const CommunityMain = () => {
-  const communityApi = useCommnunityApi()
+  const { all } = useCommnunityApi()
 
   const [posts, setPosts] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await communityApi()
+        const res = await all()
         console.log(res.data.data)
         setPosts(res.data.data)
       } catch (err) {
