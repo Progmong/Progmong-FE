@@ -56,7 +56,7 @@ const BottomContents = styled.div`
   min-height: 310px;
 `
 const MyPageNav = styled.div`
-  background-image: url('/src/assets/modalBackground.png');
+  background-image: url('../../assets/modalBackground.png');
   display: flex;
   flex-direction: row;
   justify-content: space-between;
