@@ -57,7 +57,7 @@ export const useMyPage = () => useContext(MyPageContext)
 
 const formatMyPageData = (data) => ({
   pet: {
-    type: data.userPet.petId,
+    type: data.userPet.userPetId,
     stage: data.userPet.evolutionStage,
     name: data.userPet.nickname,
     level: data.userPet.level,
@@ -87,26 +87,32 @@ export const MyPageProvider = ({ children }) => {
     try {
       const res = await AxiosInstance.get('/mypage')
       console.log("[AxiosInstance] - get('/mypage')")
-      console.log(res.data)
+      console.log(res.data ? '마이페이지 데이터 가져오기 성공' : '마이페이지 데이터 가져오기 실패')
+      console.log(res)
 
-      const data = res.data?.data || res.data
+      const data = res.data
       if (!data) {
         throw new Error('마이페이지-응답 데이터 없음')
       }
       if (!res.data || !res.data.data) {
         throw new Error('마이페이지-응답 데이터 구조 오류')
       }
-      setMyPageData(formatMyPageData(data))
+      return formatMyPageData(data?.data)
     } catch (error) {
       console.error('마이페이지 데이터 가져오기 실패:', error)
-      setMyPageData(mockData)
+      return formatMyPageData(mockData)
     } finally {
       setLoading(false)
     }
   }
 
-  useEffect(() => {
-    fetchMyPageData()
+  useEffect(async () => {
+    const init = async () => {
+      const data = await fetchMyPageData()
+      console.log('마이페이지 데이터 초기화')
+      setMyPageData(data)
+    }
+    init()
   }, [])
 
   return (
@@ -115,7 +121,7 @@ export const MyPageProvider = ({ children }) => {
         myPageData: myPageData,
         setMyPageData: setMyPageData,
         loading,
-        refreshMyPageData: fetchMyPageData, // optional
+        refreshMyPageData: fetchMyPageData,
       }}
     >
       {children}

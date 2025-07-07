@@ -2,12 +2,8 @@
 import styled from 'styled-components'
 import BaseButton from '@/components/BaseButton'
 import { useMyPage } from '@/context/MyPageContext.jsx'
-
-const LabelRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 4px 0;
-`
+import InfoRow from '@/pages/MyPage/infoPanel/InfoRow.jsx'
+import { memo } from 'react'
 
 const ButtonGroup = styled.div`
   display: flex;
@@ -36,25 +32,17 @@ const UserInfo = () => {
   if (loading || !myPageData) return <div>로딩 중...</div>
 
   const user = myPageData.user || {
-      nickname: '유저정보-기본닉네임',
-      email: '유저정보-기본이메일',
-      bjId: '유저정보-기본백준ID',
+    // 에러 핸들링을 위한 기본값
+    nickname: '유저정보-기본닉네임',
+    email: '유저정보-기본이메일',
+    bjId: '유저정보-기본백준ID'
   }
 
   return (
     <>
-      <LabelRow>
-        <div>닉네임</div>
-        <div>{user.nickname}</div>
-      </LabelRow>
-      <LabelRow>
-        <div>이메일</div>
-        <div>{user.email}</div>
-      </LabelRow>
-      <LabelRow>
-        <div>백준 ID</div>
-        <div>{user.bjId}</div>
-      </LabelRow>
+      <InfoRow label="닉네임" value={user.nickname} />
+      <InfoRow label="이메일" value={user.email} />
+      <InfoRow label="백준 ID" value={user.bjId} />
       <ButtonGroup>
         <BaseButton onClick={handleEditNickname}>닉네임 수정</BaseButton>
         <BaseButton onClick={handleChangePassword}>비밀번호 변경</BaseButton>
@@ -66,4 +54,4 @@ const UserInfo = () => {
   )
 }
 
-export default UserInfo
+export default memo(UserInfo)

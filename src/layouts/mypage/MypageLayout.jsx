@@ -5,6 +5,7 @@ import CharacterStage from '../../pages/MyPage/CharacterStage.jsx'
 import ExploreRecords from '../../pages/MyPage/ExploreRecord.jsx'
 import InterestTags from '../../pages/MyPage/InterestTags.jsx'
 import { MyPageProvider } from '@/context/MyPageContext.jsx'
+import { memo } from 'react'
 
 const BackgroundContainer = styled.div`
   background-color: #fff5db;
@@ -53,53 +54,6 @@ const BottomContents = styled.div`
 `
 
 const MyPageLayout = () => {
-  const mockData = {
-    pet: {
-      type: 2, // pet2
-      stage: 3, // stage3
-      name: '에라그몽프로그몽',
-    },
-    user: {
-      nickname: '애라모르겠다',
-      email: 'progmong@gmail.com',
-      bjId: 'progmong',
-    },
-    interestTags: [1, 2, 5],
-    message: '애라 모르겠다~!',
-    exploreRecords: [
-      {
-        id: 1001,
-        tier: 'Gold V',
-        title: '부분 수열의 합',
-        status: '성공',
-      },
-      {
-        id: 2020,
-        tier: 'Silver I',
-        title: 'LCS',
-        status: '패스',
-      },
-      {
-        id: 3010,
-        tier: 'Bronze II',
-        title: 'DFS와 BFS',
-        status: '성공',
-      },
-      {
-        id: 4040,
-        tier: 'Silver III',
-        title: '토마토',
-        status: '패스',
-      },
-      {
-        id: 5050,
-        tier: 'Gold IV',
-        title: '다익스트라',
-        status: '성공',
-      },
-    ],
-  }
-
   return (
     // 마이페이지 컨텍스트 제공자 => 사용시 useMyPage 훅을 통해 데이터 접근 가능(컨슈머 대신  커스텀 훅 방식 사용)
     <MyPageProvider>
@@ -107,14 +61,14 @@ const MyPageLayout = () => {
         <Container>
           <Wrapper>
             <UpperContents>
-              <InfoPanel user={mockData.user} pet={mockData.pet} />
+              <InfoPanel />
               <MainContent>
-                <CharacterStage pet={mockData.pet} message={mockData.message} />
+                <CharacterStage />
               </MainContent>
             </UpperContents>
             <BottomContents>
-              <ExploreRecords problems={mockData.exploreRecords} />
-              <InterestTags tags={mockData.interestTags} />
+              <ExploreRecords />
+              <InterestTags />
             </BottomContents>
           </Wrapper>
         </Container>
@@ -123,4 +77,4 @@ const MyPageLayout = () => {
   )
 }
 
-export default MyPageLayout
+export default memo(MyPageLayout)

@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import checkIcon from '@/assets/check-icon.png'
 import passIcon from '@/assets/pass-icon.png'
 
+
 const Box = styled.div`
   background-color: white;
   border-radius: 16px;
@@ -71,7 +72,40 @@ const GrayBox = styled.div`
   text-overflow: ellipsis;
 `
 
-const ExploreRecords = ({ problems = [] }) => {
+const mockExploreRecords = [
+  {
+    id: 1001,
+    tier: 'Gold V',
+    title: '부분 수열의 합',
+    status: '성공',
+  },
+  {
+    id: 2020,
+    tier: 'Silver I',
+    title: 'LCS',
+    status: '패스',
+  },
+  {
+    id: 3010,
+    tier: 'Bronze II',
+    title: 'DFS와 BFS',
+    status: '성공',
+  },
+  {
+    id: 4040,
+    tier: 'Silver III',
+    title: '토마토',
+    status: '패스',
+  },
+  {
+    id: 5050,
+    tier: 'Gold IV',
+    title: '다익스트라',
+    status: '성공',
+  },
+]
+
+const ExploreRecords = ({ problems = mockExploreRecords }) => {
   return (
     <Box>
       <Title>최근 탐험 기록</Title>

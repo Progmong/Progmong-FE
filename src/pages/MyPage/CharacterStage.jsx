@@ -11,6 +11,8 @@ import pet2_stage3 from '@/assets/pets/pet2_stage3.png'
 import pet3_stage1 from '@/assets/pets/pet3_stage1.png'
 import pet3_stage2 from '@/assets/pets/pet3_stage2.png'
 import pet3_stage3 from '@/assets/pets/pet3_stage3.png'
+import { useMyPage } from '@/context/MyPageContext.jsx'
+import { memo } from 'react'
 
 const Stage = styled.section`
   background-color: white;
@@ -75,8 +77,13 @@ const mockPetData = {
   name: '에라그몽프로그몽',
 }
 
-const CharacterStage = ({ pet, message }) => {
+const CharacterStage = () => {
   const { openModal } = useModal()
+  const { myPageData, loading } = useMyPage()
+
+  if (loading || !myPageData) return <div>로딩 중...</div>
+
+  const { pet, message } = myPageData
   const petImage = petImagesMap[pet.type]?.[pet.stage]
 
   return (
@@ -86,7 +93,7 @@ const CharacterStage = ({ pet, message }) => {
 
         <MessageBox>
           <MessageText>{message}</MessageText>
-          <BaseButton onClick={() => openModal('tag-edit', { title: '오늘의 한마디 수정' })}>
+          <BaseButton onClick={() => openModal('text-edit', { title: '오늘의 한마디 수정' } )}>
             수정하기
           </BaseButton>
         </MessageBox>
@@ -95,4 +102,4 @@ const CharacterStage = ({ pet, message }) => {
   )
 }
 
-export default CharacterStage
+export default memo(CharacterStage)
