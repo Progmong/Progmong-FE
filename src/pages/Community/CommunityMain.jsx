@@ -76,8 +76,8 @@ const HomeBox = styled.div`
   flex-grow: 1;
   /* width: calc(100% - 30px); */
   position: relative;
-  background-color: #ffd48b;
-  border: 2px solid #d3a76b;
+  background-color: var(--bg-community);
+  border: 2px solid var(--bg-community-accent);
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
   padding: 10px 10px 0px 10px;
@@ -89,7 +89,7 @@ const HomeBox = styled.div`
 
 const BoardContainer = styled.div`
   flex-grow: 1;
-  background-color: white;
+  background-color: var(--bg-community-post);
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   padding: 25px;
@@ -141,9 +141,9 @@ const CommunityMain = () => {
         <CateBox style={{ backgroundColor: '#ffd48b' }}>
           <CateText>알고리즘</CateText>
         </CateBox>
-        <CateBox>
+        {/* <CateBox>
           <CateText>자랑하기</CateText>
-        </CateBox>
+        </CateBox> */}
         <CateBox>
           <CateText>자유글</CateText>
         </CateBox>

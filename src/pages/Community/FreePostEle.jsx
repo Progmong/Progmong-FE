@@ -33,9 +33,16 @@ const CreatedBox = styled.div`
 `
 
 const FreePostEle = (props) => {
+  const navigate = useNavigate()
+
   const formatedTime = formatRelativeTime(props.post.createdAt)
+
+  const isClick = () => {
+    console.log('postId : ' + props.post.postId + ' 클릭됨')
+    navigate(`/community/posts/${props.post.postId}`)
+  }
   return (
-    <BaseContainer style={{ border: '1px solid #ccc' }}>
+    <BaseContainer style={{ border: '1px solid #ccc' }} onClick={isClick}>
       <Container>
         <TitleBox>{props.post.title}</TitleBox>
         <AuthorBox>

@@ -119,8 +119,8 @@ root.render(
             {/* /community 에서는 PostList */}
             <Route index element={<PostList />} />
             {/* /community/postdetail 에서는 PostDetail */}
-            <Route path="postdetail" element={<PostDetail />} />
-            <Route path="postwrite" element={<PostWrite />} />
+            <Route path="posts/:postId" element={<PostDetail />} />
+            <Route path="posts/new" element={<PostWrite />} />
           </Route>
           <Route
             path="/explore/result"

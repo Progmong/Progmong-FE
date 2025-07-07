@@ -1,9 +1,11 @@
+import DOMPurify from 'dompurify'
+
 import BaseEditor from '@/components/BaseEditor'
 import BaseButton from '@/components/BaseButton'
+import useCommnunityApi from '@/constants/Community'
 
 // styled-components 정의
 const Container = styled.div`
-  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
 
@@ -66,7 +68,32 @@ const SubmitButton = styled.button`
 `
 
 const PostWrite = () => {
+  const { write } = useCommnunityApi()
+  const navigate = useNavigate()
   const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+
+  const handleContentChange = (html) => {
+    setContent(html)
+  }
+
+  const isClickWrite = async () => {
+    console.log('제목 : ' + title)
+    console.log('=========내용========')
+    console.log(content)
+
+    // HTML 상에서 JS 공격을 방지
+    const safeHtml = DOMPurify.sanitize(content)
+
+    const res = await write(title, content, '알고리즘')
+    if (res.status === 200) {
+      console.log('글 쓰기 성공')
+      const postId = res.data.data.postId
+      navigate(`/community/posts/${postId}`, { replace: true })
+    } else {
+      console.log(res)
+    }
+  }
 
   return (
     <Container>
@@ -75,11 +102,13 @@ const PostWrite = () => {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <div style={{ height: '100%' }}>
-        <BaseEditor style="height:100%" />
+      <div>
+        <BaseEditor style="height:100%" onContentChange={handleContentChange} />
       </div>
-      <div style={{ display: 'inline-block', textAlign: 'right' }}>
-        <BaseButton>글쓰기</BaseButton>
+      <div style={{ display: 'inline-block', textAlign: 'right', marginTop: '1rem' }}>
+        <BaseButton variant="pass" onClick={isClickWrite}>
+          완료
+        </BaseButton>
       </div>
     </Container>
   )

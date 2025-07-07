@@ -21,8 +21,12 @@ export const useCommnunityApi = () => {
     return await axios.post(`/community/post/delete/${postId}`)
   }
 
-  const getDetail = async (postId) => {
+  const postDetail = async (postId) => {
     return await axios.get(`/community/post/detail/${postId}`)
+  }
+
+  const communityActivity = async () => {
+    return await axios.get(`/community/post/activity`)
   }
 
   return {
@@ -31,7 +35,8 @@ export const useCommnunityApi = () => {
     isWriter,
     modify,
     deletePost,
-    getDetail,
+    postDetail,
+    communityActivity,
   }
 }
 export default useCommnunityApi

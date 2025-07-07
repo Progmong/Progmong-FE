@@ -54,6 +54,9 @@
   --bg-blue: #1f4d80;
   --bg-black: #000000;
   --bg-sky: #b4d0e9;
+  --bg-community: #ffd48b;
+  --bg-community-accent: #d3a76b;
+  --bg-community-post: #fff8e4;
 
   /* 텍스트 색상 */
   --text-white: #ffffff;
