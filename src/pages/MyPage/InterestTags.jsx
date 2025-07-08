@@ -90,13 +90,18 @@ const InterestTags = () => {
     }
   }, [myPageData])
 
+  const handleClickTagEdit = () => {
+    console.log('관심 태그 수정 버튼 클릭')
+    openModal('tag-edit')
+  }
+
   return (
     <Box>
       <InterestTagsHeader>
         <Title>관심 태그</Title>
         <BaseButtonWrapper>
           <BaseButton
-            onClick={() => openModal('tag-edit', { title: '관심 태그 수정', message: '돌아가!' })}
+            onClick={handleClickTagEdit}
             $size="sm"
           >
             태그 수정
