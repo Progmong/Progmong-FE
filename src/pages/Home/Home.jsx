@@ -431,7 +431,7 @@ const Home = () => {
                 style={{ top: `${item.top}px`, left: `${item.left}px` }}
                 onClick={() => {
                   if (item.name === '던전') handleCaveClick()
-                  if (item.name === '로그아웃') logout()
+                  else if (item.name === '로그아웃') logout()
                   else navigate(item.route)
                 }}
               />
