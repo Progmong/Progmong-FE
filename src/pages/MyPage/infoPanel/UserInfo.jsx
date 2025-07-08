@@ -5,6 +5,7 @@ import { useMyPage } from '@/context/MyPageContext.jsx'
 import InfoRow from '@/pages/MyPage/infoPanel/InfoRow.jsx'
 import AxiosInstance from '@/constants/axiosInstance.js'
 import { useModal } from '@/context/ModalContext.jsx'
+import { toast } from 'react-toastify'
 
 const ButtonGroup = styled.div`
   display: flex;
@@ -40,16 +41,16 @@ const UserInfo = () => {
       message: '새 닉네임을 입력하세요.',
       onConfirm: async (newNickname) => {
         // 서버에 닉네임 변경 요청
-        console.log(`모달 컴펌 액션 새 닉네임: ${newNickname}`)
+        console.log(`모달 컨펌 액션 새 닉네임: ${newNickname}`)
         // 상태 관리를 이용해 전체 페이지 전부 다시 렌더링
         if (!newNickname) {
           console.error('닉네임은 비워둘 수 없습니다.')
-          // 모달에 에러 이벤트 추가하기
+          toast.error('닉네임은 비워둘 수 없습니다.')
           return
         }
         if (newNickname.length > 12) {
           console.error('닉네임은 0자 이상 12자 이하로 입력해주세요.')
-          // 모달에 에러 이벤트 추가하기
+          toast.error('닉네임은 0자 이상 12자 이하로 입력해주세요.')
           return
         }
         try {
@@ -60,8 +61,11 @@ const UserInfo = () => {
           })
           console.log('닉네임 변경 완료:', res.data)
           refreshMyPageData()
+          toast.success('닉네임이 변경되었습니다.')
         } catch (error) {
           console.error('닉네임 변경 실패:', error)
+          toast.error(error.response.data.message)
+
           // 에러 핸들링 로직 추가
         }
       },
@@ -78,9 +82,10 @@ const UserInfo = () => {
       inputType: 'password',
       onConfirm: async (newPassword) => {
         // 서버에 비밀번호 변경 요청
-        console.log(`모달 컴펌 액션 새 비밀번호: ${newPassword}`)
+        console.log(`모달 컨펌 액션 새 비밀번호: ${newPassword}`)
         if (!newPassword) {
           console.error('비밀번호는 비워둘 수 없습니다.')
+          toast.error('비밀번호는 비워둘 수 없습니다.')
           // 모달에 에러 이벤트 추가하기
           return
         }
@@ -93,8 +98,10 @@ const UserInfo = () => {
           })
           console.log('비밀번호 변경 완료:', res.data)
           refreshMyPageData()
+          toast.success('비밀번호가 변경되었습니다.')
         } catch (error) {
           console.error('비밀번호 변경 실패:', error)
+          toast.error(error.response.data.message)
           // 에러 핸들링 로직 추가
         }
       },
@@ -111,6 +118,7 @@ const UserInfo = () => {
         try {
           const res = await AxiosInstance.delete('/users')
           console.log('회원 탈퇴 완료:', res.data)
+          toast.success('회원 탈퇴가 완료되었습니다.')
           // 탈퇴 후 메인 페이지로 리다이렉트
           window.location.href = '/'
         } catch (error) {

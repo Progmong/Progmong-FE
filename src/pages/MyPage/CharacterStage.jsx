@@ -20,6 +20,7 @@ import pet4_stage1 from '@/assets/pets/pet4_stage1.png'
 import pet4_stage2 from '@/assets/pets/pet4_stage2.png'
 import pet4_stage3 from '@/assets/pets/pet4_stage3.png'
 import AxiosInstance from '@/constants/axiosInstance.js'
+import { toast } from 'react-toastify'
 
 const Stage = styled.div`
   display: flex;
@@ -133,6 +134,7 @@ const CharacterStage = () => {
       onConfirm: async (newMessage) => {
         if (!newMessage) {
           console.error('메시지는 비워둘 수 없습니다.')
+          toast.error('메시지는 비워둘 수 없습니다.')
           return
         }
         try {
@@ -142,9 +144,11 @@ const CharacterStage = () => {
             },
           })
           console.log('메시지 변경 완료:', res.data)
+          toast.success('메세지가 변경되었습니다.')
           refreshMyPageData()
         } catch (error) {
           console.error('메시지 변경 실패:', error)
+          toast.error('메시지 변경에 실패했습니다. 다시 시도해주세요.')
           // 에러 핸들링 로직 추가
         }
       },
