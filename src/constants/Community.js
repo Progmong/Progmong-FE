@@ -5,6 +5,10 @@ export const useCommnunityApi = () => {
     return await axios.get('/community/post/all')
   }
 
+  const categoryAll = async (postCategory) => {
+    return await axios.get(`/community/${postCategory}/post/all`)
+  }
+
   const write = async (title, content, postCategory) => {
     return await axios.post('/community/post/write', { title, content, postCategory })
   }
@@ -31,6 +35,7 @@ export const useCommnunityApi = () => {
 
   return {
     all,
+    categoryAll,
     write,
     isWriter,
     modify,

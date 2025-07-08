@@ -73,6 +73,7 @@ const PostWrite = () => {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
 
+  const { category } = useParams()
   const handleContentChange = (html) => {
     setContent(html)
   }
@@ -83,13 +84,13 @@ const PostWrite = () => {
     console.log(content)
 
     // HTML 상에서 JS 공격을 방지
-    const safeHtml = DOMPurify.sanitize(content)
+    // const safeHtml = DOMPurify.sanitize(content)
 
-    const res = await write(title, content, '알고리즘')
+    const res = await write(title, content, category)
     if (res.status === 200) {
       console.log('글 쓰기 성공')
       const postId = res.data.data.postId
-      navigate(`/community/posts/${postId}`, { replace: true })
+      navigate(`/community/${category}/posts/${postId}`, { replace: true })
     } else {
       console.log(res)
     }

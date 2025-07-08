@@ -31,7 +31,7 @@ const PostList = () => {
   const navigate = useNavigate()
 
   const isCickWrite = () => {
-    navigate(`/community/posts/new`)
+    navigate(`posts/new`)
   }
   return (
     <div>

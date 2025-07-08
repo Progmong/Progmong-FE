@@ -39,7 +39,7 @@ const FreePostEle = (props) => {
 
   const isClick = () => {
     console.log('postId : ' + props.post.postId + ' 클릭됨')
-    navigate(`/community/posts/${props.post.postId}`)
+    navigate(`posts/${props.post.postId}`)
   }
   return (
     <BaseContainer style={{ border: '1px solid #ccc' }} onClick={isClick}>

@@ -15,3 +15,23 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* 이미지 전체를 감싸는 figure 기본 스타일 */
+figure.image {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+/* 사용자가 리사이즈한 figure는 너비 비율에 따라 블록 레벨로 표시 */
+figure.image.image_resized {
+  display: block; /* 블록 레벨 요소로 너비 계산 가능 */
+  margin-left: auto; /* 좌우 중앙 정렬 */
+  margin-right: auto;
+}
+
+/* 리사이즈된 이미지 자체는 부모 너비에 맞게 축소·확대 */
+figure.image.image_resized img {
+  display: block;
+  width: 100%; /* 부모 figure 너비(예: style="width:56.7%") 기준 */
+  height: auto; /* 종횡비 유지 */
+}

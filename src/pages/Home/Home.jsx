@@ -380,7 +380,7 @@ const Home = () => {
         <>
           <BackgroundWrapper>
             {/* /community – 시장 아이콘 */}
-            <Link to="/community" style={{ display: 'contents' }}>
+            <Link to="/community/알고리즘" style={{ display: 'contents' }}>
               <HoverableIcon
                 $src={community}
                 $w={{ mobile: '320px', tablet: '320px', notebook: '320px', desktop: '400px' }}
