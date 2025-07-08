@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import BaseButton from '@/components/BaseButton'
 import { useMyPage } from '@/context/MyPageContext.jsx'
 import InfoRow from '@/pages/MyPage/infoPanel/InfoRow.jsx'
-import { memo } from 'react'
+import AxiosInstance from '@/constants/axiosInstance.js'
+import { useModal } from '@/context/ModalContext.jsx'
 
 const ButtonGroup = styled.div`
   display: flex;
@@ -19,9 +20,45 @@ const InfoWrapper = styled.div`
 `
 
 const UserInfo = () => {
+  const { openModal } = useModal()
+  const { myPageData, loading, refreshMyPageData } = useMyPage()
+  if (loading || !myPageData) return <div>로딩 중...</div>
+
   const handleEditNickname = () => {
     // 추후 닉네임 변경 모달 열기
     console.log('닉네임 변경')
+    // Alert 모달로 변경되었음을 알림
+    openModal('text-edit', {
+      title: '닉네임 변경',
+      message: '새 닉네임을 입력하세요.',
+      onConfirm: async (newNickname) => {
+        // 서버에 닉네임 변경 요청
+        console.log(`모달 컴펌 액션 새 닉네임: ${newNickname}`)
+        // 상태 관리를 이용해 전체 페이지 전부 다시 렌더링
+        if (!newNickname) {
+          console.error('닉네임은 비워둘 수 없습니다.')
+          // 모달에 에러 이벤트 추가하기
+          return
+        }
+        if (newNickname.length > 12) {
+          console.error('닉네임은 0자 이상 12자 이하로 입력해주세요.')
+          // 모달에 에러 이벤트 추가하기
+          return
+        }
+        try {
+          const res = await AxiosInstance.patch('/users/nickname', newNickname, {
+            headers: {
+              'Content-Type': 'text/plain',
+            },
+          })
+          console.log('닉네임 변경 완료:', res.data)
+          refreshMyPageData()
+        } catch (error) {
+          console.error('닉네임 변경 실패:', error)
+          // 에러 핸들링 로직 추가
+        }
+      },
+    })
   }
 
   const handleChangePassword = () => {
@@ -33,9 +70,6 @@ const UserInfo = () => {
     // 추후 탈퇴 확인 모달 열기
     console.log('회원 탈퇴')
   }
-
-  const { myPageData, loading } = useMyPage()
-  if (loading || !myPageData) return <div>로딩 중...</div>
 
   const user = myPageData.user || {
     // 에러 핸들링을 위한 기본값
@@ -62,4 +96,4 @@ const UserInfo = () => {
   )
 }
 
-export default memo(UserInfo)
+export default UserInfo

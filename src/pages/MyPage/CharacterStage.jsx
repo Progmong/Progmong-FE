@@ -130,9 +130,7 @@ const CharacterStage = () => {
       <Title>나의 프로그몽</Title>
 
       <StageContainer $isMobile={isMobile}>
-        <PetName>
-          {pet.name}
-        </PetName>
+        <PetName>{pet.name}</PetName>
         <CharacterImage
           src={petImage}
           alt={`pet${pet.type}_stage${pet.stage}`}
@@ -144,7 +142,12 @@ const CharacterStage = () => {
         <MessageText $isMobile={isMobile}>{message}</MessageText>
         <BaseButton
           style={{ width: '80px', padding: '5px 3px', fontSize: '14px' }}
-          onClick={() => openModal('text-edit', { title: '오늘의 한마디 수정' })}
+          onClick={() =>
+            openModal('text-edit', {
+              title: '오늘의 한마디 수정',
+              message: '오늘의 한마디를 수정해보세요!',
+            })
+          }
         >
           수정하기
         </BaseButton>
