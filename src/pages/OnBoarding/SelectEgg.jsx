@@ -216,7 +216,7 @@ const SelectEgg = () => {
           }}
         />
 
-        <CustomButton variant="secondary" size="mg" onClick={handleEvent}>
+        <CustomButton $variant="secondary" $size="mg" onClick={handleEvent}>
           결정
         </CustomButton>
       </CustomContainer>

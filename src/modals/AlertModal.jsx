@@ -25,7 +25,7 @@ const ButtonWrapper = styled.div`
   justify-content: center;
 `
 
-const AlertModal = ({ title = '알림', message, onConfirm, buttonText = '확인' }) => {
+const AlertModal = ({ title = '알림', message, onConfirm, buttonText = '확인', containCancel=null }) => {
   const { closeModal } = useModal()
 
   const handleClick = () => {
@@ -39,7 +39,12 @@ const AlertModal = ({ title = '알림', message, onConfirm, buttonText = '확인
     <BaseModal title={title} onClose={closeModal}>
       <Message>{message}</Message>
       <ButtonWrapper>
-        <BaseButton onClick={handleClick}>{buttonText}</BaseButton>
+        <BaseButton onClick={handleClick} $variant="secondary">{buttonText}</BaseButton>
+        {containCancel && (
+          <BaseButton onClick={closeModal}  style={{ marginLeft: '1rem' }}>
+            취소
+          </BaseButton>
+        )}
       </ButtonWrapper>
     </BaseModal>
   )

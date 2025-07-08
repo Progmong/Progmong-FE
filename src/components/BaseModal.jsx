@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-
 import BaseContainer from './BaseContainer.jsx'
 import modalBackground from '@/assets/modalBackground.png'
 
@@ -26,11 +25,13 @@ const ModalContainer = styled.div`
   width: 600px;
   max-width: 70vw;
   max-height: 75vh; /* 고정 높이 제거 */
-  font-family: Binggrae,serif;
+  font-family: Binggrae, serif;
   overflow-y: auto;
 `
 
 const ModalTitle = styled.div`
+  display: flex;
+  justify-content: center;
   margin-top: 2rem;
   margin-bottom: 1rem;
 
@@ -47,6 +48,7 @@ const ModalContent = styled.div`
   align-items: center;
   justify-content: center;
   flex: 1;
+  font-family: Binggrae, serif;
 `
 
 const BaseModal = ({ title, children, onClose }) => {

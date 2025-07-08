@@ -48,9 +48,9 @@ const convexMixin = ({ $c, $s }) => css`
 /* --------------------------------------------------
    3) 스타일드 버튼
    -------------------------------------------------- */
-const ConvexBtn = styled.button.attrs(({ variant = 'primary', size = 'md' }) => ({
-  $c: COLOR_SET[variant] || COLOR_SET.primary,
-  $s: SIZE_SET[size] || SIZE_SET.md,
+const ConvexBtn = styled.button.attrs(({ $variant = 'primary', $size = 'md' }) => ({
+  $c: COLOR_SET[$variant] || COLOR_SET.primary,
+  $s: SIZE_SET[$size] || SIZE_SET.md,
 }))`
   /* 기본 레이아웃 */
   display: inline-block;

@@ -6,6 +6,7 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const IconCircle: typeof import('~icons/ci/rcle.jsx')['default']
   const IconLineMdLoadingTwotoneLoop: typeof import('~icons/line-md/loading-twotone-loop.jsx')['default']
   const IconMdiClockOutline: typeof import('~icons/mdi/clock-outline.jsx')['default']
   const IconMdiKeyboardBackspace: typeof import('~icons/mdi/keyboard-backspace.jsx')['default']

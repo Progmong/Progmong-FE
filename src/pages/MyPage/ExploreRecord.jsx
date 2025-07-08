@@ -1,12 +1,15 @@
 import styled from 'styled-components'
 import checkIcon from '@/assets/check-icon.png'
 import passIcon from '@/assets/pass-icon.png'
-
+import BaseButton from '@/components/BaseButton.jsx'
+import React from 'react'
+import { useModal } from '@/context/ModalContext.jsx'
+import { useMyPage } from '@/context/MyPageContext.jsx'
 
 const Box = styled.div`
   background-color: white;
   border-radius: 16px;
-  padding: 16px;
+  padding: 10px 16px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
   width: 510px;
   height: 330px;
@@ -15,14 +18,25 @@ const Box = styled.div`
   align-content: space-between;
   margin: 10px;
 `
-
+const ExploreRecordHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-between;
+  margin: 5px;
+`
 const Title = styled.h3`
   font-size: 16px;
-  font-family: 'Binggrae',serif;
+  font-family: 'Binggrae', serif;
   font-weight: 700;
   margin: 10px;
   padding: 5px;
   color: #051d2f;
+`
+const BaseButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 6px 10px;
 `
 
 const MypageResultContainer = styled.div`
@@ -31,7 +45,7 @@ const MypageResultContainer = styled.div`
   border-radius: 20px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   min-width: 450px;
-  min-height: 260px;
+  min-height: 240px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -75,7 +89,7 @@ const Icon = styled.img`
 `
 
 const GrayBox = styled.div`
-  flex: ${({ flex }) => flex};
+  flex: ${({ $flex }) => $flex};
   background-color: #e3e3e3;
   padding: 5px;
   border-radius: 8px;
@@ -87,43 +101,31 @@ const GrayBox = styled.div`
   text-overflow: ellipsis;
 `
 
-const mockExploreRecords = [
-  {
-    id: 1001,
-    tier: 'Gold V',
-    title: '부분 수열의 합',
-    status: '성공',
-  },
-  {
-    id: 2020,
-    tier: 'Silver I',
-    title: 'LCS',
-    status: '패스',
-  },
-  {
-    id: 3010,
-    tier: 'Bronze II',
-    title: 'DFS와 BFS',
-    status: '성공',
-  },
-  {
-    id: 4040,
-    tier: 'Silver III',
-    title: '토마토',
-    status: '패스',
-  },
-  {
-    id: 5050,
-    tier: 'Gold IV',
-    title: '다익스트라',
-    status: '성공',
-  },
-]
+const ExploreRecords = () => {
+  const { openModal } = useModal()
+  const { myPageData, loading } = useMyPage()
+  if (loading || !myPageData?.exploreRecords) return <div>Loading...</div>
 
-const ExploreRecords = ({ problems = mockExploreRecords }) => {
+  const problems = myPageData.exploreRecords
+
+  const handleQueryExploreRecords = () => {
+    console.log('탐험 기록 조회 버튼 클릭 및 모달 열기')
+    openModal('record')
+  }
+
   return (
     <Box>
-      <Title>최근 탐험 기록</Title>
+      <ExploreRecordHeader>
+        <Title>최근 탐험 기록</Title>
+        <BaseButtonWrapper>
+          <BaseButton
+            onClick={handleQueryExploreRecords}
+            $size="sm"
+          >
+            탐험 기록 조회
+          </BaseButton>
+        </BaseButtonWrapper>
+      </ExploreRecordHeader>
       <MypageResultContainer>
         {problems.map((p) => (
           <ResultRow key={p.id}>
@@ -135,10 +137,11 @@ const ExploreRecords = ({ problems = mockExploreRecords }) => {
                 />
               </IconCircle>
             </IconWrapper>
-            <GrayBox flex="1.5">{p.tier}</GrayBox>
-            <GrayBox flex="1">{p.id}</GrayBox>
-            <GrayBox flex="2">{p.title}</GrayBox>
-            <GrayBox flex="1">{p.status}</GrayBox>
+            <GrayBox $flex="1">{p.tier}</GrayBox>
+            <GrayBox $flex="1">{p.id}</GrayBox>
+            <GrayBox $flex="2">{p.title}</GrayBox>
+            <GrayBox $flex="1">{p.status}</GrayBox>
+            <GrayBox $flex="1">{p.mainTagKo}</GrayBox>
           </ResultRow>
         ))}
       </MypageResultContainer>

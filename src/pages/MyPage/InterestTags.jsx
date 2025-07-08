@@ -3,13 +3,14 @@ import styled from 'styled-components'
 import BaseButton from '../../components/BaseButton.jsx'
 import { useModal } from '../../context/ModalContext.jsx'
 import React, { useEffect, useState } from 'react'
+import { useMyPage } from '@/context/MyPageContext.jsx'
 
 const Box = styled.div`
   background-color: white;
   border-radius: 16px;
   min-height: 330px;
   min-width: 380px;
-  padding: 16px;
+  padding: 10px 16px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
   margin: 10px;
 `
@@ -24,14 +25,15 @@ const Title = styled.div`
 `
 
 const BtnContainer = styled.div`
-  background-color: #f9fafb;
+  background: #e3e3e3;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  height: 240px;
-  width: ;
+  height: 230px;
   padding: 10px 9px; /* 위아래 10px, 좌우 9px */
   justify-content: space-around;
+  box-shadow: 0 3px 0 rgba(74, 74, 74, 0.4);
+  
 `
 
 const Row = styled.div`
@@ -51,8 +53,7 @@ const TagButton = styled.button`
   font-weight: 700;
   border: none;
   border-radius: 21px;
-  /* Drop shadow */
-  box-shadow: 0 4.5px 0 rgba(74, 74, 74, 0.4);
+  box-shadow: 0 3px 0 rgba(74, 74, 74, 0.4);
   cursor: pointer;
 `
 const InterestTagsHeader = styled.div`
@@ -62,7 +63,10 @@ const InterestTagsHeader = styled.div`
   justify-content: space-between;
   margin: 5px;
 `
-const BasButtonWraper = styled.div``
+const BaseButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 2px 10px 6px 10px;`
 
 const TAGS = {
   1: '수학',
@@ -75,26 +79,34 @@ const TAGS = {
   8: '기하학',
 }
 
-const InterestTags = ({ tags = [] }) => {
+const InterestTags = () => {
   const { openModal } = useModal()
+  const { myPageData } = useMyPage()
   const [selectedTags, setSelectedTags] = useState(new Set())
-  const mockTagIds = [1, 2, 5, 8]
 
   useEffect(() => {
-    setSelectedTags(new Set(mockTagIds))
-  }, [])
+    if (myPageData && myPageData.interestTags) {
+      setSelectedTags(new Set(myPageData.interestTags))
+    }
+  }, [myPageData])
+
+  const handleClickTagEdit = () => {
+    console.log('관심 태그 수정 버튼 클릭')
+    openModal('tag-edit')
+  }
 
   return (
     <Box>
       <InterestTagsHeader>
         <Title>관심 태그</Title>
-        <BasButtonWraper>
+        <BaseButtonWrapper>
           <BaseButton
-            onClick={() => openModal('alert', { title: '관심 태그 수정', message: '돌아가!' })}
+            onClick={handleClickTagEdit}
+            $size="sm"
           >
             태그 수정
           </BaseButton>
-        </BasButtonWraper>
+        </BaseButtonWrapper>
       </InterestTagsHeader>
       <BtnContainer>
         <Row>

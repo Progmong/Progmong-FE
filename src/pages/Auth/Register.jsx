@@ -1,9 +1,6 @@
 import styled, { createGlobalStyle } from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-
-import bgImage from '../../assets/background-img1.png'
 import bgVideo from '../../assets/bg-video.mp4'
 
 import BaseButton from '../../components/BaseButton'
@@ -197,7 +194,7 @@ const Register = () => {
                   onChange={(e) => setBojId(e.target.value)}
                 />
                 <BaseButton
-                  variant="secondary"
+                  $variant="secondary"
                   onClick={handleGenerateBojCode}
                   style={{ marginTop: '15px' }}
                 >
@@ -225,7 +222,7 @@ const Register = () => {
                 </code>
 
                 <BaseButton
-                  variant="secondary"
+                  $variant="secondary"
                   onClick={handleVerifyBojCode}
                   style={{ marginTop: '15px' }}
                 >
@@ -246,7 +243,7 @@ const Register = () => {
                   }}
                 />
                 <BaseButton
-                  variant="secondary"
+                  $variant="secondary"
                   onClick={handleSendEmail}
                   style={{ marginTop: '15px' }}
                   disabled={isEmailSending}
@@ -265,7 +262,7 @@ const Register = () => {
                   onChange={(e) => setCode(e.target.value)}
                 />
                 <BaseButton
-                  variant="secondary"
+                  $variant="secondary"
                   onClick={handleVerifyCode}
                   style={{ marginTop: '15px' }}
                 >
@@ -309,7 +306,7 @@ const Register = () => {
                   onChange={(e) => setConfirmPwd(e.target.value)}
                 />
                 <BaseButton
-                  variant="secondary"
+                  $variant="secondary"
                   onClick={handleRegister}
                   style={{ marginTop: '15px' }}
                 >

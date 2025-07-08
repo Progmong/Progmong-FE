@@ -186,7 +186,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <BaseButton variant="secondary" onClick={handleLogin} style={{ marginTop: '15px' }}>
+            <BaseButton $variant="secondary" onClick={handleLogin} style={{ marginTop: '15px' }}>
               LOGIN
             </BaseButton>
             <div

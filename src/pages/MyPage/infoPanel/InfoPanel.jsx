@@ -25,12 +25,13 @@ const Title = styled.div`
   font-weight: bold;
   margin-top: 5px;
   margin-left: 10px;
+  margin-bottom: 5px;
 `
 
 const ToggleGroup = styled.div`
   display: flex;
   gap: 10px;
-
+  padding: 0 15px;
   & > * {
     flex: 1;
   }
@@ -57,15 +58,15 @@ const InfoPanel = () => {
       <Title>내 정보</Title>
       <ToggleGroup>
         <BaseButton
-          variant={mode === 'pet' ? 'secondary' : 'pass'}
-          size="sm"
+          $variant={mode === 'pet' ? 'secondary' : 'pass'}
+          $size="sm"
           onClick={() => setMode('pet')}
         >
           프로그몽
         </BaseButton>
         <BaseButton
-          variant={mode === 'user' ? 'secondary' : 'pass'}
-          size="sm"
+          $variant={mode === 'user' ? 'secondary' : 'pass'}
+          $size="sm"
           onClick={() => setMode('user')}
         >
           유저정보

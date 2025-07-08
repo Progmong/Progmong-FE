@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-
 import BaseModal from '../components/BaseModal'
 import BaseInput from '../components/BaseInput'
 import BaseButton from '../components/BaseButton'
@@ -27,37 +26,74 @@ const StyledInput = styled(BaseInput)`
 
 const ButtonWrapper = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
 `
 
-const StyledButton = styled(BaseButton)`
-  padding: 0.6rem 1.5rem;
-  font-size: 1rem;
+const MessageContainer = styled.div`
+  text-align: center;
 `
 
-const TextEditModal = (props) => {
+const TextEditModal = ({
+  title,
+  message,
+  onConfirm,
+  placeholder = '',
+  buttonText = '적용',
+  inputType = 'text',
+  containCancel = true,
+}) => {
   const { closeModal } = useModal()
+  const [value, setValue] = useState('')
 
   const handleClick = () => {
-    if (props.onSubmit) {
-      props.onSubmit()
+    if (onConfirm) {
+      onConfirm(value)
     }
     closeModal()
   }
 
   return (
-    <BaseModal title={props.title} onClose={closeModal}>
+    <BaseModal title={title} onClose={closeModal}>
       <ContentWrapper>
+        {message && <MessageContainer>{message}</MessageContainer>}
         <InputWrapper>
           <StyledInput
-            placeholder={props.placeholder}
-            onChange={props.onChange}
-            value={props.value}
+            placeholder={placeholder}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
             autoFocus
+            type={inputType}
           />
         </InputWrapper>
         <ButtonWrapper>
-          <StyledButton onClick={handleClick}>{props.buttonText || '저장'}</StyledButton>
+          <BaseButton onClick={handleClick} $variant="secondary">{buttonText}</BaseButton>
+          {containCancel && (
+            <BaseButton onClick={closeModal}  style={{ marginLeft: '1rem' }}>
+              취소
+            </BaseButton>
+          )}
+
+          {/*<BaseButton*/}
+          {/*  style={{*/}
+          {/*    padding: '0.6rem 1.5rem',*/}
+          {/*    fontSize: '1rem',*/}
+          {/*  }}*/}
+          {/*  $variant="secondary"*/}
+          {/*  onClick={handleClick}*/}
+          {/*>*/}
+          {/*  {buttonText}*/}
+          {/*</BaseButton>*/}
+          {/*{containCancel && (*/}
+          {/*  <BaseButton*/}
+          {/*    onClick={closeModal}*/}
+          {/*    style={{*/}
+          {/*      padding: '0.6rem 1.5rem',*/}
+          {/*      fontSize: '1rem',*/}
+          {/*    }}*/}
+          {/*  >*/}
+          {/*    취소*/}
+          {/*  </BaseButton>*/}
+          {/*)}*/}
         </ButtonWrapper>
       </ContentWrapper>
     </BaseModal>

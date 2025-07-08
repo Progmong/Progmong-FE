@@ -104,7 +104,6 @@ const ExploreTagSelect = () => {
   const navigate = useNavigate()
   const [selectedTags, setSelectedTags] = useState(new Set())
   const { minLevel, maxLevel } = location.state || {}
-  
 
   const { getUserTags, updateUserTags } = useInterestTagApi()
   const { startExplore } = useExploreApi()
@@ -199,7 +198,7 @@ const ExploreTagSelect = () => {
           </Row>
         </BtnContainer>
 
-        <CustomButton variant="secondary" size="sm" onClick={handleSubmit}>
+        <CustomButton $variant="secondary" $size="sm" onClick={handleSubmit}>
           전투 개시
         </CustomButton>
       </CustomContainer>

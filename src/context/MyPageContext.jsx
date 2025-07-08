@@ -58,7 +58,7 @@ export const useMyPage = () => useContext(MyPageContext)
 const formatMyPageData = (data) => ({
   pet: {
     type: data.userPet.petId,
-    stage: (Math.floor(data.userPet.level/5) + 1), // 1: 알, 2: 성장기, 3: 성인기
+    stage: Math.floor(data.userPet.level / 5) + 1, // 1: 알, 2: 성장기, 3: 성인기
     name: data.userPet.nickname,
     level: data.userPet.level,
     exp: data.userPet.currentExp,
@@ -106,7 +106,7 @@ export const MyPageProvider = ({ children }) => {
     }
   }
 
-  useEffect( () => {
+  useEffect(() => {
     const init = async () => {
       const data = await fetchMyPageData()
       console.log('마이페이지 데이터 초기화')
@@ -115,13 +115,18 @@ export const MyPageProvider = ({ children }) => {
     init()
   }, [])
 
+  const refreshMyPageData = async () => {
+    const data = await fetchMyPageData()
+    setMyPageData(data)
+  }
+
   return (
     <MyPageContext.Provider
       value={{
         myPageData: myPageData,
         setMyPageData: setMyPageData,
         loading,
-        refreshMyPageData: fetchMyPageData,
+        refreshMyPageData,
       }}
     >
       {children}

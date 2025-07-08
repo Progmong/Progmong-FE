@@ -8,6 +8,8 @@ import { MyPageProvider } from '@/context/MyPageContext.jsx'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import navBackground from '@/assets/modalBackground.png'
+import { useModal } from '@/context/ModalContext.jsx'
+import AxiosInstance from '@/constants/axiosInstance.js'
 
 const BackgroundContainer = styled.div`
   background-color: #fff5db;
@@ -123,6 +125,7 @@ const LogOut = styled.div`
 `
 
 const MyPageLayout = () => {
+  const { openModal } = useModal()
   const navigate = useNavigate()
   const handleGoToMain = () => {
     console.log('마이페이지에서 메인으로 이동')
@@ -131,6 +134,26 @@ const MyPageLayout = () => {
   const handleLogOut = () => {
     // 로그아웃 로직 구현
     console.log('로그아웃')
+    openModal('alert', {
+      title: '로그아웃',
+      message: '로그아웃 하시겠습니까?',
+      onConfirm: async () => {
+        // 로그아웃 처리 로직
+        console.log('로그아웃 처리')
+        try {
+          const res = await AxiosInstance.post('users/logout')
+          console.log('로그아웃 요청 성공:', res)
+        } catch (error) {
+          console.error('로그아웃 요청 실패:', error)
+        } finally {
+          // 로컬 스토리지에서 토큰 제거
+          localStorage.removeItem('accessToken')
+          localStorage.removeItem('refreshToken')
+          // 페이지 이동
+          window.location.href = '/'
+        }
+      },
+    })
   }
   return (
     // 마이페이지 컨텍스트 제공자 => 사용시 useMyPage 훅을 통해 데이터 접근 가능(컨슈머 대신  커스텀 훅 방식 사용)

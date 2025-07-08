@@ -19,6 +19,8 @@ import pet3_stage3 from '@/assets/pets/pet3_stage3.png'
 import pet4_stage1 from '@/assets/pets/pet4_stage1.png'
 import pet4_stage2 from '@/assets/pets/pet4_stage2.png'
 import pet4_stage3 from '@/assets/pets/pet4_stage3.png'
+import AxiosInstance from '@/constants/axiosInstance.js'
+import { toast } from 'react-toastify'
 
 const Stage = styled.div`
   display: flex;
@@ -60,15 +62,14 @@ const PetName = styled.div`
   font-family: Binggrae, serif;
   font-size: 24px;
   font-weight: bold;
-  color: #051d2f;
+  color: rgba(5, 29, 47, 0.9);
   text-align: center;
   z-index: 1;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.3);
   padding: 5px 10px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 80%;
-  max-width: 300px;
+  width: 300px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -118,21 +119,48 @@ const petImagesMap = {
 const CharacterStage = () => {
   const isMobile = useMediaQuery({ query: '(max-width:767px)' })
   const { openModal } = useModal()
-  const { myPageData, loading } = useMyPage()
+  const { myPageData, loading, refreshMyPageData } = useMyPage()
 
   if (loading || !myPageData) return <div>로딩 중...</div>
 
   const { pet, message } = myPageData
   const petImage = petImagesMap[pet.type]?.[pet.stage]
 
+  const handelEditMessage = () => {
+    openModal('text-edit', {
+      title: '오늘의 메시지 변경',
+      message: '새 메시지를 입력하세요!',
+      initialValue: message,
+      onConfirm: async (newMessage) => {
+        if (!newMessage) {
+          console.error('메시지는 비워둘 수 없습니다.')
+          toast.error('메시지는 비워둘 수 없습니다.')
+          return
+        }
+        try {
+          const res = await AxiosInstance.patch('/pet/message', newMessage, {
+            headers: {
+              'Content-Type': 'text/plain',
+            },
+          })
+          console.log('메시지 변경 완료:', res.data)
+          toast.success('메세지가 변경되었습니다.')
+          refreshMyPageData()
+        } catch (error) {
+          console.error('메시지 변경 실패:', error)
+          toast.error('메시지 변경에 실패했습니다. 다시 시도해주세요.')
+          // 에러 핸들링 로직 추가
+        }
+      },
+    })
+  }
+
   return (
     <Stage>
       <Title>나의 프로그몽</Title>
 
       <StageContainer $isMobile={isMobile}>
-        <PetName>
-          {pet.name}
-        </PetName>
+        <PetName>{pet.name}</PetName>
         <CharacterImage
           src={petImage}
           alt={`pet${pet.type}_stage${pet.stage}`}
@@ -144,7 +172,7 @@ const CharacterStage = () => {
         <MessageText $isMobile={isMobile}>{message}</MessageText>
         <BaseButton
           style={{ width: '80px', padding: '5px 3px', fontSize: '14px' }}
-          onClick={() => openModal('text-edit', { title: '오늘의 한마디 수정' })}
+          onClick={handelEditMessage}
         >
           수정하기
         </BaseButton>
