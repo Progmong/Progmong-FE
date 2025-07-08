@@ -24,7 +24,7 @@ import fightBubble from '../../assets/fightbubble.png'
 import sleepBubble from '../../assets/sleepbubble.png'
 import LeftArrowImg from '../../assets/left-arrow2.png'
 import RightArrowImg from '../../assets/right-arrow2.png'
-import LogoutLogo from '../../assets/stone_logout2.png'
+import LogoutLogo from '../../assets/stone_logout3.png'
 
 //걷기 테스트
 import walking from '../../assets/walking22.gif'
@@ -240,6 +240,7 @@ const allItems = [
   { name: '던전', src: dungeonImg, top: 30, left: 670, size: 350, route: '/levelselect' },
   { name: '마이페이지', src: mypageImg, top: 280, left: 970, size: 310, route: '/mypage' },
   { name: '게시판', src: boardImg, top: 650, left: 210, size: 310, route: '/main' },
+  { name: '로그아웃', src: LogoutLogo, top: 20, left: 1200, size: 200 },
 ]
 
 //걷기 테스트
@@ -270,13 +271,8 @@ const MobilePetBubble = styled.div`
 `
 const LogoutBtn = styled.button`
   position: fixed;
-  top: 100px;
-  right: 100px;
-  width: 200px;
-  height: 200px;
   border: none;
   background: transparent;
-
   background-image: url(${LogoutLogo});
   background-size: contain;
   background-repeat: no-repeat;
@@ -284,21 +280,11 @@ const LogoutBtn = styled.button`
   border-radius: 20px;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
-
+  z-index: 999;
   &:hover {
     transform: scale(1.1);
   }
 `
-
-const logout = async () => {
-  try {
-    await axios.post('/users/logout', {}, { withCredentials: true })
-    localStorage.removeItem('accessToken')
-    window.location.href = '/login'
-  } catch (err) {
-    console.error('로그아웃 실패:', err)
-  }
-}
 
 const Home = () => {
   const [petData, setPetData] = useState(null)
@@ -365,6 +351,16 @@ const Home = () => {
   const backgroundImage = isMobile ? mobileBg : desktopBg
   const config = statusMap[petData.status]
 
+  const logout = async () => {
+    try {
+      await axios.post('/users/logout', {}, { withCredentials: true })
+      localStorage.removeItem('accessToken')
+      window.location.href = '/'
+    } catch (err) {
+      console.error('로그아웃 실패:', err)
+    }
+  }
+
   return (
     <BackgroundContainer>
       <BackgroundImage src={backgroundImage} alt="background" />
@@ -400,7 +396,10 @@ const Home = () => {
                   <MobileMenuIcon
                     src={item.src}
                     alt={item.name}
-                    onClick={() => navigate(item.route)}
+                    onClick={() => {
+                      if (item.name === '로그아웃') logout()
+                      else navigate(item.route)
+                    }}
                   />
                 </MobileMenuWrapper>
               </SwiperSlide>
@@ -416,7 +415,6 @@ const Home = () => {
         <ScalingStage scale={scale}>
           <StageContent>
             <BackgroundImageInStage src={backgroundImage} alt="bg" />
-            <LogoutBtn onClick={() => logout()} />
             {allItems.map((item) => (
               <DesktopMenuIcon
                 key={item.name}
@@ -426,6 +424,7 @@ const Home = () => {
                 style={{ top: `${item.top}px`, left: `${item.left}px` }}
                 onClick={() => {
                   if (item.name === '던전') handleCaveClick()
+                  if (item.name === '로그아웃') logout()
                   else navigate(item.route)
                 }}
               />
