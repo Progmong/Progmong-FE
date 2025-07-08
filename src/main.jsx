@@ -109,7 +109,7 @@ root.render(
           />
           {/* 커뮤니티 전체 보호 */}
           <Route
-            path="/community"
+            path="/community/:category"
             element={
               <ProtectedRoute>
                 <CommunityLayout />
@@ -118,10 +118,11 @@ root.render(
           >
             {/* /community 에서는 PostList */}
             <Route index element={<PostList />} />
+            <Route path="posts/:postId" element={<PostDetail />} />
+            <Route path="posts/new" element={<PostWrite />} />
             {/* /community/postdetail 에서는 PostDetail */}
-            <Route path="postdetail" element={<PostDetail />} />
-            <Route path="postwrite" element={<PostWrite />} />
           </Route>
+
           <Route
             path="/explore/result"
             element={

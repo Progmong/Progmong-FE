@@ -4,9 +4,9 @@ import { useAuth } from '../constants/AuthContext'
 
 const ProtectedRoute = ({ children }) => {
   const { state } = useAuth()
+  const accessToken = localStorage.getItem('accessToken')
 
-  if (state.loading) {
-    // 로딩 중일 때 스피너 또는 빈 화면 처리
+  if (state.loading || (accessToken && !state.user)) {
     return <div>Loading...</div>
   }
 

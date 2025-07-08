@@ -1,4 +1,6 @@
+/* 예시: Lato + 한글용 Noto Sans KR 함께 로드 */
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
 
 @media print {
   body {
@@ -7,10 +9,9 @@
 }
 
 .main-container {
-  font-family: 'Lato';
+  font-family: 'Noto Sans KR', 'Lato', sans-serif;
   margin-left: auto;
   margin-right: auto;
-  height: 100%;
 }
 
 .ck-content {
@@ -22,9 +23,43 @@
 }
 
 .editor-container_classic-editor .editor-container__editor {
+  /* min-width: 70vw;
+  max-width: 70vw; */
 }
 
 /* POWERED BY 내용 삭제 */
 .ck-powered-by {
   display: none !important;
+}
+
+/* CKEditor 콘텐츠 영역에서만 스타일 복원 */
+b,
+strong {
+  font-weight: bold; /* 볼드 복원 */
+}
+
+em,
+i {
+  font-style: italic; /* 이탤릭 복원 */
+}
+
+u {
+  text-decoration: underline; /* 밑줄 복원 */
+}
+
+sub {
+  vertical-align: sub; /* 아래 첨자 복원 */
+  font-size: smaller;
+}
+
+sup {
+  vertical-align: super; /* 위 첨자 복원 */
+  font-size: smaller;
+}
+
+code {
+  font-family: monospace; /* 코드 복원 */
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 2px 4px;
+  border-radius: 4px;
 }

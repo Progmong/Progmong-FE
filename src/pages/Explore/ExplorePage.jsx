@@ -67,6 +67,20 @@ const getPetImageByIdAndStage = (petId, stage) => {
   }
 }
 
+const stageToText = (evolutionStage) => {
+  switch (evolutionStage) {
+    case 1:
+      return '알'
+    case 2:
+      return '성장기'
+    case 3:
+      return '성인기'
+
+    default:
+      return '알수없음'
+  }
+}
+
 const ProblemBoxContent = styled.div`
   animation: ${fadeTransition} 0.4s ease-in-out;
 `
@@ -626,7 +640,7 @@ const ExplorePage = () => {
             </InfoRow>
             <InfoRow>
               <span>진화 단계</span>
-              <span>{petInfo?.evolutionStage} 단계</span>
+              <span>{stageToText(petInfo?.evolutionStage)}</span>
             </InfoRow>
             <ExpBarWrapper>
               <ExpBarFill percent={(petInfo?.currentExp / petInfo?.maxExp) * 100} />

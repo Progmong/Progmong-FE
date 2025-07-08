@@ -74,7 +74,7 @@ import axios from 'axios'
  */
 const LICENSE_KEY = 'GPL' // or <YOUR_LICENSE_KEY>.
 
-export default function BaseEditor() {
+export default function BaseEditor({ onContentChange }) {
   const editorContainerRef = useRef(null)
   const editorRef = useRef(null)
   const [isLayoutReady, setIsLayoutReady] = useState(false)
@@ -110,7 +110,9 @@ export default function BaseEditor() {
             headers: { 'Content-Type': 'multipart/form-data' },
           })
           .then((response) => {
-            return { default: response.data.url } // 서버 응답 구조에 맞게 변경
+            console.log(response.data.data.url)
+            const baseUrl = 'http://choohouse.iptime.org:8200'
+            return { default: baseUrl + response.data.data.url } // 서버 응답 구조에 맞게 변경
           })
       })
     }
@@ -332,7 +334,17 @@ export default function BaseEditor() {
       <div className="editor-container editor-container_classic-editor" ref={editorContainerRef}>
         <div className="editor-container__editor">
           <div ref={editorRef}>
-            {editorConfig && <CKEditor editor={ClassicEditor} config={editorConfig} />}
+            {editorConfig && (
+              <CKEditor
+                editor={ClassicEditor}
+                config={editorConfig}
+                onChange={(event, editor) => {
+                  const data = editor.getData()
+
+                  if (onContentChange) onContentChange(data)
+                }}
+              />
+            )}
           </div>
         </div>
       </div>
