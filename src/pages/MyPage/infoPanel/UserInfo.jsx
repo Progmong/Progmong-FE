@@ -64,6 +64,34 @@ const UserInfo = () => {
   const handleChangePassword = () => {
     // 추후 비밀번호 변경 모달 열기
     console.log('비밀번호 변경')
+
+    openModal('text-edit', {
+      title: '비밀번호 변경',
+      message: '새 비밀번호를 입력하세요.',
+      inputType: 'password',
+      onConfirm: async (newPassword) => {
+        // 서버에 비밀번호 변경 요청
+        console.log(`모달 컴펌 액션 새 비밀번호: ${newPassword}`)
+        if (!newPassword) {
+          console.error('비밀번호는 비워둘 수 없습니다.')
+          // 모달에 에러 이벤트 추가하기
+          return
+        }
+
+        try {
+          const res = await AxiosInstance.patch('/users/password', newPassword, {
+            headers: {
+              'Content-Type': 'text/plain',
+            },
+          })
+          console.log('비밀번호 변경 완료:', res.data)
+          refreshMyPageData()
+        } catch (error) {
+          console.error('비밀번호 변경 실패:', error)
+          // 에러 핸들링 로직 추가
+        }
+      },
+    })
   }
 
   const handleWithdraw = () => {

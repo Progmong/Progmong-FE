@@ -34,7 +34,14 @@ const StyledButton = styled(BaseButton)`
   font-size: 1rem;
 `
 
-const TextEditModal = ({ title, message, onConfirm, placeholder = '', buttonText = '적용' }) => {
+const TextEditModal = ({
+  title,
+  message,
+  onConfirm,
+  placeholder = '',
+  buttonText = '적용',
+  inputType = 'text',
+}) => {
   const { closeModal } = useModal()
   const [value, setValue] = useState('')
 
@@ -55,6 +62,7 @@ const TextEditModal = ({ title, message, onConfirm, placeholder = '', buttonText
             value={value}
             onChange={(e) => setValue(e.target.value)}
             autoFocus
+            type={inputType}
           />
         </InputWrapper>
         <ButtonWrapper>
