@@ -109,6 +109,7 @@ const ExploreRecords = () => {
   const problems = myPageData.exploreRecords
 
   const handleQueryExploreRecords = () => {
+    console.log('탐험 기록 조회 버튼 클릭 및 모달 열기')
     openModal('record')
   }
 

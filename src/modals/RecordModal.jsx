@@ -1,9 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-
+import checkIcon from '@/assets/check-icon.png'
+import passIcon from '@/assets/pass-icon.png'
 import BaseModal from '../components/BaseModal'
 import BaseButton from '../components/BaseButton'
 import { useModal } from '../context/ModalContext'
+import AxiosInstance from '@/constants/axiosInstance.js'
 
 const MypageResultContainer = styled.div`
   background: rgba(255, 255, 255, 0.75);
@@ -31,7 +33,6 @@ const ModalTitle = styled.div`
   margin: 0 60px 0 150px;
   display: flex;
   justify-content: center;
-
 
   font-size: 1.7rem;
   text-align: center;
@@ -104,50 +105,89 @@ const ExploreCount = styled.div`
 const RecordModal = ({ title = '탐험 기록' }) => {
   const { closeModal } = useModal()
 
+  const [page, setPage] = useState(0)
+  const [records, setRecords] = useState([])
+  const [totalPages, setTotalPages] = useState(1)
+  const [hasNext, setHasNext] = useState(false)
+  const [hasPrev, setHasPrev] = useState(false)
+
+  const fetchRecords = async () => {
+    try {
+      console.log('탐험 기록 조회 시작')
+      const res = await AxiosInstance.get(`/explore/records?page=${page}&size=5`)
+      console.log('탐험 기록 조회 성공:', res.data)
+      console.log(res)
+      const pageInfo = res.data?.data?.pageInfo
+      const content = pageInfo?.content ?? []
+      const size = pageInfo?.size ?? 5
+      const totalElements = pageInfo?.totalElements ?? content.length
+      const currentPage = pageInfo?.page ?? 0
+
+      const calculatedTotalPages = Math.ceil(totalElements / size)
+      const isLastPage = currentPage + 1 >= calculatedTotalPages
+
+      setRecords(content)
+      setTotalPages(calculatedTotalPages)
+      setHasNext(!isLastPage) // ← 서버값 대신 직접 계산
+      setHasPrev(currentPage > 0)
+    } catch (e) {
+      console.error('탐험 기록 조회 실패:', e)
+      setRecords([])
+    }
+  }
+
+  useEffect(() => {
+    console.log('탐험 기록 모달 상태 변화 :', page)
+    fetchRecords()
+  }, [page])
+
   const handleClickBefore = () => {
-    console.log('handleClickBefore')
+    if (hasPrev) setPage((prev) => prev - 1)
+    console.log('이전 페이지 클릭:', page - 1)
   }
+
   const handleClickAfter = () => {
-    console.log('handleClickAfter')
+    if (hasNext) setPage((prev) => prev + 1)
+    console.log('다음 페이지 클릭:', page + 1)
   }
-
-  // const problems = myPageData.exploreRecords || []
-
-  const exploreText = '1 / 10'
+  const exploreText = `${page + 1} / ${totalPages}`
   return (
     <BaseModal onClose={closeModal}>
       <ExploreModalHeader>
         <ModalTitle>{title}</ModalTitle>
         <BaseButton onClick={closeModal} $size="sm" style={{ width: '80px', height: '40px' }}>
-          {' '}
-          닫기{' '}
+          닫기
         </BaseButton>
       </ExploreModalHeader>
       <MypageResultContainer>
-        {/*problems&&{problems.map((p) => (*/}
-        {/*  <ResultRow key={p.id}>*/}
-        {/*    <IconWrapper>*/}
-        {/*      <IconCircle>*/}
-        {/*        <Icon*/}
-        {/*          src={p.status === '성공' ? checkIcon : passIcon}*/}
-        {/*          alt={p.status === '성공' ? 'solved' : 'pass'}*/}
-        {/*        />*/}
-        {/*      </IconCircle>*/}
-        {/*    </IconWrapper>*/}
-        {/*    <GrayBox $flex="1">{p.tier}</GrayBox>*/}
-        {/*    <GrayBox $flex="1">{p.id}</GrayBox>*/}
-        {/*    <GrayBox $flex="2">{p.title}</GrayBox>*/}
-        {/*    <GrayBox $flex="1">{p.status}</GrayBox>*/}
-        {/*    <GrayBox $flex="1">{p.mainTagKo}</GrayBox>*/}
-        {/*  </ResultRow>*/}
-        {/*))}*/}
+        {records.length > 0 ? (
+          records.map((p) => (
+            <ResultRow key={p.id}>
+              <IconWrapper>
+                <IconCircle>
+                  <Icon
+                    src={p.status === '성공' ? checkIcon : passIcon}
+                    alt={p.status === '성공' ? 'solved' : 'pass'}
+                  />
+                </IconCircle>
+              </IconWrapper>
+              <GrayBox $flex="1">{p.tier}</GrayBox>
+              <GrayBox $flex="1">{p.id}</GrayBox>
+              <GrayBox $flex="2">{p.title}</GrayBox>
+              <GrayBox $flex="1">{p.status}</GrayBox>
+              <GrayBox $flex="1">{p.mainTagKo}</GrayBox>
+            </ResultRow>
+          ))
+        ) : (
+          <div style={{ marginTop: '1rem' }}>기록이 없습니다.</div>
+        )}
       </MypageResultContainer>
       <BottomWrapper>
-        <BaseButton onClick={handleClickBefore} $variant="secondary">
+        <BaseButton onClick={handleClickBefore} $variant="secondary" disabled={!hasPrev}>
           이전
         </BaseButton>
         <ExploreCount>{exploreText}</ExploreCount>
-        <BaseButton onClick={handleClickAfter} $variant="secondary">
+        <BaseButton onClick={handleClickAfter} $variant="secondary" disabled={!hasNext}>
           다음
         </BaseButton>
       </BottomWrapper>
