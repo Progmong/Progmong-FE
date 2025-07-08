@@ -34,6 +34,10 @@ const StyledButton = styled(BaseButton)`
   font-size: 1rem;
 `
 
+const MessageContainer = styled.div`
+  text-align: center;
+`
+
 const TextEditModal = ({
   title,
   message,
@@ -55,7 +59,7 @@ const TextEditModal = ({
   return (
     <BaseModal title={title} onClose={closeModal}>
       <ContentWrapper>
-        {message && <p>{message}</p>}
+        {message && <MessageContainer>{message}</MessageContainer>}
         <InputWrapper>
           <StyledInput
             placeholder={placeholder}

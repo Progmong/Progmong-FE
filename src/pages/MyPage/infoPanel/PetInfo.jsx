@@ -3,6 +3,8 @@ import BaseButton from '@/components/BaseButton.jsx'
 import { useMyPage } from '@/context/MyPageContext'
 import InfoRow from '@/pages/MyPage/infoPanel/InfoRow.jsx'
 import { memo } from 'react'
+import AxiosInstance from '@/constants/axiosInstance.js'
+import { useModal } from '@/context/ModalContext.jsx'
 
 const InfoWrapper = styled.div`
   width: 90%;
@@ -18,7 +20,9 @@ const ButtonGroup = styled.div`
 `
 
 const PetInfo = () => {
-  const { myPageData, loading } = useMyPage()
+  const { myPageData, loading, refreshMyPageData } = useMyPage()
+  const { openModal } = useModal()
+
   if (loading || !myPageData) return <div>로딩 중...</div>
 
   const pet = myPageData.pet || {
@@ -33,9 +37,42 @@ const PetInfo = () => {
     message: '펫정보-기본 메시지',
     proud: false,
   }
+
   const handlePetNameChange = () => {
     // 추후 애칭 변경 모달 열기
     console.log('애칭 수정')
+    // Alert 모달로 변경되었음을 알림
+    openModal('text-edit', {
+      title: '애칭 변경',
+      message: '새 애칭을 입력하세요.',
+      onConfirm: async (newNickname) => {
+        // 서버에 닉네임 변경 요청
+        console.log(`모달 컴펌 액션 새 닉네임: ${newNickname}`)
+        // 상태 관리를 이용해 전체 페이지 전부 다시 렌더링
+        if (!newNickname) {
+          console.error('닉네임은 비워둘 수 없습니다.')
+          // 모달에 에러 이벤트 추가하기
+          return
+        }
+        if (newNickname.length > 12) {
+          console.error('닉네임은 1자 이상 12자 이하로 입력해주세요.')
+          // 모달에 에러 이벤트 추가하기
+          return
+        }
+        try {
+          const res = await AxiosInstance.patch('/pet/nickname', newNickname, {
+            headers: {
+              'Content-Type': 'text/plain',
+            },
+          })
+          console.log('닉네임 변경 완료:', res.data)
+          refreshMyPageData()
+        } catch (error) {
+          console.error('닉네임 변경 실패:', error)
+          // 에러 핸들링 로직 추가
+        }
+      },
+    })
   }
 
   const handlePetProudChange = () => {
