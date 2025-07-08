@@ -12,7 +12,6 @@ import useAuthApi from '../../constants/auth'
 import { useModal } from '@/context/ModalContext'
 import { useAuth } from '../../constants/AuthContext'
 
-
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
     font-family: 'Binggrae';
@@ -122,11 +121,9 @@ const Login = () => {
     try {
       const response = await login(email, password)
       const accessToken = response.data.data.accessToken
-      const refreshToken = response.data.data.refreshToken
 
       if (accessToken) {
         localStorage.setItem('accessToken', accessToken)
-        localStorage.setItem('refreshToken', refreshToken)
 
         // 유저 정보 디코딩 후 전역 상태에 저장
         const userInfo = decodeJWT(accessToken)
