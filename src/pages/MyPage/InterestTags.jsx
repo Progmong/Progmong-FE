@@ -7,13 +7,16 @@ import React, { useEffect, useState } from 'react'
 const Box = styled.div`
   background-color: white;
   border-radius: 16px;
+  min-height: 330px;
+  min-width: 380px;
   padding: 16px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  margin: 10px;
 `
 
 const Title = styled.div`
   font-size: 16px;
-  font-family: 'Binggrae';
+  font-family: 'Binggrae',serif;
   font-weight: 700;
   margin: 10px;
   padding: 5px;
@@ -21,20 +24,26 @@ const Title = styled.div`
 `
 
 const BtnContainer = styled.div`
+  background-color: #f9fafb;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
-  gap: 20px; /* 행 간 간격 */
-  align-items: center;
+  height: 240px;
+  width: ;
   padding: 10px 9px; /* 위아래 10px, 좌우 9px */
+  justify-content: space-around;
 `
 
 const Row = styled.div`
   display: flex;
-  gap: 10px; /* 버튼 간 간격 */
+  flex-direction: row;
+  justify-content: space-around;
+  //gap: 10px; /* 버튼 간 간격 */'
+  margin: 5px;
 `
 
 const TagButton = styled.button`
-  width: 105px;
+  width: 100px;
   height: 50px;
   background-color: ${({ selected }) => (selected ? '#1C445C' : '#ffffff')};
   color: ${({ selected }) => (selected ? '#ffffff' : '#000000')};

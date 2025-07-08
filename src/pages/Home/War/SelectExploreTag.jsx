@@ -5,7 +5,7 @@ import BaseContainer from '../../../components/BaseContainer'
 import BaseButton from '../../../components/BaseButton'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import useExploreApi from '@/constants/explore'
+import useExploreApi from '../../../constants/explore'
 
 const fightBackground = new URL('../../../assets/fight.png', import.meta.url).href
 
@@ -108,7 +108,7 @@ const ExploreTagSelect = () => {
 
   const { getUserTags, updateUserTags } = useInterestTagApi()
   const { startExplore } = useExploreApi()
-
+  
   useEffect(() => {
     getUserTags()
       .then((res) => {

@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import BaseContainer from './BaseContainer.jsx'
+import modalBackground from '@/assets/modalBackground.png'
 
 const Overlay = styled.div`
   position: fixed;
@@ -19,13 +20,13 @@ const Overlay = styled.div`
 const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
-  background-image: url('/src/assets/modalBackground.png');
+  background-image: url(${modalBackground});
   padding: 2rem;
   border-radius: 12px;
   width: 600px;
   max-width: 70vw;
   max-height: 75vh; /* 고정 높이 제거 */
-  font-family: Binggrae;
+  font-family: Binggrae,serif;
   overflow-y: auto;
 `
 

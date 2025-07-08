@@ -1,12 +1,9 @@
 // UserInfo.jsx
 import styled from 'styled-components'
 import BaseButton from '@/components/BaseButton'
-
-const LabelRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 4px 0;
-`
+import { useMyPage } from '@/context/MyPageContext.jsx'
+import InfoRow from '@/pages/MyPage/infoPanel/InfoRow.jsx'
+import { memo } from 'react'
 
 const ButtonGroup = styled.div`
   display: flex;
@@ -14,8 +11,14 @@ const ButtonGroup = styled.div`
   gap: 8px;
   margin-top: 12px;
 `
+const InfoWrapper = styled.div`
+  width: 90%;
+  background-color: #f9fafb;
+  border-radius: 12px;
+  padding: 10px;
+`
 
-const UserInfo = ({ user }) => {
+const UserInfo = () => {
   const handleEditNickname = () => {
     // 추후 닉네임 변경 모달 열기
     console.log('닉네임 변경')
@@ -31,20 +34,23 @@ const UserInfo = ({ user }) => {
     console.log('회원 탈퇴')
   }
 
+  const { myPageData, loading } = useMyPage()
+  if (loading || !myPageData) return <div>로딩 중...</div>
+
+  const user = myPageData.user || {
+    // 에러 핸들링을 위한 기본값
+    nickname: '유저정보-기본닉네임',
+    email: '유저정보-기본이메일',
+    bjId: '유저정보-기본백준ID',
+  }
+
   return (
     <>
-      <LabelRow>
-        <div>닉네임</div>
-        <div>{user.nickname}</div>
-      </LabelRow>
-      <LabelRow>
-        <div>이메일</div>
-        <div>{user.email}</div>
-      </LabelRow>
-      <LabelRow>
-        <div>백준 ID</div>
-        <div>{user.bjId}</div>
-      </LabelRow>
+      <InfoWrapper>
+        <InfoRow label="닉네임" value={user.nickname} />
+        <InfoRow label="이메일" value={user.email} />
+        <InfoRow label="백준 ID" value={user.bjId} />
+      </InfoWrapper>
       <ButtonGroup>
         <BaseButton onClick={handleEditNickname}>닉네임 수정</BaseButton>
         <BaseButton onClick={handleChangePassword}>비밀번호 변경</BaseButton>
@@ -56,4 +62,4 @@ const UserInfo = ({ user }) => {
   )
 }
 
-export default UserInfo
+export default memo(UserInfo)
