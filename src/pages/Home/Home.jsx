@@ -234,7 +234,14 @@ const progmongPosition = {
 }
 
 const allItems = [
-  { name: '커뮤니티', src: communityImg, top: 250, left: 330, size: 270, route: '/community' },
+  {
+    name: '커뮤니티',
+    src: communityImg,
+    top: 250,
+    left: 330,
+    size: 270,
+    route: '/community/알고리즘',
+  },
   { name: '던전', src: dungeonImg, top: 30, left: 670, size: 350, route: '/levelselect' },
   { name: '마이페이지', src: mypageImg, top: 280, left: 970, size: 310, route: '/mypage' },
   { name: '게시판', src: boardImg, top: 650, left: 210, size: 310, route: '/main' },

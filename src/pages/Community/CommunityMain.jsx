@@ -162,7 +162,13 @@ const CommunityMain = () => {
     <MainBox>
       <BackBox>
         <IconMdiKeyboardBackspace />
-        <div>메인으로</div>
+        <div
+          onClick={() => {
+            navigate('/home')
+          }}
+        >
+          메인으로
+        </div>
       </BackBox>
       <CateContainer>
         <CateBox
