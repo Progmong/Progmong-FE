@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import BaseButton from '../../components/BaseButton.jsx'
 import { useModal } from '../../context/ModalContext.jsx'
 import React, { useEffect, useState } from 'react'
+import { useMyPage } from '@/context/MyPageContext.jsx'
 
 const Box = styled.div`
   background-color: white;
@@ -80,12 +81,14 @@ const TAGS = {
 
 const InterestTags = () => {
   const { openModal } = useModal()
+  const { myPageData } = useMyPage()
   const [selectedTags, setSelectedTags] = useState(new Set())
-  const mockTagIds = [1, 2, 5, 8]
 
   useEffect(() => {
-    setSelectedTags(new Set(mockTagIds))
-  }, [])
+    if (myPageData && myPageData.interestTags) {
+      setSelectedTags(new Set(myPageData.interestTags))
+    }
+  }, [myPageData])
 
   return (
     <Box>
