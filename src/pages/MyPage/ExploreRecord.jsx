@@ -5,6 +5,7 @@ import BaseButton from '@/components/BaseButton.jsx'
 import React from 'react'
 import { useModal } from '@/context/ModalContext.jsx'
 import Explore from '@/constants/explore.js'
+import { useMyPage } from '@/context/MyPageContext.jsx'
 
 const Box = styled.div`
   background-color: white;
@@ -134,8 +135,12 @@ const mockExploreRecords = [
   },
 ]
 
-const ExploreRecords = ({ problems = mockExploreRecords }) => {
+const ExploreRecords = () => {
   const { openModal } = useModal()
+  const { myPageData, loading } = useMyPage()
+  if (loading || !myPageData?.exploreRecords) return <div>Loading...</div>
+
+  const problems = myPageData.exploreRecords
 
   return (
     <Box>
