@@ -17,24 +17,18 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Binggrae';
   }
 `
+const introBackground = new URL('../../assets/background-img1.png', import.meta.url).href
 
-const Bg = styled.div`
+const Background = styled.div`
   position: relative;
+  width: 100vw;
   height: 100vh;
-  width: 100%;
-  overflow: hidden;
+  background: url(${introBackground}) no-repeat center center;
+  background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
-`
-const BackgroundVideo = styled.video`
-  position: absolute;
-  top: 0;
-  left: 0;
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
+  overflow: hidden;
 `
 const Logo = styled.div`
   position: absolute;
@@ -157,11 +151,7 @@ const Login = () => {
   return (
     <>
       <GlobalStyle />
-      <Bg>
-        <BackgroundVideo autoPlay muted loop>
-          <source src={bgVideo} type="video/mp4" />
-        </BackgroundVideo>
-
+      <Background>
         <BaseContainer
           style={{
             backgroundColor: '#ffffffb9',
@@ -210,7 +200,7 @@ const Login = () => {
             </div>
           </LoginContainer>
         </BaseContainer>
-      </Bg>
+      </Background>
     </>
   )
 }
