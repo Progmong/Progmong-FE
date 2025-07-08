@@ -1,11 +1,15 @@
 import styled from 'styled-components'
 import checkIcon from '@/assets/check-icon.png'
 import passIcon from '@/assets/pass-icon.png'
+import BaseButton from '@/components/BaseButton.jsx'
+import React from 'react'
+import { useModal } from '@/context/ModalContext.jsx'
+import Explore from '@/constants/explore.js'
 
 const Box = styled.div`
   background-color: white;
   border-radius: 16px;
-  padding: 16px;
+  padding: 10px 16px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
   width: 510px;
   height: 330px;
@@ -14,7 +18,13 @@ const Box = styled.div`
   align-content: space-between;
   margin: 10px;
 `
-
+const ExploreRecordHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-between;
+  margin: 5px;
+`
 const Title = styled.h3`
   font-size: 16px;
   font-family: 'Binggrae', serif;
@@ -23,6 +33,11 @@ const Title = styled.h3`
   padding: 5px;
   color: #051d2f;
 `
+const BaseButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 6px 10px;
+`
 
 const MypageResultContainer = styled.div`
   background: rgba(255, 255, 255, 0.75);
@@ -30,7 +45,7 @@ const MypageResultContainer = styled.div`
   border-radius: 20px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   min-width: 450px;
-  min-height: 260px;
+  min-height: 240px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -120,9 +135,20 @@ const mockExploreRecords = [
 ]
 
 const ExploreRecords = ({ problems = mockExploreRecords }) => {
+  const { openModal } = useModal()
+
   return (
     <Box>
-      <Title>최근 탐험 기록</Title>
+      <ExploreRecordHeader>
+        <Title>최근 탐험 기록</Title>
+        <BaseButtonWrapper>
+          <BaseButton
+            onClick={() => openModal('alert', { title: '지난 탐험 기록 조회', message: '돌아가!' })}
+            $size="sm"
+          >
+            태그 수정
+          </BaseButton>
+        </BaseButtonWrapper></ExploreRecordHeader>
       <MypageResultContainer>
         {problems.map((p) => (
           <ResultRow key={p.id}>
