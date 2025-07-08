@@ -28,12 +28,17 @@ const WriteButtonContainer = styled.div`
 `
 const PostList = () => {
   const { posts } = useOutletContext()
+  const navigate = useNavigate()
+
+  const isCickWrite = () => {
+    navigate(`posts/new`)
+  }
   return (
     <div>
       <ListContainer>
         {posts.map((post) => (
-          <ElementContainer>
-            <FreePostEle key={post.postId} post={post} />
+          <ElementContainer key={post.postId}>
+            <FreePostEle post={post} />
           </ElementContainer>
         ))}
       </ListContainer>
@@ -41,7 +46,7 @@ const PostList = () => {
         <div></div>
         <div></div>
         <WriteButtonContainer>
-          <BaseButton>글쓰기</BaseButton>
+          <BaseButton onClick={isCickWrite}>글쓰기</BaseButton>
         </WriteButtonContainer>
       </BottomContainer>
     </div>

@@ -76,8 +76,8 @@ const HomeBox = styled.div`
   flex-grow: 1;
   /* width: calc(100% - 30px); */
   position: relative;
-  background-color: #ffd48b;
-  border: 2px solid #d3a76b;
+  background-color: var(--bg-community);
+  border: 2px solid var(--bg-community-accent);
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
   padding: 10px 10px 0px 10px;
@@ -89,7 +89,7 @@ const HomeBox = styled.div`
 
 const BoardContainer = styled.div`
   flex-grow: 1;
-  background-color: white;
+  background-color: var(--bg-community-post);
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   padding: 25px;
@@ -113,23 +113,50 @@ const WriteButtonContainer = styled.div`
 `
 
 const CommunityMain = () => {
-  const { all } = useCommnunityApi()
+  const { all, categoryAll } = useCommnunityApi()
+
+  const { category, postId } = useParams()
 
   const [posts, setPosts] = useState([])
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await all()
-        console.log(res.data.data)
-        setPosts(res.data.data)
+        if (!postId) {
+          const res = await categoryAll(category)
+          console.log(res.data.data)
+          setPosts(res.data.data)
+        }
       } catch (err) {
         console.error(err)
       }
     }
 
     fetchData()
-  }, [])
+  }, [category, postId])
+
+  const onCateClick = (selectedCate) => {
+    switch (selectedCate) {
+      case '알고리즘':
+        console.log(selectedCate)
+        if (category === selectedCate) {
+          navigate('/community/알고리즘', { replace: true })
+        } else {
+          navigate('/community/알고리즘')
+        }
+        break
+      case '자유글':
+        console.log(selectedCate)
+        if (category === selectedCate) {
+          navigate('/community/자유글', { replace: true })
+        } else {
+          navigate('/community/자유글')
+        }
+        break
+    }
+  }
 
   return (
     <MainBox>
@@ -138,13 +165,25 @@ const CommunityMain = () => {
         <div>메인으로</div>
       </BackBox>
       <CateContainer>
-        <CateBox style={{ backgroundColor: '#ffd48b' }}>
+        <CateBox
+          onClick={() => onCateClick('알고리즘')}
+          style={
+            category === '알고리즘'
+              ? { backgroundColor: '#ffd48b' }
+              : { backgroundColor: '#ffedb6' }
+          }
+        >
           <CateText>알고리즘</CateText>
         </CateBox>
-        <CateBox>
+        {/* <CateBox>
           <CateText>자랑하기</CateText>
-        </CateBox>
-        <CateBox>
+        </CateBox> */}
+        <CateBox
+          onClick={() => onCateClick('자유글')}
+          style={
+            category === '자유글' ? { backgroundColor: '#ffd48b' } : { backgroundColor: '#ffedb6' }
+          }
+        >
           <CateText>자유글</CateText>
         </CateBox>
       </CateContainer>

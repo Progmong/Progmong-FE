@@ -6,6 +6,7 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const IconLineMdLoadingTwotoneLoop: typeof import('~icons/line-md/loading-twotone-loop.jsx')['default']
   const IconMdiClockOutline: typeof import('~icons/mdi/clock-outline.jsx')['default']
   const IconMdiKeyboardBackspace: typeof import('~icons/mdi/keyboard-backspace.jsx')['default']
   const Link: typeof import('react-router-dom')['Link']

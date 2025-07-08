@@ -1,5 +1,6 @@
 {
   "globals": {
+    "IconLineMdLoadingTwotoneLoop": true,
     "IconMdiKeyboardBackspace": true,
     "Link": true,
     "NavLink": true,
