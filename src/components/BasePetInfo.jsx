@@ -255,7 +255,7 @@ const BasePetInfo = ({ nickname }) => {
           <PetStage>단계 : {stageToText(pet.evolutionStage)}</PetStage>
           <PetLevel>레벨 : LV.{pet.level}</PetLevel>
           <ProgressBarContainer>
-            <ProgressFiller percent={percent} />
+            <ProgressFiller $percent={percent} />
             {/* <ProgressText>{text}</ProgressText> */}
           </ProgressBarContainer>
           <PetExpContainer>

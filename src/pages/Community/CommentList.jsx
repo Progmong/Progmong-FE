@@ -89,7 +89,7 @@ const CommentList = ({ comments = [] }) => {
   // const getInitial = (name) => (name ? name.trim().charAt(0).toUpperCase() : '?')
 
   // axios 통신을 기다려야함
-  console.log('왔나 테스트')
+  console.log('댓글 Props 결과')
   console.log(comments)
   return (
     <ListWrapper>
