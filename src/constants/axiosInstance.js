@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const AxiosInstance = axios.create({
-  baseURL: 'http://localhost:8100/api/v1',
+  baseURL: 'https://api-progmong.shop/api/v1',
   withCredentials: true, // 쿠키를 자동 포함하도록 설정
 })
 
