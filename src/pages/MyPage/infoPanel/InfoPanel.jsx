@@ -58,14 +58,14 @@ const InfoPanel = () => {
       <ToggleGroup>
         <BaseButton
           $variant={mode === 'pet' ? 'secondary' : 'pass'}
-          size="sm"
+          $size="sm"
           onClick={() => setMode('pet')}
         >
           프로그몽
         </BaseButton>
         <BaseButton
           $variant={mode === 'user' ? 'secondary' : 'pass'}
-          size="sm"
+          $size="sm"
           onClick={() => setMode('user')}
         >
           유저정보
