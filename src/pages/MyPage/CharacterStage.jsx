@@ -61,15 +61,14 @@ const PetName = styled.div`
   font-family: Binggrae, serif;
   font-size: 24px;
   font-weight: bold;
-  color: #051d2f;
+  color: rgba(5, 29, 47, 0.9);
   text-align: center;
   z-index: 1;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.3);
   padding: 5px 10px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 80%;
-  max-width: 300px;
+  width: 300px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

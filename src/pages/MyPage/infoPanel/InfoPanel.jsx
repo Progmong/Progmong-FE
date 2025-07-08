@@ -25,12 +25,13 @@ const Title = styled.div`
   font-weight: bold;
   margin-top: 5px;
   margin-left: 10px;
+  margin-bottom: 5px;
 `
 
 const ToggleGroup = styled.div`
   display: flex;
   gap: 10px;
-
+  padding: 0 15px;
   & > * {
     flex: 1;
   }

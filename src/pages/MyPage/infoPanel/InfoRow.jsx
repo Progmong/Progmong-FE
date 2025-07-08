@@ -13,20 +13,21 @@ const LabelRow = styled.div`
 const LabelName = styled.div`
   font-weight: bold;
   min-width: 60px;
+  margin-left: 5px;
 `
 const LabelValue = styled.div`
   text-align: end;
   font-weight: bold;
   font-size: 12px;
   min-width: 150px;
-  margin-right: 10px;
+  margin-right: 20px;
 `
 const ExpBarWrapper = styled.div`
   width: 100%;
   min-width: 150px;
   display: flex;
   justify-content: end;
-  
+  margin-right: 10px;
 `
 
 const InfoRow = ({ label, value, expData: expData }) => {

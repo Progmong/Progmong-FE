@@ -93,7 +93,7 @@ const InterestTags = () => {
         <Title>관심 태그</Title>
         <BaseButtonWrapper>
           <BaseButton
-            onClick={() => openModal('alert', { title: '관심 태그 수정', message: '돌아가!' })}
+            onClick={() => openModal('tag-edit', { title: '관심 태그 수정', message: '돌아가!' })}
             $size="sm"
           >
             태그 수정

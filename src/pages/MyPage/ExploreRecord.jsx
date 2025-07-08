@@ -4,7 +4,6 @@ import passIcon from '@/assets/pass-icon.png'
 import BaseButton from '@/components/BaseButton.jsx'
 import React from 'react'
 import { useModal } from '@/context/ModalContext.jsx'
-import Explore from '@/constants/explore.js'
 import { useMyPage } from '@/context/MyPageContext.jsx'
 
 const Box = styled.div`
@@ -102,39 +101,6 @@ const GrayBox = styled.div`
   text-overflow: ellipsis;
 `
 
-const mockExploreRecords = [
-  {
-    id: 1001,
-    tier: 'Gold V',
-    title: '부분 수열의 합',
-    status: '성공',
-  },
-  {
-    id: 2020,
-    tier: 'Silver I',
-    title: 'LCS',
-    status: '패스',
-  },
-  {
-    id: 3010,
-    tier: 'Bronze II',
-    title: 'DFS와 BFS',
-    status: '성공',
-  },
-  {
-    id: 4040,
-    tier: 'Silver III',
-    title: '토마토',
-    status: '패스',
-  },
-  {
-    id: 5050,
-    tier: 'Gold IV',
-    title: '다익스트라',
-    status: '성공',
-  },
-]
-
 const ExploreRecords = () => {
   const { openModal } = useModal()
   const { myPageData, loading } = useMyPage()
@@ -142,18 +108,23 @@ const ExploreRecords = () => {
 
   const problems = myPageData.exploreRecords
 
+  const handleQueryExploreRecords = () => {
+    openModal('record')
+  }
+
   return (
     <Box>
       <ExploreRecordHeader>
         <Title>최근 탐험 기록</Title>
         <BaseButtonWrapper>
           <BaseButton
-            onClick={() => openModal('alert', { title: '지난 탐험 기록 조회', message: '돌아가!' })}
+            onClick={handleQueryExploreRecords}
             $size="sm"
           >
-            태그 수정
+            탐험 기록 조회
           </BaseButton>
-        </BaseButtonWrapper></ExploreRecordHeader>
+        </BaseButtonWrapper>
+      </ExploreRecordHeader>
       <MypageResultContainer>
         {problems.map((p) => (
           <ResultRow key={p.id}>
@@ -165,10 +136,11 @@ const ExploreRecords = () => {
                 />
               </IconCircle>
             </IconWrapper>
-            <GrayBox $flex="1.5">{p.tier}</GrayBox>
+            <GrayBox $flex="1">{p.tier}</GrayBox>
             <GrayBox $flex="1">{p.id}</GrayBox>
             <GrayBox $flex="2">{p.title}</GrayBox>
             <GrayBox $flex="1">{p.status}</GrayBox>
+            <GrayBox $flex="1">{p.mainTagKo}</GrayBox>
           </ResultRow>
         ))}
       </MypageResultContainer>

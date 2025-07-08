@@ -8,7 +8,7 @@ import { useModal } from '@/context/ModalContext.jsx'
 
 const InfoWrapper = styled.div`
   width: 90%;
-  background-color: #f9fafb;
+  background-color: #f4f4f4;
   border-radius: 12px;
   padding: 10px;
 `
@@ -17,6 +17,14 @@ const ButtonGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-top: 12px;
+  width: 270px;
+`
+
+const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
 const PetInfo = () => {
@@ -77,9 +85,9 @@ const PetInfo = () => {
 
   const handlePetProudChange = () => {
     // AlertModal로 펫 자랑하기/비공개 변경
-    console.log('펫 자랑하기/비공개 변경 모달 열기')
+    console.log('프로그몽 자랑하기/비공개 변경 모달 열기')
     openModal('alert', {
-      title: '펫 자랑하기',
+      title: '프로그몽 자랑하기',
       message: pet.proud ? '펫을 비공개로 전환하시겠습니까?' : '펫을 자랑하시겠습니까?',
       onConfirm: async () => {
         try {
@@ -102,7 +110,7 @@ const PetInfo = () => {
   const expLabel = `${pet.exp} / ${pet.expMax}`
 
   return (
-    <>
+    <InfoContainer>
       <InfoWrapper>
         <InfoRow
           label="단계"
@@ -118,13 +126,15 @@ const PetInfo = () => {
       </InfoWrapper>
       <div style={{ textAlign: 'center', marginTop: '12px' }}>
         <ButtonGroup>
-          <BaseButton onClick={handlePetNameChange} >애칭 수정</BaseButton>
-          <BaseButton onClick={handlePetProudChange} $variant="secondary">
-            {pet.proud ? '펫 비공개' : '펫 자랑하기'}
+          <BaseButton onClick={handlePetNameChange} $size="sm">
+            애칭 수정
+          </BaseButton>
+          <BaseButton onClick={handlePetProudChange} $variant="secondary" $size="sm">
+            {pet.proud ? '프로그몽 비공개' : '프로그몽 자랑하기'}
           </BaseButton>
         </ButtonGroup>
       </div>
-    </>
+    </InfoContainer>
   )
 }
 

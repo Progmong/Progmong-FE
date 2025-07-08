@@ -11,13 +11,20 @@ const ButtonGroup = styled.div`
   flex-direction: column;
   gap: 8px;
   margin-top: 12px;
+  width: 270px;
 `
 const InfoWrapper = styled.div`
   width: 90%;
-  background-color: #f9fafb;
+  background-color: #f4f4f4;
   border-radius: 12px;
   padding: 10px;
 `
+const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
 
 const UserInfo = () => {
   const { openModal } = useModal()
@@ -107,20 +114,20 @@ const UserInfo = () => {
   }
 
   return (
-    <>
+    <InfoContainer>
       <InfoWrapper>
         <InfoRow label="닉네임" value={user.nickname} />
         <InfoRow label="이메일" value={user.email} />
         <InfoRow label="백준 ID" value={user.bjId} />
       </InfoWrapper>
       <ButtonGroup>
-        <BaseButton onClick={handleEditNickname}>닉네임 수정</BaseButton>
-        <BaseButton onClick={handleChangePassword}>비밀번호 변경</BaseButton>
-        <BaseButton onClick={handleWithdraw} $variant="secondary">
+        <BaseButton $size="sm" onClick={handleEditNickname}>닉네임 수정</BaseButton>
+        <BaseButton $size="sm" onClick={handleChangePassword}>비밀번호 변경</BaseButton>
+        <BaseButton $size="sm" onClick={handleWithdraw} $variant="secondary">
           회원 탈퇴
         </BaseButton>
       </ButtonGroup>
-    </>
+    </InfoContainer>
   )
 }
 

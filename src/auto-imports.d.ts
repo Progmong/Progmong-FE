@@ -6,6 +6,7 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const IconCircle: typeof import('~icons/ci/rcle.jsx')['default']
   const IconMdiClockOutline: typeof import('~icons/mdi/clock-outline.jsx')['default']
   const IconMdiKeyboardBackspace: typeof import('~icons/mdi/keyboard-backspace.jsx')['default']
   const Link: typeof import('react-router-dom')['Link']

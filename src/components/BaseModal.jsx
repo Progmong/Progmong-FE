@@ -30,6 +30,8 @@ const ModalContainer = styled.div`
 `
 
 const ModalTitle = styled.div`
+  display: flex;
+  justify-content: center;
   margin-top: 2rem;
   margin-bottom: 1rem;
 
