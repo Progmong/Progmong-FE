@@ -1,6 +1,6 @@
 import BaseContainer from '@/components/BaseContainer'
 import formatRelativeTime from '@/utils/formatRelativeTime'
-import getPetImage from '@/utils/PetImageUrl'
+import getPetImage from '@/utils/petImageUrl'
 
 // 전체 목록 래퍼
 const ListWrapper = styled.div`
@@ -91,6 +91,7 @@ const CommentList = ({ comments = [] }) => {
   // axios 통신을 기다려야함
   console.log('댓글 Props 결과')
   console.log(comments)
+
   return (
     <ListWrapper>
       {comments.map((c) => (
