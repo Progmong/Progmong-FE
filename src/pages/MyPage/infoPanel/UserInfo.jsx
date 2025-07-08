@@ -101,9 +101,25 @@ const UserInfo = () => {
     })
   }
 
-  const handleWithdraw = () => {
+  const handleDeleteUser = () => {
     // 추후 탈퇴 확인 모달 열기
     console.log('회원 탈퇴')
+    openModal('alert', {
+      title: '회원 탈퇴',
+      message: '정말로 회원 탈퇴를 하시겠습니까?',
+      onConfirm: async () => {
+        try {
+          const res = await AxiosInstance.delete('/users')
+          console.log('회원 탈퇴 완료:', res.data)
+          // 탈퇴 후 메인 페이지로 리다이렉트
+          window.location.href = '/'
+        } catch (error) {
+          console.error('회원 탈퇴 실패:', error)
+          // 에러 핸들링 로직 추가
+        }
+      },
+      containCancel: true,
+    })
   }
 
   const user = myPageData.user || {
@@ -123,7 +139,7 @@ const UserInfo = () => {
       <ButtonGroup>
         <BaseButton $size="sm" onClick={handleEditNickname}>닉네임 수정</BaseButton>
         <BaseButton $size="sm" onClick={handleChangePassword}>비밀번호 변경</BaseButton>
-        <BaseButton $size="sm" onClick={handleWithdraw} $variant="secondary">
+        <BaseButton $size="sm" onClick={handleDeleteUser} $variant="secondary">
           회원 탈퇴
         </BaseButton>
       </ButtonGroup>
