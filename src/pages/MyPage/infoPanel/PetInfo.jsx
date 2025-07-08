@@ -76,10 +76,23 @@ const PetInfo = () => {
   }
 
   const handlePetProudChange = () => {
-    // 추후 펫 자랑하기/비공개 토글 기능 구현
-    console.log('펫 자랑하기/비공개 토글')
-    // Alert 모달로 변경되었음을 알림
-    // 상태 관리를 이용해 전체 페이지 전부 다시 렌더링
+    // AlertModal로 펫 자랑하기/비공개 변경
+    console.log('펫 자랑하기/비공개 변경 모달 열기')
+    openModal('alert', {
+      title: '펫 자랑하기',
+      message: pet.proud ? '펫을 비공개로 전환하시겠습니까?' : '펫을 자랑하시겠습니까?',
+      onConfirm: async () => {
+        try {
+          const res = await AxiosInstance.patch('/pet/proud', !pet.proud)
+          console.log('펫 자랑하기 상태 변경 완료:', res.data)
+          refreshMyPageData()
+        } catch (error) {
+          console.error('펫 자랑하기 상태 변경 실패:', error)
+          // 에러 핸들링 로직 추가
+        }
+      },
+      containCancel: true,
+    })
   }
 
   const growthProgress = pet.level % 5
@@ -105,7 +118,7 @@ const PetInfo = () => {
       </InfoWrapper>
       <div style={{ textAlign: 'center', marginTop: '12px' }}>
         <ButtonGroup>
-          <BaseButton onClick={handlePetNameChange}>애칭 수정</BaseButton>
+          <BaseButton onClick={handlePetNameChange} >애칭 수정</BaseButton>
           <BaseButton onClick={handlePetProudChange} $variant="secondary">
             {pet.proud ? '펫 비공개' : '펫 자랑하기'}
           </BaseButton>

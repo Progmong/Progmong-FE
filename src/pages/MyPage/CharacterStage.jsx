@@ -19,6 +19,7 @@ import pet3_stage3 from '@/assets/pets/pet3_stage3.png'
 import pet4_stage1 from '@/assets/pets/pet4_stage1.png'
 import pet4_stage2 from '@/assets/pets/pet4_stage2.png'
 import pet4_stage3 from '@/assets/pets/pet4_stage3.png'
+import AxiosInstance from '@/constants/axiosInstance.js'
 
 const Stage = styled.div`
   display: flex;
@@ -118,12 +119,38 @@ const petImagesMap = {
 const CharacterStage = () => {
   const isMobile = useMediaQuery({ query: '(max-width:767px)' })
   const { openModal } = useModal()
-  const { myPageData, loading } = useMyPage()
+  const { myPageData, loading, refreshMyPageData } = useMyPage()
 
   if (loading || !myPageData) return <div>로딩 중...</div>
 
   const { pet, message } = myPageData
   const petImage = petImagesMap[pet.type]?.[pet.stage]
+
+  const handelEditMessage = () => {
+    openModal('text-edit', {
+      title: '오늘의 메시지 변경',
+      message: '새 메시지를 입력하세요!',
+      initialValue: message,
+      onConfirm: async (newMessage) => {
+        if (!newMessage) {
+          console.error('메시지는 비워둘 수 없습니다.')
+          return
+        }
+        try {
+          const res = await AxiosInstance.patch('/pet/message', newMessage, {
+            headers: {
+              'Content-Type': 'text/plain',
+            },
+          })
+          console.log('메시지 변경 완료:', res.data)
+          refreshMyPageData()
+        } catch (error) {
+          console.error('메시지 변경 실패:', error)
+          // 에러 핸들링 로직 추가
+        }
+      },
+    })
+  }
 
   return (
     <Stage>
@@ -142,12 +169,7 @@ const CharacterStage = () => {
         <MessageText $isMobile={isMobile}>{message}</MessageText>
         <BaseButton
           style={{ width: '80px', padding: '5px 3px', fontSize: '14px' }}
-          onClick={() =>
-            openModal('text-edit', {
-              title: '오늘의 한마디 수정',
-              message: '오늘의 한마디를 수정해보세요!',
-            })
-          }
+          onClick={handelEditMessage}
         >
           수정하기
         </BaseButton>

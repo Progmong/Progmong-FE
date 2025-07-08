@@ -26,12 +26,7 @@ const StyledInput = styled(BaseInput)`
 
 const ButtonWrapper = styled.div`
   display: flex;
-  justify-content: flex-end;
-`
-
-const StyledButton = styled(BaseButton)`
-  padding: 0.6rem 1.5rem;
-  font-size: 1rem;
+  justify-content: center;
 `
 
 const MessageContainer = styled.div`
@@ -45,6 +40,7 @@ const TextEditModal = ({
   placeholder = '',
   buttonText = '적용',
   inputType = 'text',
+  containCancel = true,
 }) => {
   const { closeModal } = useModal()
   const [value, setValue] = useState('')
@@ -70,7 +66,34 @@ const TextEditModal = ({
           />
         </InputWrapper>
         <ButtonWrapper>
-          <StyledButton onClick={handleClick}>{buttonText}</StyledButton>
+          <BaseButton onClick={handleClick} $variant="secondary">{buttonText}</BaseButton>
+          {containCancel && (
+            <BaseButton onClick={closeModal}  style={{ marginLeft: '1rem' }}>
+              취소
+            </BaseButton>
+          )}
+
+          {/*<BaseButton*/}
+          {/*  style={{*/}
+          {/*    padding: '0.6rem 1.5rem',*/}
+          {/*    fontSize: '1rem',*/}
+          {/*  }}*/}
+          {/*  $variant="secondary"*/}
+          {/*  onClick={handleClick}*/}
+          {/*>*/}
+          {/*  {buttonText}*/}
+          {/*</BaseButton>*/}
+          {/*{containCancel && (*/}
+          {/*  <BaseButton*/}
+          {/*    onClick={closeModal}*/}
+          {/*    style={{*/}
+          {/*      padding: '0.6rem 1.5rem',*/}
+          {/*      fontSize: '1rem',*/}
+          {/*    }}*/}
+          {/*  >*/}
+          {/*    취소*/}
+          {/*  </BaseButton>*/}
+          {/*)}*/}
         </ButtonWrapper>
       </ContentWrapper>
     </BaseModal>
