@@ -12,7 +12,6 @@ import useAuthApi from '../../constants/auth'
 import { useModal } from '@/context/ModalContext'
 import { useAuth } from '../../constants/AuthContext'
 
-
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
     font-family: 'Binggrae';
@@ -199,7 +198,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <BaseButton variant="secondary" onClick={handleLogin} style={{ marginTop: '15px' }}>
+            <BaseButton $variant="secondary" onClick={handleLogin} style={{ marginTop: '15px' }}>
               LOGIN
             </BaseButton>
             <div

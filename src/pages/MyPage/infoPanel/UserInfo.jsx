@@ -54,7 +54,7 @@ const UserInfo = () => {
       <ButtonGroup>
         <BaseButton onClick={handleEditNickname}>닉네임 수정</BaseButton>
         <BaseButton onClick={handleChangePassword}>비밀번호 변경</BaseButton>
-        <BaseButton onClick={handleWithdraw} variant="secondary">
+        <BaseButton onClick={handleWithdraw} $variant="secondary">
           회원 탈퇴
         </BaseButton>
       </ButtonGroup>

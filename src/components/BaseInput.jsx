@@ -13,8 +13,8 @@ const SIZE_SET = {
 }
 
 /* 실제 input 요소 */
-const InputBase = styled.input.attrs(({ size = 'md' }) => ({
-  s: SIZE_SET[size] || SIZE_SET.md,
+const InputBase = styled.input.attrs(({ $size = 'md' }) => ({
+  $s: SIZE_SET[$size] || SIZE_SET.md,
 }))`
   /* 기본 레이아웃 */
   display: block;
@@ -26,7 +26,7 @@ const InputBase = styled.input.attrs(({ size = 'md' }) => ({
     0 6px 0 rgba(0, 0, 0, 0.25);
   margin-bottom: 6px; /* 그람자를 보장하기 위한 최소한의 margin */
   border: 1.5px solid #e8e8e8;
-  font-size: ${({ s }) => s.font};
+  font-size: ${({ $s }) => $s.font};
 
   /* number 타입 스핀 버튼 제거 */
   &[type='number'] {

@@ -1,9 +1,6 @@
 import styled, { createGlobalStyle } from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-
-import bgImage from '../../assets/background-img1.png'
 import bgVideo from '../../assets/bg-video.mp4'
 
 import BaseButton from '../../components/BaseButton'
@@ -15,7 +12,7 @@ import { useModal } from '@/context/ModalContext'
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
-      font-family: 'Binggrae';
+    font-family: 'Binggrae';
   }
 `
 const Bg = styled.div`
@@ -56,6 +53,7 @@ const StyleLink = styled(Link)`
   color: #2c2c2c;
   font-weight: bold;
   transition: transform 0.2s ease;
+
   &:hover {
     transform: scale(1.1);
   }
@@ -152,7 +150,7 @@ const FindPwd = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <BaseButton
-                  variant="secondary"
+                  $variant="secondary"
                   onClick={handleSendEmail}
                   style={{ marginTop: '15px' }}
                   disabled={isEmailSending}
@@ -186,7 +184,7 @@ const FindPwd = () => {
                   onChange={(e) => setConfirmPwd(e.target.value)}
                 />
                 <BaseButton
-                  variant="secondary"
+                  $variant="secondary"
                   onClick={handleVerifyCodeAndChangePwd}
                   style={{ marginTop: '15px' }}
                 >

@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import checkIcon from '@/assets/check-icon.png'
 import passIcon from '@/assets/pass-icon.png'
 
-
 const Box = styled.div`
   background-color: white;
   border-radius: 16px;
@@ -18,7 +17,7 @@ const Box = styled.div`
 
 const Title = styled.h3`
   font-size: 16px;
-  font-family: 'Binggrae',serif;
+  font-family: 'Binggrae', serif;
   font-weight: 700;
   margin: 10px;
   padding: 5px;
@@ -75,7 +74,7 @@ const Icon = styled.img`
 `
 
 const GrayBox = styled.div`
-  flex: ${({ flex }) => flex};
+  flex: ${({ $flex }) => $flex};
   background-color: #e3e3e3;
   padding: 5px;
   border-radius: 8px;
@@ -135,10 +134,10 @@ const ExploreRecords = ({ problems = mockExploreRecords }) => {
                 />
               </IconCircle>
             </IconWrapper>
-            <GrayBox flex="1.5">{p.tier}</GrayBox>
-            <GrayBox flex="1">{p.id}</GrayBox>
-            <GrayBox flex="2">{p.title}</GrayBox>
-            <GrayBox flex="1">{p.status}</GrayBox>
+            <GrayBox $flex="1.5">{p.tier}</GrayBox>
+            <GrayBox $flex="1">{p.id}</GrayBox>
+            <GrayBox $flex="2">{p.title}</GrayBox>
+            <GrayBox $flex="1">{p.status}</GrayBox>
           </ResultRow>
         ))}
       </MypageResultContainer>

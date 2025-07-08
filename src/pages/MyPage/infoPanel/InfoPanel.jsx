@@ -57,14 +57,14 @@ const InfoPanel = () => {
       <Title>내 정보</Title>
       <ToggleGroup>
         <BaseButton
-          variant={mode === 'pet' ? 'secondary' : 'pass'}
+          $variant={mode === 'pet' ? 'secondary' : 'pass'}
           size="sm"
           onClick={() => setMode('pet')}
         >
           프로그몽
         </BaseButton>
         <BaseButton
-          variant={mode === 'user' ? 'secondary' : 'pass'}
+          $variant={mode === 'user' ? 'secondary' : 'pass'}
           size="sm"
           onClick={() => setMode('user')}
         >
