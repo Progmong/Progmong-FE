@@ -9,7 +9,7 @@ import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import navBackground from '@/assets/modalBackground.png'
 import { useModal } from '@/context/ModalContext.jsx'
-import AxiosInstance from '@/constants/axiosInstance.js'
+import axios from '@/constants/axiosInstance.js'
 
 const BackgroundContainer = styled.div`
   background-color: #fff5db;
@@ -160,15 +160,14 @@ const MyPageLayout = () => {
         // 로그아웃 처리 로직
         console.log('로그아웃 처리')
         try {
-          const res = await AxiosInstance.post('users/logout')
+          const res = await axios.post('/users/logout', {}, { withCredentials: true })
+
           console.log('로그아웃 요청 성공:', res)
         } catch (error) {
           console.error('로그아웃 요청 실패:', error)
         } finally {
           // 로컬 스토리지에서 토큰 제거
           localStorage.removeItem('accessToken')
-          localStorage.removeItem('refreshToken')
-          // 페이지 이동
           window.location.href = '/'
         }
       },
