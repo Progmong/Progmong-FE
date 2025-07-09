@@ -86,7 +86,8 @@ const InterestTags = () => {
 
   useEffect(() => {
     if (myPageData && myPageData.interestTags) {
-      setSelectedTags(new Set(myPageData.interestTags))
+      const tagIdSet = new Set(myPageData.interestTags.map(tag => tag.id))
+      setSelectedTags(tagIdSet)
     }
   }, [myPageData])
 
