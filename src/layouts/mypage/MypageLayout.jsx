@@ -47,6 +47,10 @@ const UpperContents = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `
 
 const BottomContents = styled.div`
@@ -57,6 +61,11 @@ const BottomContents = styled.div`
   align-items: center;
   justify-content: space-between;
   min-height: 310px;
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    //align-items: stretch; /* 세로로 꽉 차도록 */
+    gap: 24px;
+  }
 `
 const MyPageNav = styled.div`
   background-image: url(${navBackground});
@@ -67,6 +76,11 @@ const MyPageNav = styled.div`
   margin: 14px;
   padding: 20px 20px;
   border-radius: 8px;
+  @media (max-width: 1024px) {
+    width: 100%;
+    max-width: none;
+    font-size: 32px;
+  }
 `
 
 const MyPageTitle = styled.div`
@@ -104,6 +118,10 @@ const GoToMain = styled.div`
   &:hover {
     text-decoration: underline;
   }
+
+  @media (max-width: 1024px) {
+    margin: 0;
+  }
 `
 const LogOut = styled.div`
   display: flex;
@@ -118,6 +136,7 @@ const LogOut = styled.div`
   border-radius: 20px;
   color: #051d2f;
   font-weight: bold;
+  font-size: 16px;
 
   &:hover {
     text-decoration: underline;
