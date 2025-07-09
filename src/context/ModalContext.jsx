@@ -8,14 +8,20 @@ export const useModal = () => useContext(ModalContext)
 
 export const ModalProvider = ({ children }) => {
   const [modalState, setModalState] = useState({ name: null, props: {} })
+  const [onCloseCallback, setOnCloseCallback] = useState(null)
 
-  const openModal = useCallback((name, props = {}) => {
+  const openModal = useCallback((name, props = {}, onClose = null) => {
     setModalState({ name, props })
+    setOnCloseCallback(() => onClose)
   }, [])
 
   const closeModal = useCallback(() => {
     setModalState({ name: null, props: {} })
-  }, [])
+    if (onCloseCallback) {
+      onCloseCallback()
+      setOnCloseCallback(null)
+    }
+  }, [onCloseCallback])
 
   return (
     <ModalContext.Provider value={{ ...modalState, openModal, closeModal }}>

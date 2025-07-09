@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import BaseButton from '../../components/BaseButton.jsx'
 import { useModal } from '../../context/ModalContext.jsx'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, memo } from 'react'
 import { useMyPage } from '@/context/MyPageContext.jsx'
 
 const Box = styled.div`
@@ -81,7 +81,7 @@ const TAGS = {
 
 const InterestTags = () => {
   const { openModal } = useModal()
-  const { myPageData } = useMyPage()
+  const { myPageData, refreshMyPageData } = useMyPage()
   const [selectedTags, setSelectedTags] = useState(new Set())
 
   useEffect(() => {
@@ -93,7 +93,9 @@ const InterestTags = () => {
 
   const handleClickTagEdit = () => {
     console.log('관심 태그 수정 버튼 클릭')
-    openModal('tag-edit')
+    openModal('tag-edit', {}, refreshMyPageData)
+    // 모달이 닫히면 콘솔로그 찍기
+
   }
 
   return (
@@ -136,4 +138,4 @@ const InterestTags = () => {
   )
 }
 
-export default InterestTags
+export default memo(InterestTags)
