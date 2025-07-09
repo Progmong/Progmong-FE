@@ -118,8 +118,8 @@ const UserInfo = () => {
         try {
           const res = await AxiosInstance.delete('/users')
           console.log('회원 탈퇴 완료:', res.data)
-          toast.success('회원 탈퇴가 완료되었습니다.')
           // 탈퇴 후 메인 페이지로 리다이렉트
+          localStorage.removeItem('accessToken')
           window.location.href = '/'
         } catch (error) {
           console.error('회원 탈퇴 실패:', error)

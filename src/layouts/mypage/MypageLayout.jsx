@@ -9,7 +9,7 @@ import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import navBackground from '@/assets/modalBackground.png'
 import { useModal } from '@/context/ModalContext.jsx'
-import AxiosInstance from '@/constants/axiosInstance.js'
+import axios from '@/constants/axiosInstance.js'
 
 const BackgroundContainer = styled.div`
   background-color: #fff5db;
@@ -47,6 +47,10 @@ const UpperContents = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `
 
 const BottomContents = styled.div`
@@ -57,6 +61,11 @@ const BottomContents = styled.div`
   align-items: center;
   justify-content: space-between;
   min-height: 310px;
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    //align-items: stretch; /* 세로로 꽉 차도록 */
+    gap: 24px;
+  }
 `
 const MyPageNav = styled.div`
   background-image: url(${navBackground});
@@ -67,6 +76,11 @@ const MyPageNav = styled.div`
   margin: 14px;
   padding: 20px 20px;
   border-radius: 8px;
+  @media (max-width: 1024px) {
+    width: 100%;
+    max-width: none;
+    font-size: 32px;
+  }
 `
 
 const MyPageTitle = styled.div`
@@ -104,6 +118,10 @@ const GoToMain = styled.div`
   &:hover {
     text-decoration: underline;
   }
+
+  @media (max-width: 1024px) {
+    margin: 0;
+  }
 `
 const LogOut = styled.div`
   display: flex;
@@ -118,6 +136,7 @@ const LogOut = styled.div`
   border-radius: 20px;
   color: #051d2f;
   font-weight: bold;
+  font-size: 16px;
 
   &:hover {
     text-decoration: underline;
@@ -141,15 +160,14 @@ const MyPageLayout = () => {
         // 로그아웃 처리 로직
         console.log('로그아웃 처리')
         try {
-          const res = await AxiosInstance.post('users/logout')
+          const res = await axios.post('/users/logout', {}, { withCredentials: true })
+
           console.log('로그아웃 요청 성공:', res)
         } catch (error) {
           console.error('로그아웃 요청 실패:', error)
         } finally {
           // 로컬 스토리지에서 토큰 제거
           localStorage.removeItem('accessToken')
-          localStorage.removeItem('refreshToken')
-          // 페이지 이동
           window.location.href = '/'
         }
       },

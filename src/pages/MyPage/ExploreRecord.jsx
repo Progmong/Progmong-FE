@@ -118,32 +118,33 @@ const ExploreRecords = () => {
       <ExploreRecordHeader>
         <Title>최근 탐험 기록</Title>
         <BaseButtonWrapper>
-          <BaseButton
-            onClick={handleQueryExploreRecords}
-            $size="sm"
-          >
+          <BaseButton onClick={handleQueryExploreRecords} $size="sm">
             탐험 기록 조회
           </BaseButton>
         </BaseButtonWrapper>
       </ExploreRecordHeader>
       <MypageResultContainer>
-        {problems.map((p) => (
-          <ResultRow key={p.id}>
-            <IconWrapper>
-              <IconCircle>
-                <Icon
-                  src={p.status === '성공' ? checkIcon : passIcon}
-                  alt={p.status === '성공' ? 'solved' : 'pass'}
-                />
-              </IconCircle>
-            </IconWrapper>
-            <GrayBox $flex="1">{p.tier}</GrayBox>
-            <GrayBox $flex="1">{p.id}</GrayBox>
-            <GrayBox $flex="2">{p.title}</GrayBox>
-            <GrayBox $flex="1">{p.status}</GrayBox>
-            <GrayBox $flex="1">{p.mainTagKo}</GrayBox>
-          </ResultRow>
-        ))}
+        {problems.length > 0 ? (
+          problems.map((p) => (
+            <ResultRow key={p.id}>
+              <IconWrapper>
+                <IconCircle>
+                  <Icon
+                    src={p.status === '성공' ? checkIcon : passIcon}
+                    alt={p.status === '성공' ? 'solved' : 'pass'}
+                  />
+                </IconCircle>
+              </IconWrapper>
+              <GrayBox $flex="1">{p.tier}</GrayBox>
+              <GrayBox $flex="1">{p.id}</GrayBox>
+              <GrayBox $flex="2">{p.title}</GrayBox>
+              <GrayBox $flex="1">{p.status}</GrayBox>
+              <GrayBox $flex="1">{p.mainTagKo}</GrayBox>
+            </ResultRow>
+          ))
+        ) : (
+          <div style={{ marginTop: '30px', textAlign: 'center', fontSize: '20px'}}>기록이 없습니다.</div>
+        )}
       </MypageResultContainer>
     </Box>
   )

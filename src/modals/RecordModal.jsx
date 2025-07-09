@@ -179,7 +179,7 @@ const RecordModal = ({ title = '탐험 기록' }) => {
             </ResultRow>
           ))
         ) : (
-          <div style={{ marginTop: '1rem' }}>기록이 없습니다.</div>
+          <div style={{ marginTop: '30px', textAlign: 'center', fontSize: '20px' }}>기록이 없습니다.</div>
         )}
       </MypageResultContainer>
       <BottomWrapper>
