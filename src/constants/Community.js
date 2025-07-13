@@ -21,8 +21,8 @@ export const useCommnunityApi = () => {
     return await axios.post('/community/post/modify', { postId, title, content })
   }
 
-  const deletePost = async (podtId) => {
-    return await axios.post(`/community/post/delete/${postId}`)
+  const deletePost = async (postId) => {
+    return await axios.get(`/community/post/delete/${postId}`)
   }
 
   const postDetail = async (postId) => {

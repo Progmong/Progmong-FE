@@ -74,14 +74,15 @@ import axios from 'axios'
  */
 const LICENSE_KEY = 'GPL' // or <YOUR_LICENSE_KEY>.
 
-export default function BaseEditor({ onContentChange }) {
+export default function BaseEditor({ onContentChange, content }) {
   const editorContainerRef = useRef(null)
   const editorRef = useRef(null)
   const [isLayoutReady, setIsLayoutReady] = useState(false)
-
+ 
   useEffect(() => {
     setIsLayoutReady(true)
-
+    if (content !== null) {
+    }
     return () => setIsLayoutReady(false)
   }, [])
 
@@ -338,6 +339,12 @@ export default function BaseEditor({ onContentChange }) {
               <CKEditor
                 editor={ClassicEditor}
                 config={editorConfig}
+                onReady={(editor) => {
+                  editorRef.current = editor
+                  if (content) {
+                    editor.setData(content)
+                  }
+                }}
                 onChange={(event, editor) => {
                   const data = editor.getData()
 

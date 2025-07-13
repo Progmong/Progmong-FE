@@ -111,9 +111,8 @@ const PetExpContainer = styled.div`
 
 const CommunityActiveContainer = styled.div`
   flex-grow: 3;
-  background-color: #ccc;
-  color: var(--text-white);
-
+  border-left: 1px solid #ccc;
+  background-color: var(--bg-white);
   border-top-right-radius: 14px;
   border-bottom-right-radius: 14px;
 
@@ -132,7 +131,16 @@ const ActiveTitle = styled.div`
   font-weight: bold;
 `
 
-const ActiveCateContainer = styled.div``
+const ActiveCateContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--color-neon-2);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin: 0 0.5rem;
+  min-width: 80px;
+`
 
 const ActiveCateTitle = styled.div`
   font-size: var(--font-size-xl);
@@ -166,6 +174,7 @@ const BasePetInfo = ({ nickname }) => {
     const fetchPostData = async () => {
       try {
         const res = await getPetInfo()
+        console.log('펫정보')
         console.log(res.data.data)
         setPet(res.data.data)
 
@@ -255,7 +264,7 @@ const BasePetInfo = ({ nickname }) => {
           <PetStage>단계 : {stageToText(pet.evolutionStage)}</PetStage>
           <PetLevel>레벨 : LV.{pet.level}</PetLevel>
           <ProgressBarContainer>
-            <ProgressFiller $percent={percent} />
+            <ProgressFiller percent={percent} />
             {/* <ProgressText>{text}</ProgressText> */}
           </ProgressBarContainer>
           <PetExpContainer>
@@ -267,13 +276,15 @@ const BasePetInfo = ({ nickname }) => {
         <ActiveTitle>활동</ActiveTitle>
         {actLoading === false ? (
           <>
-            <div style={{ textAlign: 'center' }}>
-              <ActiveCateTitle>게시글</ActiveCateTitle>
-              <ActiveCateContent>{commuityAct.postCount}</ActiveCateContent>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <ActiveCateTitle>댓글</ActiveCateTitle>
-              <ActiveCateContent>{commuityAct.commentCount}</ActiveCateContent>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <ActiveCateContainer>
+                <ActiveCateTitle>게시글</ActiveCateTitle>
+                <ActiveCateContent>{commuityAct.postCount}</ActiveCateContent>
+              </ActiveCateContainer>
+              <ActiveCateContainer>
+                <ActiveCateTitle>댓글</ActiveCateTitle>
+                <ActiveCateContent>{commuityAct.commentCount}</ActiveCateContent>
+              </ActiveCateContainer>
             </div>
           </>
         ) : (

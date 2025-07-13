@@ -6,6 +6,7 @@ import BasePetInfo from '@/components/BasePetInfo'
 import BaseCommentInput from '@/components/BaseCommentInput'
 import CommentList from './CommentList'
 import useCommentApi from '@/constants/comment'
+import { useState } from 'react'
 
 const Wrapper = styled.div``
 
@@ -17,6 +18,7 @@ const LoadingWrapper = styled.div`
 
 const PostContainer = styled(BaseContainer)`
   padding: 2rem;
+  position: relative;
   min-height: 60vh;
 `
 
@@ -58,6 +60,33 @@ const CommentWrapper = styled(BaseContainer)`
   padding: 14px;
 `
 
+const MenuButton = styled.div`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer;
+  font-size: 1.5rem;
+  user-select: none;
+`
+const DropdownMenu = styled.div`
+  position: absolute;
+  top: 3rem;
+  right: 1rem;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+`
+const DropdownItem = styled.div`
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`
+
 // 초기 더미 댓글
 const initialComments = [
   {
@@ -91,7 +120,7 @@ const PostDetail = () => {
   // const { postId } = useParams()
   const { postId } = useParams()
 
-  const { postDetail } = useCommnunityApi()
+  const { postDetail, deletePost } = useCommnunityApi()
   const { commentAll, commentWrite } = useCommentApi()
 
   const [post, setPost] = useState(null)
@@ -99,6 +128,8 @@ const PostDetail = () => {
 
   const [comments, setComments] = useState(initialComments)
   const [commentsLoading, setCommentsLoading] = useState(true)
+
+  const navigate = useNavigate()
 
   const fetchCmtData = () => {}
 
@@ -172,9 +203,39 @@ const PostDetail = () => {
     }
   }
 
+  const [postMenuOpen, setPostMenuOpen] = useState(false)
+  const handlePostEdit = () => {
+    console.log('Edit post', postId)
+    navigate('modify', { state: { post } })
+
+    setPostMenuOpen(false)
+  }
+  const handlePostDelete = async () => {
+    console.log('Delete post', postId)
+    const res = await deletePost(postId)
+    if (res.status === 200) {
+      console.log('글 삭제 성공')
+      navigate(-1)
+    } else {
+      console.log('글 삭제 실패')
+    }
+    setPostMenuOpen(false)
+  }
+
   return postLoading === false ? (
     <Wrapper>
       <PostContainer>
+        {post.writer && (
+          <>
+            <MenuButton onClick={() => setPostMenuOpen(!postMenuOpen)}>···</MenuButton>
+            {postMenuOpen && (
+              <DropdownMenu>
+                <DropdownItem onClick={handlePostEdit}>수정하기</DropdownItem>
+                <DropdownItem onClick={handlePostDelete}>삭제하기</DropdownItem>
+              </DropdownMenu>
+            )}
+          </>
+        )}
         <TitleContainer>{post.title}</TitleContainer>
         <Header>
           <span>
