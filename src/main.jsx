@@ -32,6 +32,7 @@ import PostWrite from './pages/Community/PostWrite'
 // Toast 메시지
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import PostModify from './pages/Community/PostModify'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
@@ -120,6 +121,7 @@ root.render(
             <Route index element={<PostList />} />
             <Route path="posts/:postId" element={<PostDetail />} />
             <Route path="posts/new" element={<PostWrite />} />
+            <Route path="posts/:postId/modify" element={<PostModify />} />
             {/* /community/postdetail 에서는 PostDetail */}
           </Route>
 

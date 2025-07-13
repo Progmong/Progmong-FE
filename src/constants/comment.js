@@ -13,7 +13,7 @@ export const useCommentApi = () => {
     return await axios.put(`/community/post/${postId}/comments/${commentId}`, { content })
   }
 
-  const commentDelete = async (postId) => {
+  const commentDelete = async (postId, commentId) => {
     return await axios.delete(`/community/post/${postId}/comments/${commentId}`)
   }
 
