@@ -184,8 +184,7 @@ const BasePetInfo = ({ nickname }) => {
       }
     }
 
-    const pet = fetchPostData()
-    setPet(pet)
+    fetchPostData()
 
     // 해당 post를 불러올 때 까지 loading 찾을 띄움
   }, [])

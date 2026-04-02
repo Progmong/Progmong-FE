@@ -100,8 +100,8 @@ const Login = () => {
   const { openModal } = useModal()
   const navigate = useNavigate()
   const { dispatch } = useAuth()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState(import.meta.env.VITE_IS_DEMO === 'true' ? 'mocker@example.com' : '')
+  const [password, setPassword] = useState(import.meta.env.VITE_IS_DEMO === 'true' ? 'demo_password123!' : '')
 
   const isMobile = useMediaQuery({
     query: '(max-width:767px)',
@@ -186,6 +186,27 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            
+            {import.meta.env.VITE_IS_DEMO === 'true' && (
+              <div style={{ 
+                backgroundColor: '#fff0f0', 
+                color: '#e53e3e', 
+                border: '1px solid #fc8181', 
+                padding: '12px', 
+                borderRadius: '8px',
+                textAlign: 'center', 
+                marginTop: '15px', 
+                fontSize: '15px', 
+                fontWeight: 'bold',
+                boxShadow: '0 2px 4px rgba(252, 129, 129, 0.2)'
+              }}>
+                포트폴리오 체험 모드<br/>
+                <span style={{ fontSize: '13px', fontWeight: 'normal', color: '#c53030', display: 'inline-block', marginTop: '4px' }}>
+                  아이디/비밀번호 입력 없이 <b>바로 로그인</b>하시면 접속됩니다!
+                </span>
+              </div>
+            )}
+
             <BaseButton $variant="secondary" onClick={handleLogin} style={{ marginTop: '15px' }}>
               LOGIN
             </BaseButton>

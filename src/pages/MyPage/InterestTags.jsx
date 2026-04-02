@@ -86,7 +86,7 @@ const InterestTags = () => {
 
   useEffect(() => {
     if (myPageData && myPageData.interestTags) {
-      const tagIdSet = new Set(myPageData.interestTags.map(tag => tag.id))
+      const tagIdSet = new Set(myPageData.interestTags.map(tag => typeof tag === 'object' ? tag.id : tag))
       setSelectedTags(tagIdSet)
     }
   }, [myPageData])
@@ -114,21 +114,21 @@ const InterestTags = () => {
       <BtnContainer>
         <Row>
           {[1, 2, 3].map((id) => (
-            <TagButton key={id} selected={selectedTags.has(id)} onClick={() => toggleTag(id)}>
+            <TagButton key={id} selected={selectedTags.has(id)} style={{ cursor: 'default' }}>
               {TAGS[id]}
             </TagButton>
           ))}
         </Row>
         <Row>
           {[4, 5, 6].map((id) => (
-            <TagButton key={id} selected={selectedTags.has(id)} onClick={() => toggleTag(id)}>
+            <TagButton key={id} selected={selectedTags.has(id)} style={{ cursor: 'default' }}>
               {TAGS[id]}
             </TagButton>
           ))}
         </Row>
         <Row>
           {[7, 8].map((id) => (
-            <TagButton key={id} selected={selectedTags.has(id)} onClick={() => toggleTag(id)}>
+            <TagButton key={id} selected={selectedTags.has(id)} style={{ cursor: 'default' }}>
               {TAGS[id]}
             </TagButton>
           ))}
