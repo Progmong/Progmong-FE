@@ -37,6 +37,11 @@ import PostModify from './pages/Community/PostModify'
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 async function enableMocking() {
+  // 환경변수 VITE_IS_DEMO가 true가 아니면 MSW를 켜지 않고 그대로 리턴
+  if (import.meta.env.VITE_IS_DEMO !== 'true') {
+    return
+  }
+
   const { worker } = await import('./mocks/browser')
 
   // worker.start()는 브라우저의 서비스 워커가 
