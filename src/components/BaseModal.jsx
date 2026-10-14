@@ -24,6 +24,11 @@ const ModalContainer = styled.div`
   border-radius: 12px;
   width: 600px;
   max-width: 70vw;
+  @media (max-width: 767px) {
+    /* 모바일에서는 여백을 줄여 내용 폭 확보 */
+    max-width: calc(100vw - 32px);
+    padding: 1rem;
+  }
   max-height: 75vh; /* 고정 높이 제거 */
   font-family: Binggrae, serif;
   overflow-y: auto;

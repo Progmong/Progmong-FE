@@ -24,15 +24,22 @@ const BackgroundContainer = styled.div`
 
 const Container = styled.div`
   width: 100%;
+  box-sizing: border-box;
   //max-height: 100vh;
   padding: 24px;
   display: flex;
+  @media (max-width: 767px) {
+    padding: 12px 8px;
+  }
 `
 
 const Wrapper = styled.div`
   margin: 5px auto;
   display: flex;
   flex-direction: column;
+  /* 자식의 고정 폭이 화면보다 넓어져 가로 스크롤이 생기지 않도록 */
+  min-width: 0;
+  max-width: 100%;
 `
 
 const MainContent = styled.div`
@@ -40,6 +47,9 @@ const MainContent = styled.div`
   flex-direction: column;
   justify-content: center;
   gap: 24px;
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
 `
 
 const UpperContents = styled.div`
@@ -77,9 +87,13 @@ const MyPageNav = styled.div`
   padding: 20px 20px;
   border-radius: 8px;
   @media (max-width: 1024px) {
-    width: 100%;
     max-width: none;
     font-size: 32px;
+  }
+  @media (max-width: 767px) {
+    margin: 8px 0;
+    padding: 12px 10px;
+    gap: 8px;
   }
 `
 
@@ -98,6 +112,10 @@ const MyPageTitle = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 400px; /* 제목의 최대 너비 설정 */
+  min-width: 0;
+  @media (max-width: 767px) {
+    font-size: 22px;
+  }
 `
 
 const GoToMain = styled.div`
@@ -122,6 +140,11 @@ const GoToMain = styled.div`
   @media (max-width: 1024px) {
     margin: 0;
   }
+  @media (max-width: 767px) {
+    flex-shrink: 0;
+    width: auto;
+    font-size: 14px;
+  }
 `
 const LogOut = styled.div`
   display: flex;
@@ -140,6 +163,12 @@ const LogOut = styled.div`
 
   &:hover {
     text-decoration: underline;
+  }
+  @media (max-width: 767px) {
+    flex-shrink: 0;
+    width: auto;
+    margin: 0;
+    font-size: 14px;
   }
 `
 

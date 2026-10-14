@@ -12,11 +12,17 @@ const Box = styled.div`
   padding: 10px 16px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
   width: 510px;
+  max-width: 100%;
+  box-sizing: border-box;
   height: 330px;
   display: flex;
   flex-direction: column;
   align-content: space-between;
   margin: 10px;
+  @media (max-width: 1024px) {
+    width: 100%;
+    margin: 10px 0;
+  }
 `
 const ExploreRecordHeader = styled.div`
   display: flex;
@@ -46,6 +52,9 @@ const MypageResultContainer = styled.div`
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   min-width: 450px;
   min-height: 240px;
+  @media (max-width: 1024px) {
+    min-width: 0;
+  }
   display: flex;
   flex-direction: column;
   justify-content: space-between;

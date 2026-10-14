@@ -13,6 +13,12 @@ const Box = styled.div`
   padding: 10px 16px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
   margin: 10px;
+  @media (max-width: 1024px) {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 10px 0;
+  }
 `
 
 const Title = styled.div`

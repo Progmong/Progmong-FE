@@ -12,7 +12,7 @@ const MypageResultContainer = styled.div`
   padding: 10px;
   border-radius: 20px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  min-width: 480px;
+  min-width: min(480px, 80vw);
   min-height: 270px;
   display: flex;
   flex-direction: column;
@@ -27,6 +27,9 @@ const ExploreModalHeader = styled.div`
   align-items: center;
   gap: 50px;
   margin-top: 10px;
+  @media (max-width: 767px) {
+    gap: 12px;
+  }
 `
 
 const ModalTitle = styled.div`
@@ -38,6 +41,11 @@ const ModalTitle = styled.div`
   text-align: center;
   font-weight: bold;
   flex-grow: 0;
+  white-space: nowrap;
+  @media (max-width: 767px) {
+    margin: 0;
+    font-size: 1.3rem;
+  }
 `
 
 const ResultRow = styled.div`
@@ -92,6 +100,7 @@ const BottomWrapper = styled.div`
   display: flex;
   justify-content: center;
   padding: 10px;
+  white-space: nowrap;
 `
 const ExploreCount = styled.div`
   display: flex;
@@ -110,6 +119,7 @@ const RecordModal = ({ title = '탐험 기록' }) => {
   const [totalPages, setTotalPages] = useState(1)
   const [hasNext, setHasNext] = useState(false)
   const [hasPrev, setHasPrev] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const fetchRecords = async () => {
     try {
@@ -133,6 +143,8 @@ const RecordModal = ({ title = '탐험 기록' }) => {
     } catch (e) {
       console.error('탐험 기록 조회 실패:', e)
       setRecords([])
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -160,7 +172,7 @@ const RecordModal = ({ title = '탐험 기록' }) => {
         </BaseButton>
       </ExploreModalHeader>
       <MypageResultContainer>
-        {records.length > 0 ? (
+        {loading ? null : records.length > 0 ? (
           records.map((p) => (
             <ResultRow key={p.id}>
               <IconWrapper>
