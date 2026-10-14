@@ -299,6 +299,7 @@ const Home = () => {
   const [scale, setScale] = useState(1)
   const [isJumping, setIsJumping] = useState(false)
   const navigate = useNavigate()
+  const { getPetInfo } = usePetApi()
 
   //걷기 테스트
   const [isWalking, setIsWalking] = useState(false)
@@ -334,8 +335,6 @@ const Home = () => {
       setIsMobile(window.innerWidth <= 767)
       setScale(window.innerHeight / DESIGN_HEIGHT)
     }
-
-    const { getPetInfo } = usePetApi()
 
     const loadPetStatus = async () => {
       try {
