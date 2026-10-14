@@ -3,6 +3,7 @@ import DOMPurify from 'dompurify'
 import BaseEditor from '@/components/BaseEditor'
 import BaseButton from '@/components/BaseButton'
 import useCommnunityApi from '@/constants/Community'
+import { toast } from 'react-toastify'
 
 // styled-components 정의
 const Container = styled.div`
@@ -68,38 +69,61 @@ const SubmitButton = styled.button`
 `
 
 const PostModify = () => {
-  const { modify } = useCommnunityApi()
+  const { modify, postDetail } = useCommnunityApi()
   const location = useLocation()
-  const { post } = location.state || {}
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
   const navigate = useNavigate()
-
   const { category, postId } = useParams()
+
+  // 상세 페이지에서 넘어오면 state를 쓰고, 새로고침·직접 접근이면 API로 불러옴
+  const [post, setPost] = useState(location.state?.post ?? null)
+  const [title, setTitle] = useState(post?.title ?? '')
+  const [content, setContent] = useState(post?.content ?? '')
+
+  useEffect(() => {
+    if (post) return
+    const fetchPost = async () => {
+      try {
+        const res = await postDetail(postId)
+        setPost(res.data.data)
+        setTitle(res.data.data.title)
+        setContent(res.data.data.content)
+      } catch (err) {
+        console.error('게시글 불러오기 오류', err)
+        toast.error('게시글을 불러오지 못했어요.')
+        navigate(`/community/${category}`, { replace: true })
+      }
+    }
+    fetchPost()
+  }, [postId])
+
   const handleContentChange = (html) => {
     setContent(html)
   }
 
-  useEffect(() => {
-    if (post) {
-      setTitle(post.title)
-    }
-  }, [])
   const isClickModify = async () => {
-    console.log('제목 : ' + title)
-    console.log('=========내용========')
-    console.log(content)
+    if (!title.trim()) {
+      toast.warning('제목을 입력해주세요.')
+      return
+    }
 
     // HTML 상에서 JS 공격을 방지
     // const safeHtml = DOMPurify.sanitize(content)
 
-    const res = await modify(postId, title, content)
-    if (res.status === 200) {
-      console.log('글 수정 성공')
+    try {
+      await modify(postId, title, content)
       navigate(`/community/${category}/posts/${postId}`, { replace: true })
-    } else {
-      console.log(res)
+    } catch (err) {
+      console.error('글 수정 오류', err)
+      toast.error('게시글을 수정하지 못했어요.')
     }
+  }
+
+  if (!post) {
+    return (
+      <Container style={{ alignItems: 'center', fontSize: '3rem' }}>
+        <IconLineMdLoadingTwotoneLoop />
+      </Container>
+    )
   }
 
   return (

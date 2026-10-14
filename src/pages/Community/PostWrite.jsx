@@ -3,6 +3,7 @@ import DOMPurify from 'dompurify'
 import BaseEditor from '@/components/BaseEditor'
 import BaseButton from '@/components/BaseButton'
 import useCommnunityApi from '@/constants/Community'
+import { toast } from 'react-toastify'
 
 // styled-components 정의
 const Container = styled.div`
@@ -79,20 +80,21 @@ const PostWrite = () => {
   }
 
   const isClickWrite = async () => {
-    console.log('제목 : ' + title)
-    console.log('=========내용========')
-    console.log(content)
+    if (!title.trim()) {
+      toast.warning('제목을 입력해주세요.')
+      return
+    }
 
     // HTML 상에서 JS 공격을 방지
     // const safeHtml = DOMPurify.sanitize(content)
 
-    const res = await write(title, content, category)
-    if (res.status === 200) {
-      console.log('글 쓰기 성공')
+    try {
+      const res = await write(title, content, category)
       const postId = res.data.data.postId
       navigate(`/community/${category}/posts/${postId}`, { replace: true })
-    } else {
-      console.log(res)
+    } catch (err) {
+      console.error('글 쓰기 오류', err)
+      toast.error('게시글을 등록하지 못했어요.')
     }
   }
 
