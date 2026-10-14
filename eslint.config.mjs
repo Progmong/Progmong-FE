@@ -54,7 +54,10 @@ export default defineConfig([
       // JSX 사용 시 React 자동 인식
       'react/react-in-jsx-scope': 'off',
 
-      'linebreak-style': ['warn', 'auto'], // or 'auto'
+      // unplugin-auto-import 로 들어오는 아이콘 컴포넌트(IconXxx)는 전역으로 인정
+      'react/jsx-no-undef': ['error', { allowGlobals: true }],
+
+      // 줄바꿈 문자는 .prettierrc 의 endOfLine: lf 로 통일 (linebreak-style 은 'auto' 를 지원하지 않음)
 
       // 리액트 프롭스 검사 끄기
       'react/prop-types': 'off',
@@ -82,9 +85,8 @@ export default defineConfig([
       },
     },
   },
-  // 검사 제외할 경로 설정 (빌드 결과물 등)
-  globalIgnores(['**/dist/**', '**/coverage/**', '**/.output/**']),
-
-  // JavaScript 기본 권장 설정 추가 (no-unused-vars 등) ESLint 기본구성
-  js.configs.recommended,
+  // 검사 제외할 경로 설정 (빌드 결과물, 자동 생성 타입 선언 등)
+  // js.configs.recommended 는 위 rules 에 이미 펼쳐 넣었으므로 다시 추가하지 않음
+  // (끝에 다시 넣으면 no-unused-vars 'warn' 설정이 'error' 로 덮어써짐)
+  globalIgnores(['**/dist/**', '**/coverage/**', '**/.output/**', '**/*.d.ts']),
 ])

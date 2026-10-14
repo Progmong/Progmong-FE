@@ -82,8 +82,6 @@ export default function BaseEditor({ onContentChange, content }) {
 
   useEffect(() => {
     setIsLayoutReady(true)
-    if (content !== null) {
-    }
     return () => setIsLayoutReady(false)
   }, [])
 

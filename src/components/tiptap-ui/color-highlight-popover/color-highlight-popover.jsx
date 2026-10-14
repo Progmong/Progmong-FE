@@ -109,6 +109,9 @@ export function ColorHighlightPopoverContent({
     <div
       ref={containerRef}
       className="tiptap-color-highlight-content"
+      // 방향키로 색상 버튼 사이를 이동하는 툴바이므로 포커스를 받는 위젯 역할을 명시
+      role="toolbar"
+      aria-label="하이라이트 색상"
       tabIndex={0}>
       <div className="tiptap-button-group" data-orientation="horizontal">
         {colors.map((color, index) => (
