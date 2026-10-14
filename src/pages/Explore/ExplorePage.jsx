@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react' // ✅ useState를 import 해야 오류 없음
 
-import petImage from '../../assets/pets/pet1.png'
-import passImage from '../../assets/pass.png'
-import missImage from '../../assets/miss.png' // MISS 이미지 경로
-import attackImage from '../../assets/attack.png'
-import killImage from '../../assets/kill.png'
+import petImage from '../../assets/pets/pet1.webp'
+import passImage from '../../assets/pass.webp'
+import missImage from '../../assets/miss.webp' // MISS 이미지 경로
+import attackImage from '../../assets/attack.webp'
+import killImage from '../../assets/kill.webp'
 import CooldownCircle from './CooldownCircle'
-import successImage from '../../assets/success.png'
-import failImage from '../../assets/fail.png'
+import successImage from '../../assets/success.webp'
+import failImage from '../../assets/fail.webp'
 import { useNavigate } from 'react-router-dom'
 import useExploreApi from '../../constants/explore'
 
 import styled, { keyframes } from 'styled-components'
-import bgImage from '../../assets/explore-bg.png'
+import bgImage from '../../assets/explore-bg.webp'
 import { swordCursor } from '../../utils/cursorBase64'
 import {
   monsterHit,
@@ -60,7 +60,7 @@ const AnimatedMonsterImage = styled.img`
 
 const getPetImageByIdAndStage = (petId, stage) => {
   try {
-    return new URL(`../../assets/pets/pet${petId}_stage${stage}.png`, import.meta.url).href
+    return new URL(`../../assets/pets/pet${petId}_stage${stage}.webp`, import.meta.url).href
   } catch (e) {
     console.error('펫 이미지 불러오기 실패', e)
     return '' // fallback image
@@ -86,7 +86,7 @@ const ProblemBoxContent = styled.div`
 `
 
 const requireMonster = (n) =>
-  new URL(`../../assets/monsters/monster-${n}.png`, import.meta.url).href
+  new URL(`../../assets/monsters/monster-${n}.webp`, import.meta.url).href
 
 const ResultImage = styled.img`
   position: fixed;

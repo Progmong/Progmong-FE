@@ -1,7 +1,6 @@
 import styled, { createGlobalStyle } from 'styled-components'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import bgVideo from '../../assets/bg-video.mp4'
 
 import BaseButton from '../../components/BaseButton'
 import BaseInput from '../../components/BaseInput'
@@ -16,7 +15,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const introBackground = new URL('../../assets/background-img1.png', import.meta.url).href
+const introBackground = new URL('../../assets/background-img1.webp', import.meta.url).href
 
 const Background = styled.div`
   position: relative;

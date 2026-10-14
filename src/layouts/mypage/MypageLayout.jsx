@@ -7,7 +7,7 @@ import InterestTags from '../../pages/MyPage/InterestTags.jsx'
 import { MyPageProvider } from '@/context/MyPageContext.jsx'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import navBackground from '@/assets/modalBackground.png'
+import navBackground from '@/assets/modalBackground.webp'
 import { useModal } from '@/context/ModalContext.jsx'
 import axios from '@/constants/axiosInstance.js'
 

@@ -263,7 +263,7 @@ const BasePetInfo = ({ nickname }) => {
     console.log(pet)
     try {
       return new URL(
-        `../assets/pets/pet${pet.petId}_stage${pet.evolutionStage}.png`,
+        `../assets/pets/pet${pet.petId}_stage${pet.evolutionStage}.webp`,
         import.meta.url,
       ).href
     } catch (err) {

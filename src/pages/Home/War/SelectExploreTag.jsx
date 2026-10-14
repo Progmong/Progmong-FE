@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import useExploreApi from '../../../constants/explore'
 
-const fightBackground = new URL('../../../assets/fight.png', import.meta.url).href
+const fightBackground = new URL('../../../assets/fight.webp', import.meta.url).href
 
 const Background = styled.div`
   position: relative;

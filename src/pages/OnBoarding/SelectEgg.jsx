@@ -10,13 +10,13 @@ import { useModal } from '@/context/ModalContext'
 import { useNavigate } from 'react-router-dom'
 
 const ProgmongEggs = [
-  new URL('../../assets/pets/pet1_stage1.png', import.meta.url).href,
-  new URL('../../assets/pets/pet2_stage1.png', import.meta.url).href,
-  new URL('../../assets/pets/pet3_stage1.png', import.meta.url).href,
-  new URL('../../assets/pets/pet4_stage1.png', import.meta.url).href,
+  new URL('../../assets/pets/pet1_stage1.webp', import.meta.url).href,
+  new URL('../../assets/pets/pet2_stage1.webp', import.meta.url).href,
+  new URL('../../assets/pets/pet3_stage1.webp', import.meta.url).href,
+  new URL('../../assets/pets/pet4_stage1.webp', import.meta.url).href,
 ]
 
-const introBackground = new URL('../../assets/background-img1.png', import.meta.url).href
+const introBackground = new URL('../../assets/background-img1.webp', import.meta.url).href
 
 const Background = styled.div`
   position: relative;

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import BaseContainer from './BaseContainer.jsx'
-import modalBackground from '@/assets/modalBackground.png'
+import modalBackground from '@/assets/modalBackground.webp'
 
 const Overlay = styled.div`
   position: fixed;
