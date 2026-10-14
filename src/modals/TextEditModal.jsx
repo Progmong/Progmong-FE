@@ -61,6 +61,8 @@ const TextEditModal = ({
             placeholder={placeholder}
             value={value}
             onChange={(e) => setValue(e.target.value)}
+            // 수정 모달을 열면 바로 입력할 수 있도록 의도적으로 포커스를 줌
+            // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
             type={inputType}
           />

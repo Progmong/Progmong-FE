@@ -302,7 +302,7 @@ const BasePetInfo = ({ nickname }) => {
   return petLoading === false ? (
     <Wrapper>
       <PetGuidContainer>
-        <PetGuidMessage>'{nickname}'</PetGuidMessage>
+        <PetGuidMessage>&apos;{nickname}&apos;</PetGuidMessage>
         <PetGuidMessage>님의</PetGuidMessage>
         <PetGuidMessage>프로그몽</PetGuidMessage>
       </PetGuidContainer>
