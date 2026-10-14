@@ -11,6 +11,8 @@ import BaseContainer from '../../components/BaseContainer'
 import useAuthApi from '../../constants/auth'
 import { useModal } from '@/context/ModalContext'
 import { useAuth } from '../../constants/AuthContext'
+import { IS_DEMO, DEMO_ACCOUNT } from '../../constants/demo'
+import { toast } from 'react-toastify'
 
 const GlobalStyle = createGlobalStyle`
   html, body, #root {
@@ -100,52 +102,60 @@ const Login = () => {
   const { openModal } = useModal()
   const navigate = useNavigate()
   const { dispatch } = useAuth()
-  const [email, setEmail] = useState(import.meta.env.VITE_IS_DEMO === 'true' ? 'mocker@example.com' : '')
-  const [password, setPassword] = useState(import.meta.env.VITE_IS_DEMO === 'true' ? 'demo_password123!' : '')
+  const [email, setEmail] = useState(IS_DEMO ? DEMO_ACCOUNT.email : '')
+  const [password, setPassword] = useState(IS_DEMO ? DEMO_ACCOUNT.password : '')
 
   const isMobile = useMediaQuery({
     query: '(max-width:767px)',
   })
 
   const handleLogin = async () => {
-    if (!email || !password) {
+    // 데모 모드에서는 빈 칸이어도 체험 계정으로 로그인
+    const loginEmail = email || (IS_DEMO ? DEMO_ACCOUNT.email : '')
+    const loginPassword = password || (IS_DEMO ? DEMO_ACCOUNT.password : '')
+
+    if (!loginEmail || !loginPassword) {
       openModal('alert', { title: '로그인 오류', message: '아이디 또는 비밀번호를 입력하세요.' })
       return
     }
     try {
-      const response = await login(email, password)
+      const response = await login(loginEmail, loginPassword)
       const accessToken = response.data.data.accessToken
 
-      if (accessToken) {
-        localStorage.setItem('accessToken', accessToken)
-
-        // 유저 정보 디코딩 후 전역 상태에 저장
-        const userInfo = decodeJWT(accessToken)
-        if (userInfo) {
-          dispatch({ type: 'LOGIN', payload: userInfo })
-        }
-
-        const res = await checkPet()
-        console.log(res.data.message)
-        if (res.data.message === '사용자 펫 정보가 없습니다.') {
-          navigate('/selectEgg') // 여기서 navigate를 사용하지 않으면 PublicRoute때문에 /main으로 리다이렉트됨
-          openModal('alert', {
-            message: `${response.data.message} 신규 사용자는 알을 선택해주세요.`,
-            // onConfirm: () => navigate('/selectEgg'),
-          })
-        } else {
-          openModal('alert', {
-            message: `${response.data.message}`,
-            onConfirm: () => navigate('/main'),
-          })
-        }
-      } else {
+      if (!accessToken) {
         openModal('alert', { message: `${response.data.message}` })
+        return
+      }
+
+      localStorage.setItem('accessToken', accessToken)
+
+      // 펫 보유 여부를 먼저 확인한 뒤 로그인 상태로 전환해야
+      // PublicRoute의 /main 리다이렉트와 /selectEgg 이동이 겹치지 않음
+      const res = await checkPet()
+      const hasPet = res.data.message !== '사용자 펫 정보가 없습니다.'
+
+      // 유저 정보 디코딩 후 전역 상태에 저장
+      const userInfo = decodeJWT(accessToken)
+      if (userInfo) {
+        dispatch({ type: 'LOGIN', payload: userInfo })
+      }
+
+      if (hasPet) {
+        toast.success(response.data.message)
+        navigate('/main', { replace: true })
+      } else {
+        toast.info('신규 사용자는 알을 선택해주세요.')
+        navigate('/selectEgg', { replace: true })
       }
     } catch (error) {
       console.error(error)
       openModal('alert', { message: `${error.response?.data?.message || '로그인 실패'}` })
     }
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    handleLogin()
   }
 
   return (
@@ -168,6 +178,8 @@ const Login = () => {
           <Logo />
 
           <LoginContainer
+            as="form"
+            onSubmit={handleSubmit}
             style={{
               marginTop: isMobile ? '100px' : '160px',
             }}
@@ -186,28 +198,41 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            
-            {import.meta.env.VITE_IS_DEMO === 'true' && (
-              <div style={{ 
-                backgroundColor: '#fff0f0', 
-                color: '#e53e3e', 
-                border: '1px solid #fc8181', 
-                padding: '12px', 
-                borderRadius: '8px',
-                textAlign: 'center', 
-                marginTop: '15px', 
-                fontSize: '15px', 
-                fontWeight: 'bold',
-                boxShadow: '0 2px 4px rgba(252, 129, 129, 0.2)'
-              }}>
-                포트폴리오 체험 모드<br/>
-                <span style={{ fontSize: '13px', fontWeight: 'normal', color: '#c53030', display: 'inline-block', marginTop: '4px' }}>
-                  아이디/비밀번호 입력 없이 <b>바로 로그인</b>하시면 접속됩니다!
+
+            {IS_DEMO && (
+              <div
+                style={{
+                  backgroundColor: '#fff0f0',
+                  color: '#e53e3e',
+                  border: '1px solid #fc8181',
+                  padding: '12px',
+                  borderRadius: '8px',
+                  textAlign: 'center',
+                  marginTop: '15px',
+                  fontSize: '15px',
+                  fontWeight: 'bold',
+                  boxShadow: '0 2px 4px rgba(252, 129, 129, 0.2)',
+                }}
+              >
+                포트폴리오 체험 모드
+                <br />
+                <span
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: 'normal',
+                    color: '#c53030',
+                    display: 'inline-block',
+                    marginTop: '4px',
+                  }}
+                >
+                  체험 계정이 채워져 있어요. <b>LOGIN</b>만 누르세요!
+                  <br />
+                  (아무 이메일/비밀번호를 입력해도 접속됩니다)
                 </span>
               </div>
             )}
 
-            <BaseButton $variant="secondary" onClick={handleLogin} style={{ marginTop: '15px' }}>
+            <BaseButton $variant="secondary" type="submit" style={{ marginTop: '15px' }}>
               LOGIN
             </BaseButton>
             <div

@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children }) => {
     return <div>Loading...</div>
   }
 
-  return state.user ? children : <Navigate to="/login" replace />
+  return state.user ? children : <Navigate to="/" replace />
 }
 
 export default ProtectedRoute

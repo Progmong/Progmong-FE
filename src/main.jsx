@@ -8,6 +8,7 @@ import './Styles/base.css'
 // Contexts
 import { AuthProvider } from './constants/AuthContext'
 import { ModalProvider } from './context/ModalContext'
+import { IS_DEMO } from './constants/demo'
 
 // Route guards
 import ProtectedRoute from './components/ProtectedRoute'
@@ -37,18 +38,19 @@ import PostModify from './pages/Community/PostModify'
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 async function enableMocking() {
-  // 환경변수 VITE_IS_DEMO가 true가 아니면 MSW를 켜지 않고 그대로 리턴
-  if (import.meta.env.VITE_IS_DEMO !== 'true') {
+  // 데모 모드가 아니면 MSW를 켜지 않고 그대로 리턴
+  if (!IS_DEMO) {
     return
   }
 
   const { worker } = await import('./mocks/browser')
 
-  // worker.start()는 브라우저의 서비스 워커가 
-  // 백그라운드에 등록되고, API 요청을 가로챌 준비가 완전히 끝났을 때 
-  // Promise 형식으로 발송 
+  // worker.start()는 브라우저의 서비스 워커가
+  // 백그라운드에 등록되고, API 요청을 가로챌 준비가 완전히 끝났을 때
+  // Promise 형식으로 발송
   return worker.start({
     onUnhandledRequest: 'bypass', // 처리되지 않은 요청은 경고 없이 통과
+    quiet: import.meta.env.PROD, // 배포 환경에서는 요청마다 찍히는 MSW 로그 끄기
   })
 }
 
