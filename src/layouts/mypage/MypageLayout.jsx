@@ -4,7 +4,8 @@ import InfoPanel from '../../pages/MyPage/infoPanel/InfoPanel.jsx'
 import CharacterStage from '../../pages/MyPage/CharacterStage.jsx'
 import ExploreRecords from '../../pages/MyPage/ExploreRecord.jsx'
 import InterestTags from '../../pages/MyPage/InterestTags.jsx'
-import { MyPageProvider } from '@/context/MyPageContext.jsx'
+import { MyPageProvider, useMyPage } from '@/context/MyPageContext.jsx'
+import PageLoader from '@/components/PageLoader'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import navBackground from '@/assets/modalBackground.webp'
@@ -172,6 +173,13 @@ const LogOut = styled.div`
   }
 `
 
+// 마이페이지 데이터를 받는 동안 패널마다 '로딩 중...' 글자를 띄우지 않고
+// 화면 전체 로더 하나로 기다렸다가 한 번에 보여줌 (짧으면 로더도 보이지 않음)
+const MyPageLoadingGate = ({ children }) => {
+  const { loading } = useMyPage()
+  return loading ? <PageLoader /> : children
+}
+
 const MyPageLayout = () => {
   const { openModal } = useModal()
   const navigate = useNavigate()
@@ -205,27 +213,29 @@ const MyPageLayout = () => {
   return (
     // 마이페이지 컨텍스트 제공자 => 사용시 useMyPage 훅을 통해 데이터 접근 가능(컨슈머 대신  커스텀 훅 방식 사용)
     <MyPageProvider>
-      <BackgroundContainer>
-        <Container>
-          <Wrapper>
-            <MyPageNav>
-              <GoToMain onClick={handleGoToMain}>메인페이지</GoToMain>
-              <MyPageTitle>마이페이지</MyPageTitle>
-              <LogOut onClick={handleLogOut}>로그아웃</LogOut>
-            </MyPageNav>
-            <UpperContents>
-              <InfoPanel />
-              <MainContent>
-                <CharacterStage />
-              </MainContent>
-            </UpperContents>
-            <BottomContents>
-              <ExploreRecords />
-              <InterestTags />
-            </BottomContents>
-          </Wrapper>
-        </Container>
-      </BackgroundContainer>
+      <MyPageLoadingGate>
+        <BackgroundContainer>
+          <Container>
+            <Wrapper>
+              <MyPageNav>
+                <GoToMain onClick={handleGoToMain}>메인페이지</GoToMain>
+                <MyPageTitle>마이페이지</MyPageTitle>
+                <LogOut onClick={handleLogOut}>로그아웃</LogOut>
+              </MyPageNav>
+              <UpperContents>
+                <InfoPanel />
+                <MainContent>
+                  <CharacterStage />
+                </MainContent>
+              </UpperContents>
+              <BottomContents>
+                <ExploreRecords />
+                <InterestTags />
+              </BottomContents>
+            </Wrapper>
+          </Container>
+        </BackgroundContainer>
+      </MyPageLoadingGate>
     </MyPageProvider>
   )
 }
