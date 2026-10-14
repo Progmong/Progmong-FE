@@ -3,16 +3,16 @@ import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 
 // 배경 이미지
-import backgroundImage from '../../assets/levelselecet-bg.png'
-import mobileBackgroundImage from '../../assets/levelselectmobile-bg.png'
+import backgroundImage from '../../assets/levelselecet-bg.webp'
+import mobileBackgroundImage from '../../assets/levelselectmobile-bg.webp'
 
 // 성 이미지
-import bronzeCastle from '../../assets/castles/bronze_castle.png'
-import silverCastle from '../../assets/castles/silver_castle.png'
-import goldCastle from '../../assets/castles/gold_castle.png'
-import platinumCastle from '../../assets/castles/platinum_castle.png'
-import diamondCastle from '../../assets/castles/diamond_castle.png'
-import baseBackground from '../../assets/base-background.png' // 흐릿한 하늘색 배경
+import bronzeCastle from '../../assets/castles/bronze_castle.webp'
+import silverCastle from '../../assets/castles/silver_castle.webp'
+import goldCastle from '../../assets/castles/gold_castle.webp'
+import platinumCastle from '../../assets/castles/platinum_castle.webp'
+import diamondCastle from '../../assets/castles/diamond_castle.webp'
+import baseBackground from '../../assets/base-background.webp' // 흐릿한 하늘색 배경
 
 // swiper
 import { Swiper, SwiperSlide } from 'swiper/react'

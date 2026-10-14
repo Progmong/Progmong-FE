@@ -3,7 +3,7 @@ import styled, { createGlobalStyle } from 'styled-components'
 import { Link, useNavigate } from 'react-router-dom'
 import { useMediaQuery } from 'react-responsive'
 
-import logo from '../../assets/progmong-logo.png'
+import logo from '../../assets/progmong-logo.webp'
 import BaseButton from '../../components/BaseButton'
 import BaseInput from '../../components/BaseInput/'
 import BaseContainer from '../../components/BaseContainer'
@@ -16,7 +16,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Binggrae';
   }
 `
-const introBackground = new URL('../../assets/background-img1.png', import.meta.url).href
+const introBackground = new URL('../../assets/background-img1.webp', import.meta.url).href
 
 const Background = styled.div`
   position: relative;

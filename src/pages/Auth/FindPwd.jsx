@@ -15,7 +15,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const introBackground = new URL('../../assets/background-img1.png', import.meta.url).href
+const introBackground = new URL('../../assets/background-img1.webp', import.meta.url).href
 
 const Background = styled.div`
   position: relative;

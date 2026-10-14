@@ -8,7 +8,7 @@ import FreePostEle from './FreePostEle'
 import PostList from './PostList'
 
 import BaseButton from '@/components/BaseButton'
-import BackgroundImg from '@/assets/community/community_background5.png'
+import BackgroundImg from '@/assets/community/community_background5.webp'
 
 const MainBox = styled.div`
   /* background-color: #b4e0d9; */

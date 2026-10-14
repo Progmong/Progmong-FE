@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useLocation, useNavigate } from 'react-router-dom'
-import bgImage from '../../assets/explore-bg.png'
+import bgImage from '../../assets/explore-bg.webp'
 import checkIcon from '../../assets/check-icon.png'
 import passIcon from '../../assets/pass-icon.png'
 import ConvexButton from '@/components/BaseButton'

@@ -11,24 +11,24 @@ import axios from '../../constants/axiosInstance'
 import { media } from '@/utils/breakpoints.js'
 
 // 이미지 리소스들
-import communityImg from '../../assets/shop.png'
-import desktopBg from '../../assets/home_background.png'
-import mobileBg from '../../assets/home_background_mobile.png'
-import baseBackground from '../../assets/base-background.png'
-import dungeonImg from '../../assets/main_dungeon.png'
-import mypageImg from '../../assets/main_mypage.png'
-import boardImg from '../../assets/main_board.png'
-import progmongImg from '../../assets/progmong.png'
+import communityImg from '../../assets/shop.webp'
+import desktopBg from '../../assets/home_background.webp'
+import mobileBg from '../../assets/home_background_mobile.webp'
+import baseBackground from '../../assets/base-background.webp'
+import dungeonImg from '../../assets/main_dungeon.webp'
+import mypageImg from '../../assets/main_mypage.webp'
+import boardImg from '../../assets/main_board.webp'
+import progmongImg from '../../assets/progmong.webp'
 import thoughtbubble from '../../assets/ttbubble.png'
 import fightBubble from '../../assets/fightbubble.png'
 import sleepBubble from '../../assets/sleepbubble.png'
 import LeftArrowImg from '../../assets/left-arrow2.png'
 import RightArrowImg from '../../assets/right-arrow2.png'
-import LogoutLogo from '../../assets/stone_logout3.png'
+import LogoutLogo from '../../assets/stone_logout3.webp'
 
 //걷기 테스트
 import walking from '../../assets/walking22.gif'
-import standing from '../../assets/defaultstand.png'
+import standing from '../../assets/defaultstand.webp'
 
 const DESIGN_WIDTH = 1536
 const DESIGN_HEIGHT = 1024
@@ -320,7 +320,7 @@ const Home = () => {
     if (!petData?.petId || !petData?.evolutionStage) return null
     try {
       return new URL(
-        `../../assets/pets/pet${petData.petId}_stage${petData.evolutionStage}.png`,
+        `../../assets/pets/pet${petData.petId}_stage${petData.evolutionStage}.webp`,
         import.meta.url,
       ).href
     } catch (err) {
