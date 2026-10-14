@@ -9,6 +9,12 @@ import { useMyPage } from '@/context/MyPageContext.jsx'
 const Panel = styled.div`
   min-width: 280px;
   max-width: 700px;
+  @media (max-width: 1024px) {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 10px 0;
+  }
   background-color: white;
   border-radius: 16px;
   padding: 16px;

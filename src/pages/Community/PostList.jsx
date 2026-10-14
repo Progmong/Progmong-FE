@@ -18,8 +18,17 @@ const ElementContainer = styled.div`
 `
 const BottomContainer = styled.div`
   margin-top: 10px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  display: flex;
+  justify-content: flex-end;
+  white-space: nowrap;
+`
+
+// 목록을 불러오는 동안 게시글 카드 높이만큼 자리를 잡아 글쓰기 버튼이 밀리지 않게 함
+const SkeletonItem = styled.div`
+  height: 64px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid #e5e5e5;
 `
 
 const WriteButtonContainer = styled.div`
@@ -27,7 +36,7 @@ const WriteButtonContainer = styled.div`
   text-align: end;
 `
 const PostList = () => {
-  const { posts } = useOutletContext()
+  const { posts, loading } = useOutletContext()
   const navigate = useNavigate()
 
   const isCickWrite = () => {
@@ -36,15 +45,15 @@ const PostList = () => {
   return (
     <div>
       <ListContainer>
-        {posts.map((post) => (
-          <ElementContainer key={post.postId}>
-            <FreePostEle post={post} />
-          </ElementContainer>
-        ))}
+        {loading
+          ? Array.from({ length: 3 }, (_, i) => <SkeletonItem key={i} />)
+          : posts.map((post) => (
+              <ElementContainer key={post.postId}>
+                <FreePostEle post={post} />
+              </ElementContainer>
+            ))}
       </ListContainer>
       <BottomContainer>
-        <div></div>
-        <div></div>
         <WriteButtonContainer>
           <BaseButton onClick={isCickWrite}>글쓰기</BaseButton>
         </WriteButtonContainer>

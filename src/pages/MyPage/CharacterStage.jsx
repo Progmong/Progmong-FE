@@ -32,6 +32,13 @@ const Stage = styled.div`
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
   min-width: 600px;
   gap: 8px;
+  /* 세로 배치(태블릿·모바일)에서는 고정 폭 대신 화면 폭에 맞춤 */
+  @media (max-width: 1024px) {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 10px 0;
+  }
 `
 
 const Title = styled.div`
@@ -43,7 +50,7 @@ const Title = styled.div`
 `
 
 const StageContainer = styled.div`
-  width: ${({ $isMobile }) => ($isMobile ? '360px' : '100%')};
+  width: 100%;
   //max-width: ${({ $isMobile }) => ($isMobile ? '380px' : '500px')};
   height: ${({ $isMobile }) => ($isMobile ? '220px' : '350px')};
   position: relative;

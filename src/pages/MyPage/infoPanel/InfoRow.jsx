@@ -21,11 +21,17 @@ const LabelValue = styled.div`
   font-size: 12px;
   min-width: 150px;
   margin-right: 20px;
+  @media (max-width: 767px) {
+    min-width: 0;
+  }
 `
 const ExpBarWrapper = styled.div`
   width: 100%;
   min-width: 150px;
   display: flex;
+  @media (max-width: 767px) {
+    min-width: 0;
+  }
   justify-content: end;
   margin-right: 10px;
 `

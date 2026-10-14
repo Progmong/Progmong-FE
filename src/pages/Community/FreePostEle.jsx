@@ -9,15 +9,27 @@ const Container = styled.div`
   grid-gap: 16px;
   font-family: 'Binggrae';
   padding: 10px;
+  @media (max-width: 767px) {
+    /* 모바일: 제목 한 줄 전체, 작성자·시간은 아래 줄 */
+    grid-template-columns: 1fr auto;
+    grid-gap: 8px;
+  }
 `
 
 const TitleBox = styled.div`
   font-weight: bold;
   display: flex;
   align-items: center;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  @media (max-width: 767px) {
+    grid-column: 1 / -1;
+  }
 `
 
-const AuthorBox = styled.div``
+const AuthorBox = styled.div`
+  white-space: nowrap;
+`
 
 const AuthorTextBox = styled.div`
   display: inline-block;
@@ -30,6 +42,7 @@ const AuthorTextBox = styled.div`
 const CreatedBox = styled.div`
   display: flex;
   align-items: center;
+  white-space: nowrap;
 `
 
 const FreePostEle = (props) => {
