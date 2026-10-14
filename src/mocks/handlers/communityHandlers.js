@@ -72,7 +72,10 @@ export const communityHandlers = [
       post.viewCount += 1
       return HttpResponse.json({ status: 200, data: post })
     }
-    return HttpResponse.json({ status: 404, message: '게시글을 찾을 수 없습니다.' })
+    return HttpResponse.json(
+      { status: 404, message: '게시글을 찾을 수 없습니다.' },
+      { status: 404 },
+    )
   }),
 
   http.get(`${baseURL}/community/post/activity`, () => {
