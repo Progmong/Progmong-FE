@@ -4,7 +4,16 @@ import { mockPet, globalPetStatus } from '../store'
 const baseURL = 'https://api-progmong.shop/api/v1'
 
 export const petHandlers = [
-  http.post(`${baseURL}/pet/register`, () => {
+  http.post(`${baseURL}/pet/register`, async ({ request }) => {
+    const { petId, nickname } = await request.json()
+    // 새로 고른 알로 펫 정보 초기화
+    Object.assign(mockPet, {
+      petId,
+      nickname,
+      level: 1,
+      currentExp: 0,
+      evolutionStage: 1,
+    })
     return HttpResponse.json({ status: 200, message: "펫 등록 성공" })
   }),
 
@@ -14,7 +23,8 @@ export const petHandlers = [
       message: '사용자 펫 정보가 있습니다.',
       data: {
         id: 1,
-        name: '프로그몽',
+        name: mockPet.nickname,
+        nickname: mockPet.nickname, // 탐험 화면은 nickname 필드를 읽음
         type: 'BASIC',
         level: mockPet.level,
         experience: mockPet.currentExp,
