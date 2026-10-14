@@ -68,6 +68,7 @@ import 'ckeditor5/ckeditor5.css'
 import '@/Styles/editor.css'
 
 import axios from 'axios'
+import { IS_DEMO } from '@/constants/demo'
 
 /**
  * Create a free account with a trial: https://portal.ckeditor.com/checkout?plan=free
@@ -78,7 +79,7 @@ export default function BaseEditor({ onContentChange, content }) {
   const editorContainerRef = useRef(null)
   const editorRef = useRef(null)
   const [isLayoutReady, setIsLayoutReady] = useState(false)
- 
+
   useEffect(() => {
     setIsLayoutReady(true)
     if (content !== null) {
@@ -102,6 +103,20 @@ export default function BaseEditor({ onContentChange, content }) {
     }
 
     upload() {
+      // 데모 모드에서는 이미지 서버 대신 Data URL로 본문에 바로 넣음
+      // (기존 서버는 HTTP라 HTTPS 배포본에서 혼합 콘텐츠로 차단됨)
+      if (IS_DEMO) {
+        return this.loader.file.then(
+          (file) =>
+            new Promise((resolve, reject) => {
+              const reader = new FileReader()
+              reader.onload = () => resolve({ default: reader.result })
+              reader.onerror = () => reject('이미지를 읽지 못했습니다.')
+              reader.readAsDataURL(file)
+            }),
+        )
+      }
+
       return this.loader.file.then((file) => {
         const data = new FormData()
         data.append('upload', file) // 서버 필드명이 다르면 변경
