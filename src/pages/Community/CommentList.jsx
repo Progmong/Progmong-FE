@@ -21,6 +21,10 @@ const CommentCard = styled(BaseContainer)`
   gap: 12px; /* 아바타와 내용 간 간격 */
   border: 1px solid #ccc;
   padding: 14px 16px;
+  @media (max-width: 767px) {
+    padding: 12px 10px 28px;
+    gap: 8px;
+  }
 `
 
 const AvatarCircle = styled.div`
@@ -42,6 +46,8 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
 `
 
 // 작성자 이름 + 시각 한 줄
@@ -107,11 +113,28 @@ const PetInfoContainer = styled.div`
 
 const PetImageContainer = styled.div`
   margin-left: 2rem;
+  width: 100px;
+  img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+  }
+  @media (max-width: 767px) {
+    margin-left: 0;
+    width: 64px;
+    img {
+      width: 64px;
+      height: 64px;
+    }
+  }
 `
 
 const PetInfoText = styled.div`
   text-align: center;
   font-family: 'Binggrae';
+  @media (max-width: 767px) {
+    font-size: 12px;
+  }
 `
 
 const CommentList = ({ comments = [] }) => {
@@ -169,7 +192,12 @@ const CommentList = ({ comments = [] }) => {
           {/* <AvatarCircle>{getInitial(c.authorName)}</AvatarCircle> */}
           <div>
             <PetImageContainer>
-              <img src={getPetImage(c.userPet.petId, c.userPet.evolutionStage)} width={100}></img>
+              <img
+                src={getPetImage(c.userPet.petId, c.userPet.evolutionStage)}
+                width={100}
+                height={100}
+                alt={c.userPet.nickname}
+              />
               <PetInfoText>
                 LV.{c.userPet.level} {c.userPet.nickname}
               </PetInfoText>

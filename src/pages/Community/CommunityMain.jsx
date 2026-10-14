@@ -47,6 +47,9 @@ const CateContainer = styled.div`
   display: flex;
   padding-top: var(--spacing-md);
   color: #543f25;
+  @media (max-width: 767px) {
+    padding-left: 16px;
+  }
 `
 
 const CateBox = styled.div`
@@ -57,6 +60,10 @@ const CateBox = styled.div`
   border-top-right-radius: 25px;
   padding: 5px 40px 5px 40px;
   background-color: #ffedb6;
+  cursor: pointer;
+  @media (max-width: 767px) {
+    padding: 5px 24px;
+  }
 
   transition: transform ease 0.3s;
 
@@ -85,6 +92,9 @@ const HomeBox = styled.div`
   margin-top: -30px;
 
   z-index: 1; // 카테고리 길어진거 가리기 위해 삽입
+  @media (max-width: 767px) {
+    padding: 6px 6px 0;
+  }
 `
 
 const BoardContainer = styled.div`
@@ -93,6 +103,11 @@ const BoardContainer = styled.div`
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   padding: 25px;
+  /* flex 자식이 내용 폭만큼 늘어나 본문이 화면 밖으로 잘리지 않도록 */
+  min-width: 0;
+  @media (max-width: 767px) {
+    padding: 14px 10px;
+  }
 `
 
 const ListContainer = styled.div`
@@ -118,6 +133,7 @@ const CommunityMain = () => {
   const { category, postId } = useParams()
 
   const [posts, setPosts] = useState([])
+  const [postsLoading, setPostsLoading] = useState(true)
 
   const navigate = useNavigate()
 
@@ -126,11 +142,12 @@ const CommunityMain = () => {
       try {
         if (!postId) {
           const res = await categoryAll(category)
-          console.log(res.data.data)
           setPosts(res.data.data)
         }
       } catch (err) {
         console.error(err)
+      } finally {
+        setPostsLoading(false)
       }
     }
 
@@ -196,7 +213,7 @@ const CommunityMain = () => {
 
       <HomeBox>
         <BoardContainer>
-          <Outlet context={{ posts: posts }} />
+          <Outlet context={{ posts: posts, loading: postsLoading }} />
         </BoardContainer>
       </HomeBox>
     </MainBox>

@@ -5,6 +5,21 @@ import usePetApi from '@/constants/pet'
 const Wrapper = styled(BaseContainer)`
   display: flex;
   padding: 0;
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+`
+
+// 펫 정보를 불러오는 동안 카드 높이만큼 자리를 잡아 아래 댓글이 밀리지 않게 함
+const Placeholder = styled(BaseContainer)`
+  min-height: 190px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  @media (max-width: 767px) {
+    min-height: 420px;
+  }
 `
 
 const PetGuidContainer = styled.div`
@@ -20,6 +35,12 @@ const PetGuidContainer = styled.div`
   align-items: center;
 
   flex-direction: column;
+  @media (max-width: 767px) {
+    flex-direction: row;
+    gap: 0.4rem;
+    padding: 0.75rem 1rem 1.25rem;
+    border-radius: 14px 14px 0 0;
+  }
 `
 
 const PetGuidMessage = styled.div`
@@ -28,6 +49,10 @@ const PetGuidMessage = styled.div`
   font-weight: bold;
   font-family: 'Binggrae';
   max-width: 80%;
+  @media (max-width: 767px) {
+    max-width: none;
+    font-size: var(--font-size-lg);
+  }
 `
 
 const PetInfoContaainer = styled.div`
@@ -45,10 +70,20 @@ const PetInfoContaainer = styled.div`
   padding-bottom: 1rem;
 
   display: flex;
+  @media (max-width: 767px) {
+    margin-left: 0;
+    margin-top: -10px;
+    padding: 1rem;
+    align-items: center;
+  }
 `
 
 const PetImageContainer = styled.div`
   margin-left: 2rem;
+  flex-shrink: 0;
+  @media (max-width: 767px) {
+    margin-left: 0;
+  }
 `
 
 const PetInfoContext = styled.div`
@@ -58,8 +93,13 @@ const PetInfoContext = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 2rem;
+  min-width: 0;
 
   justify-content: center;
+  @media (max-width: 767px) {
+    margin-left: 1rem;
+    font-size: var(--font-size-md);
+  }
 `
 
 const PetName = styled.div`
@@ -76,6 +116,7 @@ const PetLevel = styled.div``
 // 프로그레스바 전체 컨테이너
 const ProgressBarContainer = styled.div`
   max-width: 60%;
+  min-width: 100px;
   width: 100%;
   height: 2rem;
   background-color: #e0e0e0;
@@ -124,6 +165,12 @@ const CommunityActiveContainer = styled.div`
   font-family: 'Binggrae';
 
   gap: 1rem;
+  @media (max-width: 767px) {
+    border-left: none;
+    border-top: 1px solid #ccc;
+    border-radius: 0 0 14px 14px;
+    padding: 1rem;
+  }
 `
 
 const ActiveTitle = styled.div`
@@ -239,7 +286,12 @@ const BasePetInfo = ({ nickname }) => {
     }
   }
 
-  if (petLoading) return <IconLineMdLoadingTwotoneLoop />
+  if (petLoading)
+    return (
+      <Placeholder>
+        <IconLineMdLoadingTwotoneLoop />
+      </Placeholder>
+    )
 
   // 퍼센트 및 텍스트 계산
   const exp = pet.currentExp
@@ -256,7 +308,14 @@ const BasePetInfo = ({ nickname }) => {
       </PetGuidContainer>
       <PetInfoContaainer>
         <PetImageContainer>
-          <img src={petImage} width={150}></img>
+          {/* 이미지 로드 전에도 자리를 차지하도록 크기 고정 */}
+          <img
+            src={petImage}
+            width={150}
+            height={150}
+            alt={pet.nickname}
+            style={{ objectFit: 'contain' }}
+          />
         </PetImageContainer>
         <PetInfoContext>
           <PetName>{pet.nickname}</PetName>

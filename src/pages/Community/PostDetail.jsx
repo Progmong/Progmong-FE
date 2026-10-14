@@ -20,6 +20,9 @@ const PostContainer = styled(BaseContainer)`
   padding: 2rem;
   position: relative;
   min-height: 60vh;
+  @media (max-width: 767px) {
+    padding: 1.25rem 1rem;
+  }
 `
 
 const Header = styled.div`
@@ -30,6 +33,11 @@ const Header = styled.div`
   font-size: var(--font-size-md);
   gap: var(--spacing-lg);
   margin-top: var(--spacing-sm);
+  flex-wrap: wrap;
+  @media (max-width: 767px) {
+    gap: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
 `
 
 const MetaTitleContainer = styled.span`
@@ -40,10 +48,25 @@ const MetaTitleContainer = styled.span`
 const TitleContainer = styled.div`
   font-size: var(--font-size-2xl);
   font-weight: bold;
+  overflow-wrap: anywhere;
+  padding-right: 2rem; /* 우측 상단 메뉴 버튼과 겹치지 않게 */
+  @media (max-width: 767px) {
+    font-size: var(--font-size-xl);
+  }
 `
 
 const ContentContainer = styled.div`
   margin-top: var(--spacing-lg);
+  overflow-wrap: anywhere;
+
+  /* 본문 이미지·코드 블록이 화면 폭을 넘지 않도록 */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  pre {
+    overflow-x: auto;
+  }
 `
 
 const PetInfoWrapper = styled.div`
