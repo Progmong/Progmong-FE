@@ -1,9 +1,6 @@
 import { createContext, useContext, useEffect, useReducer } from 'react'
 import AxiosInstance from '@/constants/axiosInstance'
 
-// 초기 상태: user는 null, 로딩 상태는 true로 시작
-const initialState = { user: null, loading: true }
-
 // React Context 생성: 인증 상태를 전역으로 관리하기 위한 컨텍스트
 const AuthContext = createContext()
 
@@ -50,42 +47,36 @@ const decodeJWT = (token) => {
   }
 }
 
-// 토큰 기반 자동 로그인 시도
-const autoLogin = async (token, dispatch) => {
-  try {
-    // 인증 확인용 API 호출 (토큰 유효성 확인용)
-    const res = await AxiosInstance.get('/health-data')
+// 저장된 토큰으로 초기 상태를 바로 만든다.
+// 서버 확인을 기다리며 로딩 화면을 띄우지 않고, 확인은 화면을 그린 뒤 뒤에서 한다.
+const initAuthState = () => {
+  const user = decodeJWT(localStorage.getItem('accessToken'))
+  return { user, loading: false }
+}
 
-    if (res.status === 200) {
-      // 토큰이 유효하면 디코딩 후 로그인 상태로 dispatch
-      const decodedToken = decodeJWT(token)
-      if (decodedToken) {
-        // sub 값을 기준으로 로그인 정보 저장
-        dispatch({ type: 'LOGIN', payload: decodedToken })
-        return
-      }
-    }
-    // 토큰이 유효하지 않을 경우 로딩 종료 상태로 변경
-    dispatch({ type: 'STOP_LOADING' })
+// 토큰 유효성 확인 (화면을 막지 않음)
+// 서버가 토큰을 거절(401/403)했을 때만 로그아웃하고,
+// 네트워크 오류 등은 로그인 상태를 유지한다.
+const verifyToken = async (dispatch) => {
+  try {
+    await AxiosInstance.get('/health-data')
   } catch (error) {
-    console.error('자동 로그인 실패:', error)
-    // 리프레시 토큰 로직이 인터셉터에 있으면 여기선 무시 가능
-    // 에러 발생 시에도 로딩 상태 false 처리
-    dispatch({ type: 'STOP_LOADING' })
+    const status = error.response?.status
+    if (status === 401 || status === 403) {
+      localStorage.removeItem('accessToken')
+      dispatch({ type: 'LOGOUT' })
+    } else {
+      console.error('토큰 확인 실패:', error)
+    }
   }
 }
 
 export const AuthProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(authReducer, initialState)
+  const [state, dispatch] = useReducer(authReducer, undefined, initAuthState)
 
-  // 컴포넌트 마운트 시 자동 로그인 시도
+  // 마운트 시 토큰이 있으면 뒤에서 유효성만 확인
   useEffect(() => {
-    const token = localStorage.getItem('accessToken')
-    if (token) {
-      autoLogin(token, dispatch) // 토큰 있으면 자동 로그인 시도
-    } else {
-      dispatch({ type: 'STOP_LOADING' }) // 토큰 없으면 바로 로딩 종료
-    }
+    if (state.user) verifyToken(dispatch)
   }, [])
 
   // context provider로 state, dispatch 제공
