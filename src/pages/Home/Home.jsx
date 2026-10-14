@@ -29,6 +29,7 @@ import LogoutLogo from '../../assets/stone_logout3.webp'
 //걷기 테스트
 import walking from '../../assets/walking22.gif'
 import standing from '../../assets/defaultstand.webp'
+import PageLoader from '@/components/PageLoader'
 
 const DESIGN_WIDTH = 1536
 const DESIGN_HEIGHT = 1024
@@ -352,7 +353,8 @@ const Home = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  if (!petData) return <div>로딩 중...</div>
+  // 펫 정보를 받는 동안은 공통 로더(짧으면 보이지 않음)
+  if (!petData) return <PageLoader />
 
   const backgroundImage = isMobile ? mobileBg : desktopBg
   const config = statusMap[petData.status]

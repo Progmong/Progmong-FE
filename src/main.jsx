@@ -48,21 +48,29 @@ async function enableMocking() {
     return
   }
 
-  const { worker } = await import('./mocks/browser')
+  const { startMocking, restartMocking } = await import('./mocks/browser')
 
-  // worker.start()는 브라우저의 서비스 워커가
-  // 백그라운드에 등록되고, API 요청을 가로챌 준비가 완전히 끝났을 때
-  // Promise 형식으로 발송
-  return worker.start({
-    onUnhandledRequest: 'bypass', // 처리되지 않은 요청은 경고 없이 통과
-    quiet: import.meta.env.PROD, // 배포 환경에서는 요청마다 찍히는 MSW 로그 끄기
+  // Safari 등은 뒤로/앞으로 이동 시 페이지를 bfcache 에서 그대로 되살리는데,
+  // 떠날 때 MSW 가 이 탭을 비활성화해 두어 요청이 실제(죽은) 서버로 나간다.
+  // 새로고침(로딩 화면) 없이 MSW 만 다시 켜서 이어서 쓰게 한다.
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) restartMocking()
   })
+
+  return startMocking()
 }
 
-// 로그인 직후 가장 먼저 가는 메인 페이지는 브라우저가 한가할 때 미리 받아 둠
+// 자주 가는 가벼운 페이지는 브라우저가 한가할 때 미리 받아 둔다.
+// (처음 들어갈 때 코드 내려받기를 기다리지 않게. 에디터·상세처럼 무거운 페이지는 제외)
 const prefetchMainPage = () => {
   const idle = window.requestIdleCallback ?? ((cb) => setTimeout(cb, 1500))
-  idle(() => loadMainPage())
+  idle(() => {
+    loadMainPage()
+    import('./layouts/CommunityLayout')
+    import('./pages/Community/PostList')
+    import('./layouts/mypage/MypageLayout')
+    import('./pages/Explore/LevelSelectPage')
+  })
 }
 
 enableMocking().then(() => {

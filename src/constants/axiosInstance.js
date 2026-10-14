@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import { IS_DEMO } from './demo'
+
 const AxiosInstance = axios.create({
   baseURL: 'https://api-progmong.shop/api/v1',
   withCredentials: true, // 쿠키를 자동 포함하도록 설정
@@ -48,6 +50,15 @@ AxiosInstance.interceptors.response.use(
         window.location.href = '/'
         return new Promise(() => {})
       }
+    }
+
+    // 데모 모드에서 응답 자체가 없으면(MSW 가 요청을 놓쳐 죽은 서버로 나간 경우)
+    // MSW 를 다시 켜고 한 번만 재시도
+    if (IS_DEMO && !error.response && originalConfig && !originalConfig._mswRetried) {
+      originalConfig._mswRetried = true
+      const { restartMocking } = await import('@/mocks/browser')
+      await restartMocking()
+      return AxiosInstance(originalConfig)
     }
 
     // 그 외 에러는 그대로 처리
