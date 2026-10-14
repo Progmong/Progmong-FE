@@ -1,8 +1,20 @@
-export let exploreProblemCount = 0;
-export const problemHistory = [];
-export let globalPetStatus = '휴식';
+// 데모 데이터는 방문자 브라우저(localStorage)에 저장해 새로고침 후에도 이어지게 함
+const STORAGE_KEY = 'progmong-demo-db-v1';
 
-export let mockUser = {
+const loadSaved = () => {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) ?? {};
+  } catch {
+    return {};
+  }
+};
+const saved = loadSaved();
+
+export let exploreProblemCount = saved.exploreProblemCount ?? 0;
+export const problemHistory = saved.problemHistory ?? [];
+export let globalPetStatus = saved.globalPetStatus ?? '휴식';
+
+export let mockUser = saved.mockUser ?? {
   id: 1,
   nickname: 'Mocker',
   email: 'mocker@example.com',
@@ -11,7 +23,7 @@ export let mockUser = {
   profileImageUrl: null
 };
 
-export let mockPet = {
+export let mockPet = saved.mockPet ?? {
   petId: 1,
   level: 12,
   currentExp: 150,
@@ -35,7 +47,7 @@ export const REALISTIC_PROBLEMS = [
   { id: 1753, title: '최단경로', tier: 'Gold IV', tag: '다익스트라' }
 ];
 
-export let mockExploreRecords = Array.from({ length: 30 }, (_, i) => {
+export let mockExploreRecords = saved.mockExploreRecords ?? Array.from({ length: 30 }, (_, i) => {
   const p = REALISTIC_PROBLEMS[i % REALISTIC_PROBLEMS.length];
   return {
     id: p.id + i * 10,
@@ -47,9 +59,9 @@ export let mockExploreRecords = Array.from({ length: 30 }, (_, i) => {
   };
 });
 
-export let mockUserTags = [1, 2];
+export let mockUserTags = saved.mockUserTags ?? [1, 2];
 
-export let mockPosts = [
+export let mockPosts = saved.mockPosts ?? [
   { postId: 105, title: '다익스트라 알고리즘 시간 복잡도 질문입니다', content: '<p>우선순위 큐를 사용할 때와 안 할 때 시간 복잡도의 차이가 체감이 되나요?</p><p>실제 백준 문제 풀어볼 때 차이가 큰지 궁금합니다.</p>', nickname: '알고마스터', createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(), viewCount: 45, postCategory: '알고리즘', writer: false },
   { postId: 104, title: 'DP 문제를 풀 때 점화식을 어떻게 세워야 할지 모르겠어요.', content: '<p>처음부터 끝까지 규칙을 찾는 게 너무 힘듭니다ㅠㅠ 좋은 연습 방법이 있을까요?</p>', nickname: '코린이', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), viewCount: 112, postCategory: '알고리즘', writer: false },
   { postId: 103, title: '어제 본 코테 후기 남깁니다 ㅠㅠ', content: '<p>문자열 파싱 문제에서 시간초과가 났네요.. 다들 어떻게 푸셨나요?</p>', nickname: 'Mocker', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(), viewCount: 89, postCategory: '자유글', writer: true },
@@ -57,7 +69,7 @@ export let mockPosts = [
   { postId: 101, title: '안녕하세요 게시판 첫 글입니다', content: '<p>모두들 반갑습니다. 알고리즘 화이팅!</p>', nickname: '운영자', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(), viewCount: 500, postCategory: '자유글', writer: false }
 ];
 
-export const mockComments = {
+export const mockComments = saved.mockComments ?? {
   105: [
     { id: 1, content: '배열을 쓰면 O(V^2)이고 우선순위 큐는 O(E log V)입니다. 간선 수가 상대적으로 작을 땐 우선순위 큐가 압도적으로 빠르죠!', authorName: 'Mocker', createdAt: new Date(Date.now() - 1000 * 60 * 20).toISOString(), writer: true, userPet: { petId: 1, evolutionStage: 1, level: 3, nickname: '내 펫' } },
     { id: 2, content: '간선이 엄청 빽빽한 밀집 그래프면 배열이 빠를 수도 있어요~', authorName: '고인물', createdAt: new Date(Date.now() - 1000 * 60 * 10).toISOString(), writer: false, userPet: { petId: 3, evolutionStage: 2, level: 10, nickname: '드래곤용' } },
@@ -73,7 +85,7 @@ export const mockComments = {
   103: [
     { id: 4, content: '저도 정규식 잘못 써서 시간초과 났습니다 슬프네요...', authorName: '지나가던사람', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(), writer: false, userPet: { petId: 1, evolutionStage: 1, level: 5, nickname: '초보자' } },
     { id: 12, content: 'O(N)만에 지나가면서 파싱해야 통과되는 문제였어요 ㅠㅠ 멘붕이네요', authorName: '프론트지망생', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), writer: false, userPet: { petId: 2, evolutionStage: 2, level: 15, nickname: '리액트깎는노인' } },
-    { id: 13, content: '스트링빌더 썼더니 통과되긴 하던데 자바스크립트는 좀 빡세네요', authorName: 'JAVA장인', createdAt: new Date(Date.now() - 1000 * 60 * 50).toISOString(), writer: false, userPet: { petId: 5, evolutionStage: 3, level: 21, nickname: '객체지향' } },
+    { id: 13, content: '스트링빌더 썼더니 통과되긴 하던데 자바스크립트는 좀 빡세네요', authorName: 'JAVA장인', createdAt: new Date(Date.now() - 1000 * 60 * 50).toISOString(), writer: false, userPet: { petId: 2, evolutionStage: 3, level: 21, nickname: '객체지향' } },
     { id: 14, content: '다음 번엔 꼭 붙으실 겁니다 화이팅!!', authorName: '초보개발자', createdAt: new Date(Date.now() - 1000 * 60 * 10).toISOString(), writer: false, userPet: { petId: 1, evolutionStage: 1, level: 2, nickname: '안녕' } }
   ],
   102: [
@@ -97,3 +109,25 @@ export const setExploreProblemCount = (val) => { exploreProblemCount = val; };
 export const setGlobalPetStatus = (val) => { globalPetStatus = val; };
 export const setMockUserTags = (val) => { mockUserTags = val; };
 export const setMockPosts = (val) => { mockPosts = val; };
+
+// 현재 데모 데이터를 localStorage에 저장 (모의 응답이 나갈 때마다 호출)
+export const persistStore = () => {
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        exploreProblemCount,
+        problemHistory,
+        globalPetStatus,
+        mockUser,
+        mockPet,
+        mockExploreRecords,
+        mockUserTags,
+        mockPosts,
+        mockComments,
+      }),
+    );
+  } catch {
+    // 저장소를 쓸 수 없는 환경(시크릿 모드 등)에서는 메모리 상태로만 동작
+  }
+};
