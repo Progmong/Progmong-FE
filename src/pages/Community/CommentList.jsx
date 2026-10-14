@@ -2,7 +2,7 @@ import BaseContainer from '@/components/BaseContainer'
 import useCommentApi from '@/constants/comment'
 import formatRelativeTime from '@/utils/formatRelativeTime'
 import getPetImage from '@/utils/petImageUrl'
-import { useState } from 'react'
+import { toast } from 'react-toastify'
 
 // 전체 목록 래퍼
 const ListWrapper = styled.div`
@@ -114,13 +114,9 @@ const PetInfoText = styled.div`
   font-family: 'Binggrae';
 `
 
-const CommentList = ({ comments = [] }) => {
-  // 이름에서 첫 글자(한글 음절·알파벳 등) 추출 
+const CommentList = ({ comments = [], onChanged }) => {
+  // 이름에서 첫 글자(한글 음절·알파벳 등) 추출
   // const getInitial = (name) => (name ? name.trim().charAt(0).toUpperCase() : '?')
-
-  // axios 통신을 기다려야함
-  console.log('댓글 Props 결과')
-  console.log(comments)
 
   const [openMenuId, setOpenMenuId] = useState(null)
   const [editingCommentId, setEditingCommentId] = useState(null)
@@ -137,13 +133,15 @@ const CommentList = ({ comments = [] }) => {
   }
   const handleDelete = async (id) => {
     console.log('Delete comment', id)
-    const res = await commentDelete(postId, id)
-    if (res.status === 200) {
-      console.log('댓글 삭제 성공')
-    } else {
-      console.log('삭제실패')
-    }
     setOpenMenuId(null)
+    try {
+      await commentDelete(postId, id)
+      // 삭제 결과가 화면에 보이도록 목록 다시 불러오기
+      await onChanged?.()
+    } catch (err) {
+      console.error('댓글 삭제 오류', err)
+      toast.error('댓글을 삭제하지 못했어요.')
+    }
   }
 
   const handleCancelEdit = () => {
@@ -152,14 +150,17 @@ const CommentList = ({ comments = [] }) => {
   }
   const handleSaveEdit = async (id) => {
     console.log('Save edited comment', id, editText)
-    const res = await commentModify(postId, id, editText)
-    if (res.status === 200) {
-      console.log('댓글 수정 성공')
-    } else {
-      console.log('수정실패')
+    if (!editText.trim()) return
+    try {
+      await commentModify(postId, id, editText.trim())
+      // 수정 결과가 화면에 보이도록 목록 다시 불러오기
+      await onChanged?.()
+      setEditingCommentId(null)
+      setEditText('')
+    } catch (err) {
+      console.error('댓글 수정 오류', err)
+      toast.error('댓글을 수정하지 못했어요.')
     }
-    setEditingCommentId(null)
-    setEditText('')
   }
 
   return (

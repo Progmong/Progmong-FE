@@ -6,9 +6,20 @@ import BasePetInfo from '@/components/BasePetInfo'
 import BaseCommentInput from '@/components/BaseCommentInput'
 import CommentList from './CommentList'
 import useCommentApi from '@/constants/comment'
-import { useState } from 'react'
+import BaseButton from '@/components/BaseButton'
+import { toast } from 'react-toastify'
 
 const Wrapper = styled.div``
+
+const ErrorWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: 4rem 1rem;
+  font-family: 'Binggrae';
+  font-size: var(--font-size-lg);
+`
 
 const LoadingWrapper = styled.div`
   text-align: center;
@@ -87,28 +98,6 @@ const DropdownItem = styled.div`
   }
 `
 
-// 초기 더미 댓글
-const initialComments = [
-  {
-    id: 1,
-    author: { name: '홍길동' }, // 작성자 이름
-    content: '첫 번째 댓글입니다.\n두 줄 테스트.', // 줄바꿈 포함 예시
-    createdAt: '1시간 전',
-  },
-  {
-    id: 2,
-    author: { name: '김개발' },
-    content: '두 번째 댓글.\nReact + styled-components 굿!',
-    createdAt: '45분 전',
-  },
-  {
-    id: 3,
-    author: { name: '추추' },
-    content: '세 번째 댓글.\nTextarea 자동 리사이즈 확인 완료.',
-    createdAt: '10분 전',
-  },
-]
-
 const PostDetail = () => {
   // 필요한것
   // 닉네임, 펫데이터[알종류(이미지로), 레벨, 단계]
@@ -118,7 +107,7 @@ const PostDetail = () => {
 
   // 라우터로 부터 게시글 번호를 받아온다
   // const { postId } = useParams()
-  const { postId } = useParams()
+  const { category, postId } = useParams()
 
   const { postDetail, deletePost } = useCommnunityApi()
   const { commentAll, commentWrite } = useCommentApi()
@@ -126,32 +115,43 @@ const PostDetail = () => {
   const [post, setPost] = useState(null)
   const [postLoading, setPostLoading] = useState(true)
 
-  const [comments, setComments] = useState(initialComments)
+  const [postError, setPostError] = useState(null)
+
+  const [comments, setComments] = useState([])
   const [commentsLoading, setCommentsLoading] = useState(true)
 
   const navigate = useNavigate()
 
   const fetchCmtData = () => {}
 
-  // 게시글 불러오기
+  // 게시글 불러오기 (다른 글로 이동하면 다시 불러옴)
   useEffect(() => {
+    let ignore = false
     const fetchPostData = async () => {
+      setPostLoading(true)
+      setPostError(null)
       try {
         const res = await postDetail(postId)
+        if (ignore) return
+        if (!res.data?.data) throw new Error('게시글 없음')
         setPost(res.data.data)
-
-        console.log('불러온 게시글 목록')
-        console.log(res.data.data)
-
-        // 해당 post를 불러올 때 까지 loading 찾을 띄움
-        setPostLoading(false)
       } catch (err) {
-        console.log('글 불러오기 오류')
+        if (ignore) return
+        setPostError(
+          err.response?.status === 404 || err.message === '게시글 없음'
+            ? '게시글을 찾을 수 없습니다.'
+            : '게시글을 불러오지 못했습니다.',
+        )
+      } finally {
+        if (!ignore) setPostLoading(false)
       }
     }
 
     fetchPostData()
-  }, [])
+    return () => {
+      ignore = true
+    }
+  }, [postId])
 
   // // 댓글 불러오기
   // useEffect(() => {
@@ -178,17 +178,21 @@ const PostDetail = () => {
   //   console.log(res)
   // }
 
-  const fetchComments = useCallback(async () => {
-    try {
-      setCommentsLoading(true) // 스피너 표시
-      const res = await commentAll(postId)
-      setComments(res.data.data)
-    } catch (err) {
-      console.error('댓글 불러오기 오류', err)
-    } finally {
-      setCommentsLoading(false)
-    }
-  }, [postId])
+  // silent: 작성/수정/삭제 후 갱신할 때는 스피너 없이 목록만 교체 (레이아웃 깜빡임 방지)
+  const fetchComments = useCallback(
+    async (silent = false) => {
+      try {
+        if (!silent) setCommentsLoading(true) // 스피너 표시
+        const res = await commentAll(postId)
+        setComments(res.data.data)
+      } catch (err) {
+        console.error('댓글 불러오기 오류', err)
+      } finally {
+        setCommentsLoading(false)
+      }
+    },
+    [postId],
+  )
 
   useEffect(() => {
     fetchComments()
@@ -197,7 +201,7 @@ const PostDetail = () => {
   const onPostSubmit = async (comment) => {
     try {
       await commentWrite(postId, comment) // 등록
-      await fetchComments() // 최신 목록 다시 불러오기
+      await fetchComments(true) // 최신 목록 다시 불러오기
     } catch (err) {
       console.error('댓글 등록 오류', err)
     }
@@ -212,17 +216,38 @@ const PostDetail = () => {
   }
   const handlePostDelete = async () => {
     console.log('Delete post', postId)
-    const res = await deletePost(postId)
-    if (res.status === 200) {
-      console.log('글 삭제 성공')
-      navigate(-1)
-    } else {
-      console.log('글 삭제 실패')
-    }
     setPostMenuOpen(false)
+    try {
+      await deletePost(postId)
+      toast.success('게시글을 삭제했어요.')
+      // 진입 경로와 상관없이 해당 카테고리 목록으로 이동
+      navigate(`/community/${category}`, { replace: true })
+    } catch (err) {
+      console.error('글 삭제 오류', err)
+      toast.error('게시글을 삭제하지 못했어요.')
+    }
   }
 
-  return postLoading === false ? (
+  if (postLoading) {
+    return (
+      <LoadingWrapper>
+        <IconLineMdLoadingTwotoneLoop />
+      </LoadingWrapper>
+    )
+  }
+
+  if (postError) {
+    return (
+      <ErrorWrapper>
+        <p>{postError}</p>
+        <BaseButton onClick={() => navigate(`/community/${category}`, { replace: true })}>
+          목록으로
+        </BaseButton>
+      </ErrorWrapper>
+    )
+  }
+
+  return (
     <Wrapper>
       <PostContainer>
         {post.writer && (
@@ -261,13 +286,13 @@ const PostDetail = () => {
       </PetInfoWrapper>
       <CommentWrapper>
         <BaseCommentInput onSubmit={onPostSubmit}></BaseCommentInput>
-        {commentsLoading ? <IconLineMdLoadingTwotoneLoop /> : <CommentList comments={comments} />}
+        {commentsLoading ? (
+          <IconLineMdLoadingTwotoneLoop />
+        ) : (
+          <CommentList comments={comments} onChanged={() => fetchComments(true)} />
+        )}
       </CommentWrapper>
     </Wrapper>
-  ) : (
-    <LoadingWrapper>
-      <IconLineMdLoadingTwotoneLoop />
-    </LoadingWrapper>
   )
 }
 export default PostDetail
