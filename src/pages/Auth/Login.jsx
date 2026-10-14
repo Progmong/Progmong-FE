@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useMediaQuery } from 'react-responsive'
 
 import logo from '../../assets/progmong-logo.png'
-import bgVideo from '../../assets/bg-video.mp4'
 import BaseButton from '../../components/BaseButton'
 import BaseInput from '../../components/BaseInput/'
 import BaseContainer from '../../components/BaseContainer'
